@@ -2,42 +2,80 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-unused-vars */
 import React from "react";
-import { Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { Checkbox, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
-import { AddCircleOutlineOutlined } from "@mui/icons-material";
+import AddCircleOutlineOutlined from "@mui/icons-material/AddCircleOutlineOutlined";
+import RemoveCircleOutlineRoundedIcon from '@mui/icons-material/RemoveCircleOutlineRounded';
 
 const style = {
-    iconStyle: {
-        paddingTop: 20,
+    addIconStyle: {
         color: "grey",
-        fontSize: "2rem",
+        fontSize: "2.5rem",
         cursor: "pointer",
     },
+    removeIconStyle: {
+        color: "grey",
+        fontSize: "1.7rem",
+        cursor: "pointer",
+    }
 };
 
 const addField = (fieldName, formData, setFormData) => {
     if (formData[fieldName]?.EXPANDABLE) {
-      const childrenKeys = Object.keys(formData[fieldName]?.CHILDREN);
-      const childrenKeysLength = childrenKeys.length;
-      const lastKeyIndex = Number(childrenKeys[childrenKeysLength - 1]?.split('-')?.pop());
-  
-      if (childrenKeysLength === 0 || childrenKeysLength === lastKeyIndex) {
-        const newKeyName = `${fieldName}-${childrenKeysLength + 1}`;
+        const childrenKeys = Object.keys(formData[fieldName]?.CHILDREN);
+        const childrenKeysLength = childrenKeys.length;
+        const lastKeyIndex = Number(childrenKeys[childrenKeysLength - 1]?.split('-')?.pop());
+        let newKeyName = null;
+        if (childrenKeysLength === 0 || childrenKeysLength === lastKeyIndex) {
+            newKeyName = `${fieldName}-${childrenKeysLength + 1}`;
+        } else {
+            newKeyName = `${fieldName}-${lastKeyIndex + 1}`;
+        }
+        const subFields = JSON.parse(JSON.stringify(formData[fieldName].SUB_FIELDS));
+        Object.values(subFields).forEach((subField) => {
+            subField.FIELD_ID = `${subField.FIELD_ID}-${newKeyName}`
+        })
         setFormData({
-          ...formData,
-          [fieldName]: {
-            ...formData[fieldName],
-            REQUIRED: true,
-            CHILDREN: {
-              ...formData[fieldName]?.CHILDREN,
-              [newKeyName]: formData[fieldName]?.SUB_FIELDS,
+            ...formData,
+            [fieldName]: {
+                ...formData[fieldName],
+                REQUIRED: true,
+                CHILDREN: {
+                    ...formData[fieldName]?.CHILDREN,
+                    [newKeyName]: subFields
+                },
             },
-          },
         });
         return newKeyName;
-      }
     }
-  };  
+};
+
+const removeField = (childFieldName, parentFieldName, formData, setFormData) => {
+    const copyFormData = JSON.parse(JSON.stringify(formData));
+    delete copyFormData[parentFieldName].CHILDREN[childFieldName];
+    if (formData[parentFieldName].CHILDREN.length === 0) {
+        copyFormData[parentFieldName].REQUIRED = false;
+    }
+    setFormData(copyFormData);
+}
+
+const handleCheckBox = (fieldName, checked, targetFieldName, parentFieldName, childFieldName, formData, setFormData) => {
+    const copyFormData = JSON.parse(JSON.stringify(formData));
+
+    const parentField = copyFormData[parentFieldName]?.CHILDREN?.[childFieldName];
+    const targetField = parentField?.[targetFieldName];
+
+    if (parentField) {
+        parentField[fieldName].VALUE = checked;
+
+        if (targetField) {
+            targetField.DISABLED = checked;
+            targetField.REQUIRED = !checked;
+        }
+    }
+
+    setFormData(copyFormData);
+};
 
 const getFieldJSX = (field, handleOnChange, formData, setFormData, keyRef = null) => {
     switch (field.FIELD_TYPE) {
@@ -57,7 +95,6 @@ const getFieldJSX = (field, handleOnChange, formData, setFormData, keyRef = null
                         }
                         variant="outlined"
                         required={field?.REQUIRED}
-                        error={field?.ERROR}
                         fullWidth
                     />
                 </Grid>
@@ -82,7 +119,6 @@ const getFieldJSX = (field, handleOnChange, formData, setFormData, keyRef = null
                         variant="outlined"
                         required={field?.REQUIRED}
                         disabled={field?.DISABLED}
-                        error={field?.ERROR}
                         fullWidth
                     >
                         {field?.OPTIONS.map((option) => (
@@ -115,7 +151,7 @@ const getFieldJSX = (field, handleOnChange, formData, setFormData, keyRef = null
                         }
                         format="yyyy-MM-dd"
                         required={field?.REQUIRED}
-                        error={field?.ERROR}
+                        disabled={field?.DISABLED}
                         sx={{ width: "100%" }}
                     />
                 </Grid>
@@ -138,12 +174,8 @@ const getFieldJSX = (field, handleOnChange, formData, setFormData, keyRef = null
                         variant="outlined"
                         type="email"
                         required={field?.REQUIRED}
-                        error={field?.ERROR}
+                        disabled={field?.DISABLED}
                         fullWidth
-                        inputProps={{
-                            pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                            title: "Enter a valid email address",
-                        }}
                     />
                 </Grid>
             );
@@ -165,11 +197,8 @@ const getFieldJSX = (field, handleOnChange, formData, setFormData, keyRef = null
                         variant="outlined"
                         type="tel"
                         required={field?.REQUIRED}
-                        error={field?.ERROR}
+                        disabled={field?.DISABLED}
                         fullWidth
-                        InputProps={{
-                            maxLength: 10,
-                        }}
                     />
                 </Grid>
             );
@@ -191,82 +220,115 @@ const getFieldJSX = (field, handleOnChange, formData, setFormData, keyRef = null
                         variant="outlined"
                         type="number"
                         required={field?.REQUIRED}
-                        error={field?.ERROR}
+                        disabled={field?.DISABLED}
                         fullWidth
-                        inputProps={{
-                            inputMode: "numeric",
-                        }}
                     />
                 </Grid>
             );
 
+        case "Checkbox":
+            return (
+                <Grid item xs={12} sm={field?.SIZE} key={field?.FIELD_ID}>
+                    <InputLabel>{field?.FIELD_LABLE}</InputLabel>
+                    <Checkbox
+                        id={field?.FIELD_ID}
+                        label={field?.FIELD_LABLE}
+                        checked={field?.VALUE}
+                        onChange={(event) => {
+                            if (field?.PARENT_FIELD_NAME === 'Experience') {
+                                handleCheckBox(field?.FIELD_NAME, event.target.checked, "End Date", field?.PARENT_FIELD_NAME, keyRef, formData, setFormData)
+                            }
+                        }}
+                        variant="outlined"
+                        required={field?.REQUIRED}
+                        disabled={field?.DISABLED}
+                    />
+                </Grid>
+            )
+
         case "Address":
             return (
-                <>
-                    <Grid item xs={12} sm={field?.SIZE} key={field?.FIELD_ID}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <InputLabel style={{ paddingTop: 20 }}>
-                                    Enter your address below
-                                </InputLabel>
-                            </Grid>
-                            {Object.keys(field?.SUB_FIELDS).map((subField) => {
-                                return getFieldJSX(
-                                    formData[field?.FIELD_NAME].SUB_FIELDS[subField],
-                                    handleOnChange,
-                                    formData,
-                                    setFormData
-                                );
-                            })}
+                <Grid item xs={12} sm={field?.SIZE} key={field?.FIELD_ID}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} key={`${field?.FIELD_ID}-lable`}>
+                            <InputLabel style={{ paddingTop: 20 }}>
+                                Enter your address below
+                            </InputLabel>
                         </Grid>
+                        {Object.keys(field?.SUB_FIELDS).map((subField) => {
+                            return getFieldJSX(
+                                formData[field?.FIELD_NAME].SUB_FIELDS[subField],
+                                handleOnChange,
+                                formData,
+                                setFormData
+                            );
+                        })}
                     </Grid>
-                </>
+                </Grid>
             );
 
+        case 'Experience':
         case "Education":
-            const addEducationField = (fieldName) => {
-                const childFieldKeyRef = addField(fieldName, formData, setFormData);
-                console.log(childFieldKeyRef)
-            };
-
             return (
-                <>
-                    <Grid item xs={12} sm={field?.SIZE} key={field?.FIELD_ID}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={11}>
-                                <InputLabel style={{ paddingTop: 20 }}>
-                                    Click on the plus icon to add education
-                                </InputLabel>
+                <Grid item xs={12} sm={field?.SIZE} key={field?.FIELD_ID}>
+                    <Grid container spacing={2} style={{ padding: 10 }}>
+                        <Grid item xs={11} style={{ paddingTop: 25 }}>
+                            <InputLabel>
+                                Click on the plus icon to add {field?.FIELD_LABLE.toLowerCase()}
+                            </InputLabel>
+                        </Grid>
+                        <Grid item xs={1} alignItems="flex-end">
+                            <AddCircleOutlineOutlined
+                                style={style.addIconStyle}
+                                onClick={() => addField(field?.FIELD_NAME, formData, setFormData)}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Grid container spacing={2}>
+                                {Object.keys(formData[field?.FIELD_NAME]?.CHILDREN).map(
+                                    (childFieldName) => {
+                                        const childField =
+                                            formData[field?.FIELD_NAME]?.CHILDREN[childFieldName];
+                                        return (
+                                            <Grid item xs={12} key={childFieldName}>
+                                                <Grid container spacing={2} style={{ paddingBottom: 40 }}>
+                                                    <Grid item xs={12} alignItems="flex-end">
+                                                        <RemoveCircleOutlineRoundedIcon
+                                                            style={style.removeIconStyle}
+                                                            onClick={() =>
+                                                                removeField(
+                                                                    childFieldName,
+                                                                    field?.FIELD_NAME,
+                                                                    formData,
+                                                                    setFormData
+                                                                )
+                                                            }
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={12}>
+                                                        <Grid container spacing={2}>
+                                                            {Object.keys(childField).map((subFieldName) => {
+                                                                return getFieldJSX(
+                                                                    childField[subFieldName],
+                                                                    handleOnChange,
+                                                                    formData,
+                                                                    setFormData,
+                                                                    childFieldName
+                                                                );
+                                                            })}
+                                                        </Grid>
+                                                    </Grid>
+                                                </Grid>
+                                            </Grid>
+                                        );
+                                    }
+                                )}
                             </Grid>
-                            <Grid item xs={1} alignItems="flex-end">
-                                <AddCircleOutlineOutlined
-                                    style={style.iconStyle}
-                                    onClick={() => addEducationField(field?.FIELD_NAME)}
-                                />
-                            </Grid>
-                            {Object.keys(formData[field?.FIELD_NAME]?.CHILDREN).map(
-                                (childFieldName) => {
-                                    const childField =
-                                        formData[field?.FIELD_NAME]?.CHILDREN[childFieldName];
-                                    return (
-                                        <>
-                                            {Object.keys(childField).map((subFieldName) => {
-                                                return getFieldJSX(
-                                                    childField[subFieldName],
-                                                    handleOnChange,
-                                                    formData,
-                                                    setFormData,
-                                                    Object.keys(field.CHILDREN).pop()
-                                                );
-                                            })}
-                                        </>
-                                    );
-                                }
-                            )}
                         </Grid>
                     </Grid>
-                </>
+                </Grid>
             );
+
 
         default:
             return null;

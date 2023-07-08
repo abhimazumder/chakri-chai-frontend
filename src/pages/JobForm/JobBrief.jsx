@@ -22,7 +22,7 @@ const JobBrief = () => {
         roundedPaper: {
             padding: 2,
             borderRadius: 3,
-          },
+        },
     };
 
 
@@ -54,7 +54,7 @@ const JobBrief = () => {
                     </Grid>
                     <Grid item xs={6} textAlign="right">
                         <Typography>
-                        <span style={styles.asterisk}>*</span>Last date to apply: {SampleJob.LAST_DATE_TO_APPLY}
+                            <span style={styles.asterisk}>*</span>Last date to apply: {SampleJob.LAST_DATE_TO_APPLY}
                         </Typography>
                     </Grid>
                 </Grid>

@@ -3,11 +3,15 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import {
+  Alert,
+  Backdrop,
   Box,
   Button,
+  CircularProgress,
   Container,
   Grid,
   Paper,
+  Snackbar,
 } from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -18,6 +22,8 @@ import { fetchCountryList, fetchStatesByCountry } from '../../services/apis';
 
 const JobFields = () => {
   const [formData, setFormData] = useState(FormLayout);
+  const [open, setOpen] = useState(false);
+
 
   const styles = {
     roundedPaper: {
@@ -25,15 +31,19 @@ const JobFields = () => {
       marginBottom: 1,
       borderRadius: 3,
     },
-    submitButton: {
+    buttonBox: {
       display: 'flex',
       justifyContent: 'flex-end',
-      padding: 1,
-      marginTop: 2,
+      marginTop: 40,
+      marginRight: 10,
+      marginBottom: 20
     },
-    buttonColor: {
-      backgroundColor: '#FF3131',
+    submitButton: {
+      backgroundColor: '#5932a6',
       textTransform: 'none',
+      paddingX: 20,
+      borderRadius: 50,
+      boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.50)',
     },
   };
 
@@ -95,8 +105,20 @@ const JobFields = () => {
 
   const handleOnSubmit = (event) => {
     event.preventDefault();
-    console.log(formData);
-    console.log('Hurray!');
+    handleOpen('Backdrop');
+    setTimeout(() => {
+      console.log(formData);
+      console.log('Hurray!');
+      handleClose();
+    }, 3000)
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
   };
 
   const isNullish = (field) => {
@@ -109,17 +131,18 @@ const JobFields = () => {
   };
 
   const handleOnChange = (value, fieldName, parentFieldName = null, keyRef = null) => {
+    const copyFormData = JSON.parse(JSON.stringify(formData));
     if (parentFieldName && keyRef) {
       setFormData({
-        ...formData,
+        ...copyFormData,
         [parentFieldName]: {
-          ...formData[parentFieldName],
+          ...copyFormData[parentFieldName],
           CHILDREN: {
-            ...formData[parentFieldName].CHILDREN,
+            ...copyFormData[parentFieldName].CHILDREN,
             [keyRef]: {
-              ...formData[parentFieldName].CHILDREN[keyRef],
+              ...copyFormData[parentFieldName].CHILDREN[keyRef],
               [fieldName]: {
-                ...formData[parentFieldName].CHILDREN[keyRef][fieldName],
+                ...copyFormData[parentFieldName].CHILDREN[keyRef][fieldName],
                 VALUE: value,
                 ERROR: isNullish(value) ? true : false,
               }
@@ -129,13 +152,13 @@ const JobFields = () => {
       });
     } else if (parentFieldName) {
       setFormData({
-        ...formData,
+        ...copyFormData,
         [parentFieldName]: {
-          ...formData[parentFieldName],
+          ...copyFormData[parentFieldName],
           SUB_FIELDS: {
-            ...formData[parentFieldName].SUB_FIELDS,
+            ...copyFormData[parentFieldName].SUB_FIELDS,
             [fieldName]: {
-              ...formData[parentFieldName].SUB_FIELDS[fieldName],
+              ...copyFormData[parentFieldName].SUB_FIELDS[fieldName],
               VALUE: value,
               ERROR: isNullish(value) ? true : false,
             },
@@ -144,9 +167,9 @@ const JobFields = () => {
       });
     } else {
       setFormData({
-        ...formData,
+        ...copyFormData,
         [fieldName]: {
-          ...formData[fieldName],
+          ...copyFormData[fieldName],
           VALUE: value,
           ERROR: isNullish(value) ? true : false,
         },
@@ -167,10 +190,16 @@ const JobFields = () => {
               </Grid>
             </LocalizationProvider>
           </Box>
-          <Box sx={styles.submitButton}>
-            <Button variant="contained" style={styles.buttonColor} type="submit">
+          <Box style={styles.buttonBox}>
+            <Button variant="contained" style={styles.submitButton} type="submit">
               Let's Go
             </Button>
+            <Backdrop
+              sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={open}
+            >
+              <CircularProgress color="inherit" />
+            </Backdrop>
           </Box>
         </Paper>
       </form>

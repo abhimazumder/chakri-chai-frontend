@@ -241,7 +241,7 @@ const FromLayout = {
                 PARENT_FIELD_NAME: "Experience",
                 PARENT_FIELD_ID: "form-field-8",
                 ERROR: false,
-                VALUE: '',
+                VALUE: false,
             },
 
             "Start Date": {
