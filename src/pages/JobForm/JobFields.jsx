@@ -54,7 +54,6 @@ const JobFields = () => {
               ...formData[parentFieldName]?.SUB_FIELDS,
               [subFieldName]: {
                 ...formData[parentFieldName]?.SUB_FIELDS[subFieldName],
-                // OPTIONS: await fetchCountryList(),
                 OPTIONS: fetchCountryList(),
               },
             },
@@ -72,22 +71,21 @@ const JobFields = () => {
       const parentFieldName = 'Address';
       const subFieldName = 'State/Province';
       if (formData !== null) {
-        if(formData?.['Address']?.SUB_FIELDS?.['Country']?.VALUE.length !== 0)
+        if (formData?.['Address']?.SUB_FIELDS?.['Country']?.VALUE.length !== 0)
           setFormData({
-          ...formData,
-          [parentFieldName]: {
-            ...formData[parentFieldName],
-            SUB_FIELDS: {
-              ...formData[parentFieldName]?.SUB_FIELDS,
-              [subFieldName]: {
-                ...formData[parentFieldName]?.SUB_FIELDS[subFieldName],
-                DISABLED: false,
-                //OPTIONS: await fetchStatesByCountry(formData?.['Address']?.SUB_FIELDS?.['Country']?.VALUE) ,
-                OPTIONS: fetchStatesByCountry(formData?.['Address']?.SUB_FIELDS?.['Country']?.VALUE)
+            ...formData,
+            [parentFieldName]: {
+              ...formData[parentFieldName],
+              SUB_FIELDS: {
+                ...formData[parentFieldName]?.SUB_FIELDS,
+                [subFieldName]: {
+                  ...formData[parentFieldName]?.SUB_FIELDS[subFieldName],
+                  DISABLED: false,
+                  OPTIONS: fetchStatesByCountry(formData?.['Address']?.SUB_FIELDS?.['Country']?.VALUE)
+                },
               },
             },
-          },
-        });
+          });
       }
     };
 
@@ -110,8 +108,26 @@ const JobFields = () => {
     return false;
   };
 
-  const handleOnChange = (value, fieldName, parentFieldName = null) => {
-    if (parentFieldName) {
+  const handleOnChange = (value, fieldName, parentFieldName = null, keyRef = null) => {
+    if (parentFieldName && keyRef) {
+      setFormData({
+        ...formData,
+        [parentFieldName]: {
+          ...formData[parentFieldName],
+          CHILDREN: {
+            ...formData[parentFieldName].CHILDREN,
+            [keyRef]: {
+              ...formData[parentFieldName].CHILDREN[keyRef],
+              [fieldName]: {
+                ...formData[parentFieldName].CHILDREN[keyRef][fieldName],
+                VALUE: value,
+                ERROR: isNullish(value) ? true : false,
+              }
+            }
+          }
+        }
+      });
+    } else if (parentFieldName) {
       setFormData({
         ...formData,
         [parentFieldName]: {

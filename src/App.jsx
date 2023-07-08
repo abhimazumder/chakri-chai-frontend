@@ -1,6 +1,6 @@
 import Footer from './components/Footer'
 import Header from './components/Header'
-import JobFormIndex from './pages/JobForm/Index'
+import JobFormIndex from './pages/JobForm/JobFormIndex'
 
 
 function App() {

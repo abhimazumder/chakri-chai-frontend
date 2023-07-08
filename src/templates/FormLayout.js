@@ -1,3 +1,5 @@
+import { DegreeList } from "./DegreeList";
+
 const FromLayout = {
 
     "First Name": {
@@ -12,7 +14,7 @@ const FromLayout = {
         PARENT_FIELD_NAME: null,
         PARENT_FIELD_ID: null,
         ERROR: false,
-        VALUE: ''
+        VALUE: '',
     },
 
     "Last Name": {
@@ -27,7 +29,7 @@ const FromLayout = {
         PARENT_FIELD_NAME: null,
         PARENT_FIELD_ID: null,
         ERROR: false,
-        VALUE: ''
+        VALUE: '',
     },
 
     "Date of Birth": {
@@ -42,7 +44,7 @@ const FromLayout = {
         PARENT_FIELD_NAME: null,
         PARENT_FIELD_ID: null,
         ERROR: false,
-        VALUE: ''
+        VALUE: '',
     },
 
     "Gender": {
@@ -63,7 +65,7 @@ const FromLayout = {
             { VALUE: "Others", ID: "Others", DISABLED: false }
         ],
         ERROR: false,
-        VALUE: ''
+        VALUE: '',
     },
 
     "E-mail": {
@@ -78,7 +80,7 @@ const FromLayout = {
         PARENT_FIELD_NAME: null,
         PARENT_FIELD_ID: null,
         ERROR: false,
-        VALUE: ''
+        VALUE: '',
     },
 
     "Phone": {
@@ -93,7 +95,7 @@ const FromLayout = {
         PARENT_FIELD_NAME: null,
         PARENT_FIELD_ID: null,
         ERROR: false,
-        VALUE: ''
+        VALUE: '',
     },
 
     "Address": {
@@ -120,7 +122,7 @@ const FromLayout = {
                 PARENT_FIELD_ID: "form-field-7",
                 OPTIONS: [],
                 ERROR: false,
-                VALUE: ''
+                VALUE: '',
             },
 
             "State/Province": {
@@ -136,7 +138,7 @@ const FromLayout = {
                 PARENT_FIELD_ID: "form-field-7",
                 OPTIONS: [],
                 ERROR: false,
-                VALUE: ''
+                VALUE: '',
             },
 
             "City/Town": {
@@ -151,7 +153,7 @@ const FromLayout = {
                 PARENT_FIELD_NAME: "Address",
                 PARENT_FIELD_ID: "form-field-7",
                 ERROR: false,
-                VALUE: ''
+                VALUE: '',
             },
 
             "Pincode": {
@@ -166,7 +168,7 @@ const FromLayout = {
                 PARENT_FIELD_NAME: "Address",
                 PARENT_FIELD_ID: "form-field-7",
                 ERROR: false,
-                VALUE: ''
+                VALUE: '',
             },
 
             "Street Address": {
@@ -181,7 +183,7 @@ const FromLayout = {
                 PARENT_FIELD_NAME: "Address",
                 PARENT_FIELD_ID: "form-field-7",
                 ERROR: false,
-                VALUE: ''
+                VALUE: '',
             },
         },
     },
@@ -209,7 +211,7 @@ const FromLayout = {
                 PARENT_FIELD_NAME: "Experience",
                 PARENT_FIELD_ID: "form-field-8",
                 ERROR: false,
-                VALUE: ''
+                VALUE: '',
             },
 
             "Company Name": {
@@ -224,7 +226,7 @@ const FromLayout = {
                 PARENT_FIELD_NAME: "Experience",
                 PARENT_FIELD_ID: "form-field-8",
                 ERROR: false,
-                VALUE: ''
+                VALUE: '',
             },
 
             "Current Job": {
@@ -239,12 +241,12 @@ const FromLayout = {
                 PARENT_FIELD_NAME: "Experience",
                 PARENT_FIELD_ID: "form-field-8",
                 ERROR: false,
-                VALUE: ''
+                VALUE: '',
             },
 
             "Start Date": {
                 SIZE: 6,
-                FIELD_TYPE: "Datepicker",
+                FIELD_TYPE: "Date",
                 FIELD_LABLE: "Start Date",
                 FIELD_ID: "form-field-8-d",
                 FIELD_NAME: "Start Date",
@@ -254,23 +256,24 @@ const FromLayout = {
                 PARENT_FIELD_NAME: "Experience",
                 PARENT_FIELD_ID: "form-field-8",
                 ERROR: false,
-                VALUE: ''
+                VALUE: '',
             },
             "End Date": {
                 SIZE: 6,
-                FIELD_TYPE: "Datepicker",
+                FIELD_TYPE: "Date",
                 FIELD_LABLE: "End Date",
                 FIELD_ID: "form-field-8-e",
                 FIELD_NAME: "End Date",
                 EXPANDABLE: false,
                 REQUIRED: true,
+                DISABLED: false,
                 PARENT_FIELD_NAME: "Experience",
                 PARENT_FIELD_ID: "form-field-8",
                 ERROR: false,
-                VALUE: ''
+                VALUE: '',
             },
         },
-        CHILDREN: [],
+        CHILDREN: {},
     },
     "Education": {
         FIELD_TYPE: "Education",
@@ -290,27 +293,28 @@ const FromLayout = {
                 FIELD_ID: "form-field-9-a",
                 FIELD_NAME: "Degree",
                 EXPANDABLE: false,
-                REQUIRED: true,
+                REQUIRED: false,
                 DISABLED: false,
-                PARENT_FIELD_NAME: "Experience",
+                PARENT_FIELD_NAME: "Education",
                 PARENT_FIELD_ID: "form-field-9",
+                OPTIONS: DegreeList,
                 ERROR: false,
-                VALUE: ''
+                VALUE: '',
             },
 
             "Specialization": {
                 SIZE: 12,
-                FIELD_TYPE: "Dropdown",
+                FIELD_TYPE: "Textfield",
                 FIELD_LABLE: "Specialization",
                 FIELD_ID: "form-field-9-b",
                 FIELD_NAME: "Specialization",
                 EXPANDABLE: false,
-                REQUIRED: true,
+                REQUIRED: false,
                 DISABLED: false,
-                PARENT_FIELD_NAME: "Experience",
+                PARENT_FIELD_NAME: "Education",
                 PARENT_FIELD_ID: "form-field-9",
                 ERROR: false,
-                VALUE: ''
+                VALUE: '',
             },
 
             "College/Universisty": {
@@ -322,43 +326,43 @@ const FromLayout = {
                 EXPANDABLE: false,
                 REQUIRED: true,
                 DISABLED: false,
-                PARENT_FIELD_NAME: "Experience",
+                PARENT_FIELD_NAME: "Education",
                 PARENT_FIELD_ID: "form-field-9",
                 ERROR: false,
-                VALUE: ''
+                VALUE: '',
             },
 
             "From": {
                 SIZE: 6,
-                FIELD_TYPE: "Datepicker",
+                FIELD_TYPE: "Date",
                 FIELD_LABLE: "From",
                 FIELD_ID: "form-field-9-d",
                 FIELD_NAME: "From",
                 EXPANDABLE: false,
                 REQUIRED: true,
                 DISABLED: false,
-                PARENT_FIELD_NAME: "Experience",
+                PARENT_FIELD_NAME: "Education",
                 PARENT_FIELD_ID: "form-field-9",
                 ERROR: false,
-                VALUE: ''
+                VALUE: '',
             },
 
             "To": {
                 SIZE: 6,
-                FIELD_TYPE: "Datepicker",
+                FIELD_TYPE: "Date",
                 FIELD_LABLE: "To",
                 FIELD_ID: "form-field-9-e",
                 FIELD_NAME: "To",
                 EXPANDABLE: false,
                 REQUIRED: true,
                 DISABLED: false,
-                PARENT_FIELD_NAME: "Experience",
+                PARENT_FIELD_NAME: "Education",
                 PARENT_FIELD_ID: "form-field-9",
                 ERROR: false,
-                VALUE: ''
+                VALUE: '',
             },
         },
-        CHILDREN: [],
+        CHILDREN: {},
     },
 
     "Question 1": {
@@ -380,7 +384,7 @@ const FromLayout = {
         ]
         ,
         ERROR: false,
-        VALUE: ''
+        VALUE: '',
     },
 
     "Question 2": {
@@ -402,7 +406,7 @@ const FromLayout = {
         ]
         ,
         ERROR: false,
-        VALUE: ''
+        VALUE: '',
     },
 
     "Question 3": {
@@ -424,7 +428,7 @@ const FromLayout = {
         ]
         ,
         ERROR: false,
-        VALUE: ''
+        VALUE: '',
     },
 
     "Question 4": {
@@ -439,7 +443,7 @@ const FromLayout = {
         PARENT_FIELD_NAME: null,
         PARENT_FIELD_ID: null,
         ERROR: false,
-        VALUE: ''
+        VALUE: '',
     },
 
     "Question 5": {
@@ -461,7 +465,7 @@ const FromLayout = {
         ]
         ,
         ERROR: false,
-        VALUE: ''
+        VALUE: '',
     },
 
     "Resume/CV": {
@@ -476,7 +480,7 @@ const FromLayout = {
         PARENT_FIELD_NAME: null,
         PARENT_FIELD_ID: null,
         ERROR: false,
-        VALUE: ''
+        VALUE: '',
     }
 }
 
