@@ -39,10 +39,11 @@ const JobFields = () => {
     },
     submitButton: {
       backgroundColor: "#ED1C24",
-      textTransform: "none",
-      paddingX: 20,
       borderRadius: 50,
+      width: 150,
+      height: 50,
       boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.50)",
+      margin: 3
     },
   };
 
@@ -210,7 +211,7 @@ const JobFields = () => {
               style={styles.submitButton}
               type="submit"
             >
-              Let's Go
+              {"Let's Go"}
             </Button>
             <Backdrop
               sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
