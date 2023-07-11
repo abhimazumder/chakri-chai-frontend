@@ -1,17 +1,17 @@
-import { Container } from "@mui/material"
-import JobBrief from "./JobBrief"
-import JobFields from "./JobFields"
+import { Container } from "@mui/material";
+import JobFields from "./JobFields";
+import JobBrief from "../../components/JobBrief";
 
 const JobFormIndex = () => {
-    return (
-        <>
-            <Container style={{marginTop:100}}>
-                <JobBrief/>
-                <div style={{ marginTop: '20px' }} />
-                <JobFields suppressHydrationWarning/>
-            </Container>
-        </>
-    )
-}
+  return (
+    <>
+      <Container>
+        <JobBrief />
+        <div style={{ marginTop: 20 }} />
+        <JobFields />
+      </Container>
+    </>
+  );
+};
 
-export default JobFormIndex
+export default JobFormIndex;

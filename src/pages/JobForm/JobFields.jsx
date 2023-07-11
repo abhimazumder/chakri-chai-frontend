@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   Backdrop,
@@ -12,18 +12,17 @@ import {
   Grid,
   Paper,
   Snackbar,
-} from '@mui/material';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import FormLayout from '../../templates/FormLayout';
-import getFieldJSX from './getFieldJSX';
+} from "@mui/material";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import FormLayout from "../../templates/FormLayout";
+import getFieldJSX from "./getFieldJSX";
 
-import { fetchCountryList, fetchStatesByCountry } from '../../services/apis';
+import { fetchCountryList, fetchStatesByCountry } from "../../services/apis";
 
 const JobFields = () => {
   const [formData, setFormData] = useState(FormLayout);
   const [open, setOpen] = useState(false);
-
 
   const styles = {
     roundedPaper: {
@@ -32,18 +31,18 @@ const JobFields = () => {
       borderRadius: 3,
     },
     buttonBox: {
-      display: 'flex',
-      justifyContent: 'flex-end',
+      display: "flex",
+      justifyContent: "flex-end",
       marginTop: 40,
       marginRight: 10,
-      marginBottom: 20
+      marginBottom: 20,
     },
     submitButton: {
-      backgroundColor: '#5932a6',
-      textTransform: 'none',
+      backgroundColor: "#ED1C24",
+      textTransform: "none",
       paddingX: 20,
       borderRadius: 50,
-      boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.50)',
+      boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.50)",
     },
   };
 
@@ -53,8 +52,8 @@ const JobFields = () => {
     };
 
     const fetchOptionData = () => {
-      const parentFieldName = 'Address';
-      const subFieldName = 'Country';
+      const parentFieldName = "Address";
+      const subFieldName = "Country";
       if (formData !== null) {
         setFormData({
           ...formData,
@@ -76,12 +75,11 @@ const JobFields = () => {
   }, []);
 
   useEffect(() => {
-
     const fetchOptionData = () => {
-      const parentFieldName = 'Address';
-      const subFieldName = 'State/Province';
+      const parentFieldName = "Address";
+      const subFieldName = "State/Province";
       if (formData !== null) {
-        if (formData?.['Address']?.SUB_FIELDS?.['Country']?.VALUE.length !== 0)
+        if (formData?.["Address"]?.SUB_FIELDS?.["Country"]?.VALUE.length !== 0)
           setFormData({
             ...formData,
             [parentFieldName]: {
@@ -91,7 +89,9 @@ const JobFields = () => {
                 [subFieldName]: {
                   ...formData[parentFieldName]?.SUB_FIELDS[subFieldName],
                   DISABLED: false,
-                  OPTIONS: fetchStatesByCountry(formData?.['Address']?.SUB_FIELDS?.['Country']?.VALUE)
+                  OPTIONS: fetchStatesByCountry(
+                    formData?.["Address"]?.SUB_FIELDS?.["Country"]?.VALUE
+                  ),
                 },
               },
             },
@@ -100,17 +100,16 @@ const JobFields = () => {
     };
 
     fetchOptionData();
-
-  }, [formData?.['Address']?.SUB_FIELDS?.['Country']?.VALUE])
+  }, [formData?.["Address"]?.SUB_FIELDS?.["Country"]?.VALUE]);
 
   const handleOnSubmit = (event) => {
     event.preventDefault();
-    handleOpen('Backdrop');
+    handleOpen("Backdrop");
     setTimeout(() => {
       console.log(formData);
-      console.log('Hurray!');
+      console.log("Hurray!");
       handleClose();
-    }, 3000)
+    }, 3000);
   };
 
   const handleClose = () => {
@@ -123,14 +122,23 @@ const JobFields = () => {
 
   const isNullish = (field) => {
     if (field?.REQUIRED === true) {
-      if (field?.value === null || field?.value === undefined || field?.value === '') {
+      if (
+        field?.value === null ||
+        field?.value === undefined ||
+        field?.value === ""
+      ) {
         return true;
       }
     }
     return false;
   };
 
-  const handleOnChange = (value, fieldName, parentFieldName = null, keyRef = null) => {
+  const handleOnChange = (
+    value,
+    fieldName,
+    parentFieldName = null,
+    keyRef = null
+  ) => {
     const copyFormData = JSON.parse(JSON.stringify(formData));
     if (parentFieldName && keyRef) {
       setFormData({
@@ -145,10 +153,10 @@ const JobFields = () => {
                 ...copyFormData[parentFieldName].CHILDREN[keyRef][fieldName],
                 VALUE: value,
                 ERROR: isNullish(value) ? true : false,
-              }
-            }
-          }
-        }
+              },
+            },
+          },
+        },
       });
     } else if (parentFieldName) {
       setFormData({
@@ -184,18 +192,28 @@ const JobFields = () => {
           <Box p={1}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <Grid container spacing={2}>
-                {formData && Object.keys(formData).map((fieldName) =>
-                  getFieldJSX(formData[fieldName], handleOnChange, formData, setFormData)
-                )}
+                {formData &&
+                  Object.keys(formData).map((fieldName) =>
+                    getFieldJSX(
+                      formData[fieldName],
+                      handleOnChange,
+                      formData,
+                      setFormData
+                    )
+                  )}
               </Grid>
             </LocalizationProvider>
           </Box>
           <Box style={styles.buttonBox}>
-            <Button variant="contained" style={styles.submitButton} type="submit">
+            <Button
+              variant="contained"
+              style={styles.submitButton}
+              type="submit"
+            >
               Let's Go
             </Button>
             <Backdrop
-              sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
               open={open}
             >
               <CircularProgress color="inherit" />

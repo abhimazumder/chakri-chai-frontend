@@ -361,6 +361,21 @@ const FromLayout = {
                 ERROR: false,
                 VALUE: '',
             },
+
+            "CGPA/Percentage" : {
+                SIZE: 12,
+                FIELD_TYPE: "Number",
+                FIELD_LABLE: "CGPA/Percentage",
+                FIELD_ID: "form-field-9-f",
+                FIELD_NAME: "CGPA/Percentage",
+                EXPANDABLE: false,
+                REQUIRED: true,
+                DISABLED: false,
+                PARENT_FIELD_NAME: "Education",
+                PARENT_FIELD_ID: "form-field-9",
+                ERROR: false,
+                VALUE: '',
+            }
         },
         CHILDREN: {},
     },

@@ -1,10 +1,10 @@
-import { AppBar, Toolbar, Typography } from '@mui/material';
-import '@fontsource/montserrat';
+import { AppBar, Toolbar, Typography } from "@mui/material";
+import "@fontsource/montserrat";
 
 const headerStyles = {
   appBar: {
-    backgroundColor: 'black',
-    position: 'fixed',
+    backgroundColor: "black",
+    position: "fixed",
     top: 0,
     left: 0,
     right: 0,
@@ -17,8 +17,8 @@ const headerStyles = {
   },
   title: {
     flexGrow: 1,
-    fontFamily: 'Montserrat, sans-serif',
-    fontWeight: 'bold',
+    fontFamily: "Montserrat, sans-serif",
+    fontWeight: "bold",
   },
 };
 
@@ -27,7 +27,7 @@ const Header = () => {
     <AppBar position="sticky" style={headerStyles.appBar}>
       <Toolbar>
         <img
-          src="src/assets/logo-header.png"
+          src="src/assets/header-logo.png"
           alt="Logo"
           style={headerStyles.logo}
         />

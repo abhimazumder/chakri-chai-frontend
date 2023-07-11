@@ -22,14 +22,13 @@
 //   }
 // };
 
-
 // export const fetchStatesByCountryAlt = async (countryName) => {
 //   const otherValue = {
 //     VALUE: 'Other',
 //     ID: 'Others',
 //     DISABLED: false,
 //   };
-  
+
 //   try {
 //     const username = 'abhishek2806'; // Replace with your Geonames username
 //     const encodedCountryName = encodeURIComponent(countryName);
@@ -58,8 +57,7 @@
 // };
 
 // ------------------------------------------------------------------------------------------------------------- //
-import { Country, State }  from 'country-state-city';
-
+import { Country, State } from "country-state-city";
 
 export const fetchCountryList = () => {
   const countries = Country.getAllCountries();
@@ -73,10 +71,10 @@ export const fetchCountryList = () => {
 
 export const fetchStatesByCountry = (countryName) => {
   const otherValue = {
-        VALUE: 'Other',
-        ID: 'Others',
-        DISABLED: false,
-      };
+    VALUE: "Other",
+    ID: "Others",
+    DISABLED: false,
+  };
   const countries = Country.getAllCountries();
   const country = countries.find((c) => c.name === countryName);
 
@@ -92,8 +90,6 @@ export const fetchStatesByCountry = (countryName) => {
     DISABLED: false,
   }));
 
-  modifiedStatesList.push(otherValue)
+  modifiedStatesList.push(otherValue);
   return modifiedStatesList;
 };
-
-//console.log(fetchStatesByCountry('India'))
