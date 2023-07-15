@@ -5,7 +5,7 @@ import { Button, Container, Grid, Paper } from '@mui/material';
 const MyComponent = () => {
   const styles = {
     roundedPaper: {
-      padding: '16px', // Set the desired uniform padding value
+      padding: '16px',
       borderRadius: 6,
     },
     gridItem: {
