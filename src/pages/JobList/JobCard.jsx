@@ -1,55 +1,137 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
-import { Button, Container, Grid, Paper } from '@mui/material';
+/* eslint-disable react/prop-types */
+import React from "react";
+import { Button, Container, Grid, Paper, Typography } from "@mui/material";
+import ShareRoundedIcon from "@mui/icons-material/ShareRounded";
+import "@fontsource/montserrat";
+import { useNavigate } from "react-router-dom";
 
-const MyComponent = () => {
+const JobCard = ({ jobData }) => {
   const styles = {
     roundedPaper: {
-      padding: '16px',
+      padding: 20,
       borderRadius: 6,
     },
     gridItem: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      textAlign: 'center',
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      textAlign: "center",
+    },
+    jobTitle: {
+      textTransform: "none",
+      color: "#ED1C24",
+      marginBottom: 10,
+      fontFamily: "Montserrat, sans-serif",
     },
     applyButton: {
-      backgroundColor: '#ED1C24',
+      textTransform: "none",
+      backgroundColor: "#ED1C24",
       borderRadius: 50,
       width: 120,
       height: 40,
-      boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.50)',
+      boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.50)",
       margin: 3,
+      fontFamily: "Montserrat, sans-serif",
     },
     shareButton: {
-      backgroundColor: '#2F4F4F',
+      textTransform: "none",
+      backgroundColor: "#242424",
       borderRadius: 50,
       width: 120,
       height: 40,
-      boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.50)',
+      boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.50)",
       margin: 3,
+      fontFamily: "Montserrat, sans-serif",
     },
   };
+
+  const navigate = useNavigate();
+
+  const {
+    JOB_ID,
+    JOB_TITLE,
+    JOB_LOCATIONS,
+    POSTING_DATE,
+    APPLICATION_DEADLINE,
+    REQUIRED_EXPERIENCE,
+  } = jobData;
 
   return (
     <Container>
       <Paper elevation={3} style={styles.roundedPaper}>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6} md={4} style={styles.gridItem}>
-            <Button>
-              Click
-            </Button>
+          <Grid item xs={12} sm={12} md={4}>
+            <Typography variant="h5" component="h5" style={styles.jobTitle}>
+              {JOB_TITLE}
+            </Typography>
+            <Typography
+              variant="body2"
+              fontWeight="fontWeightBold"
+              color="textSecondary"
+            >
+              {`Job ID: ${JOB_ID}`}
+            </Typography>
           </Grid>
-          <Grid item xs={12} sm={6} md={3} style={styles.gridItem}>
-            <Button>
-              Click
-            </Button>
+          <Grid item xs={12} sm={6} md={2}>
+            <Typography
+              variant="body2"
+              fontWeight="fontWeightBold"
+              color="textSecondary"
+            >
+              {"Location: "}
+            </Typography>
+            <Typography variant="h6" fontWeight="bold">
+              {Object.keys(JOB_LOCATIONS).length > 1
+                ? "Multiple"
+                : JOB_LOCATIONS[Object.keys(JOB_LOCATIONS)[0]].length > 1
+                ? "Multiple"
+                : JOB_LOCATIONS[Object.keys(JOB_LOCATIONS)[0]][0]}
+            </Typography>
           </Grid>
-          <Grid item xs={12} sm={6} md={3} style={styles.gridItem}>
-            <Button>
-              Click
-            </Button>
+          <Grid item xs={12} sm={6} md={2}>
+            <Typography
+              variant="body2"
+              fontWeight="fontWeightBold"
+              color="textSecondary"
+            >
+              {"Posting Date: "}
+            </Typography>
+            <Typography variant="h6" fontWeight="fontWeightBold">
+              {POSTING_DATE}
+            </Typography>
+            <Typography
+              variant="body2"
+              fontWeight="fontWeightBold"
+              color="textSecondary"
+            >
+              {"Application Deadline: "}
+            </Typography>
+            <Typography variant="h6" fontWeight="fontWeightBold">
+              {APPLICATION_DEADLINE}
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sm={6} md={2}>
+          <Typography
+              variant="body2"
+              fontWeight="fontWeightBold"
+              color="textSecondary"
+            >
+              {"Required Experience: "}
+            </Typography>
+            <Typography variant="h6" fontWeight="fontWeightBold">
+              {
+                Object.keys(REQUIRED_EXPERIENCE?.RANGE).length === 2
+                ? `${REQUIRED_EXPERIENCE?.RANGE?.MINIMUM} - ${REQUIRED_EXPERIENCE?.RANGE?.MAXIMUM} ${REQUIRED_EXPERIENCE.UNIT}`
+                : REQUIRED_EXPERIENCE?.RANGE?.MINIMUM
+                ? `> ${REQUIRED_EXPERIENCE?.RANGE?.MINIMUM} ${REQUIRED_EXPERIENCE.UNIT}`
+                : REQUIRED_EXPERIENCE?.RANGE?.MAXIMUM
+                ? `< ${REQUIRED_EXPERIENCE?.RANGE?.MAXIMUM} ${REQUIRED_EXPERIENCE.UNIT}`
+                : REQUIRED_EXPERIENCE?.RANGE?.ABSOLUTE
+                ? `${REQUIRED_EXPERIENCE?.RANGE?.ABSOLUTE} ${REQUIRED_EXPERIENCE.UNIT}`
+                : ""
+              }
+            </Typography>
           </Grid>
           <Grid item xs={12} sm={6} md={2} style={styles.gridItem}>
             <Grid container spacing={1}>
@@ -58,8 +140,9 @@ const MyComponent = () => {
                   variant="contained"
                   style={styles.shareButton}
                   type="submit"
+                  endIcon={<ShareRoundedIcon />}
                 >
-                  Share
+                  {"Share"}
                 </Button>
               </Grid>
               <Grid item xs={12}>
@@ -67,8 +150,9 @@ const MyComponent = () => {
                   variant="contained"
                   style={styles.applyButton}
                   type="submit"
+                  onClick={() => navigate("/jobinfo")}
                 >
-                  Apply
+                  {"Apply"}
                 </Button>
               </Grid>
             </Grid>
@@ -79,4 +163,4 @@ const MyComponent = () => {
   );
 };
 
-export default MyComponent;
+export default JobCard;

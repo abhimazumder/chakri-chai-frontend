@@ -23,9 +23,9 @@ export const SampleJob = {
         },
         CURRENCY: "DOLLAR",
       },
-      POSTING_DATE: "12/10/22",
-      APPLICATION_DEADLINE: "20/10/22",
     },
+    POSTING_DATE: "12/10/22",
+    APPLICATION_DEADLINE: "20/10/22",
   },
   JOB_DESCRIPTION: {
     "section-1": {
@@ -46,7 +46,7 @@ export const SampleJob = {
         "Fusce rhoncus vestibulum tortor, in finibus nulla ullamcorper ac. Nullam ut elit ut libero eleifend facilisis. Sed ultrices mauris nec metus ullamcorper, in commodo nunc lacinia. Nunc pulvinar dapibus diam, vitae rhoncus urna pulvinar eu. Morbi finibus fermentum mi, vitae dignissim libero semper id. Maecenas aliquam nibh ac ex vestibulum, id commodo tortor convallis.",
     },
     "section-4": {
-      SECTION_NAME: "Educaion",
+      SECTION_NAME: "Education",
       SECTION_TYPE: "user-generated",
       CONTENT: "10th pass",
     },

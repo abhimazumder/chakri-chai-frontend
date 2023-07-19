@@ -17,6 +17,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import FormLayout from "../../templates/FormLayout";
 import getFieldJSX from "./getFieldJSX";
+import "@fontsource/montserrat";
 
 import { fetchCountryList, fetchStatesByCountry } from "../../services/apis";
 
@@ -38,12 +39,14 @@ const JobFields = () => {
       marginBottom: 20,
     },
     submitButton: {
+      textTransform: "none",
       backgroundColor: "#ED1C24",
       borderRadius: 50,
-      width: 150,
-      height: 50,
+      width: 120,
+      height: 40,
       boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.50)",
-      margin: 3
+      margin: 3,
+      fontFamily: "Montserrat, sans-serif",
     },
   };
 

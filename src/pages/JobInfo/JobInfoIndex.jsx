@@ -2,14 +2,14 @@
 import { Container } from "@mui/material";
 import React from "react";
 import JobBrief from "../../components/JobBrief";
-import JobDesciption from "./JobDesciption";
+import JobDescription from "./JobDescription";
 
 const JobInfoIndex = () => {
   return (
     <Container>
       <JobBrief />
       <div style={{ marginTop: 20 }} />
-      <JobDesciption />
+      <JobDescription />
     </Container>
   );
 };

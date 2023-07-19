@@ -1,4 +1,4 @@
-export const JobList = [
+const JobList = [
     {
       JOB_ID: "650112",
       JOB_TITLE: "Software Engineer - Entry Level",
@@ -8,7 +8,12 @@ export const JobList = [
       },
       POSTING_DATE: "12/10/22",
       APPLICATION_DEADLINE: "20/10/22",
-      DEPARTMENT: "Engineering",
+      REQUIRED_EXPERIENCE: {
+        RANGE: {
+          MINIMUM: 1,
+        },
+        UNIT: "Year",
+      },
     },
     {
       JOB_ID: "745623",
@@ -19,7 +24,12 @@ export const JobList = [
       },
       POSTING_DATE: "15/11/22",
       APPLICATION_DEADLINE: "25/11/22",
-      DEPARTMENT: "Marketing",
+      REQUIRED_EXPERIENCE: {
+        RANGE: {
+          MAXIMUM: 11,
+        },
+        UNIT: "Month",
+      },
     },
     {
       JOB_ID: "830951",
@@ -29,7 +39,13 @@ export const JobList = [
       },
       POSTING_DATE: "03/12/22",
       APPLICATION_DEADLINE: "13/12/22",
-      DEPARTMENT: "Design",
+      REQUIRED_EXPERIENCE: {
+        RANGE: {
+          MINIMUM: 1,
+          MAXIMUM: 3,
+        },
+        UNIT: "Year",
+      },
     },
     {
       JOB_ID: "926510",
@@ -40,7 +56,12 @@ export const JobList = [
       },
       POSTING_DATE: "22/01/23",
       APPLICATION_DEADLINE: "01/02/23",
-      DEPARTMENT: "Finance",
+      REQUIRED_EXPERIENCE: {
+        RANGE: {
+          ABSOLUTE: 1.5,
+        },
+        UNIT: "Year",
+      },
     },
     {
       JOB_ID: "057814",
@@ -51,7 +72,12 @@ export const JobList = [
       },
       POSTING_DATE: "10/03/23",
       APPLICATION_DEADLINE: "20/03/23",
-      DEPARTMENT: "Sales",
+      REQUIRED_EXPERIENCE: {
+        RANGE: {
+          ABSOLUTE: 6,
+        },
+        UNIT: "Month",
+      },
     },
     {
       JOB_ID: "198230",
@@ -62,7 +88,12 @@ export const JobList = [
       },
       POSTING_DATE: "05/04/23",
       APPLICATION_DEADLINE: "15/04/23",
-      DEPARTMENT: "Human Resources",
+      REQUIRED_EXPERIENCE: {
+        RANGE: {
+          MINIMUM: 10,
+        },
+        UNIT: "Month",
+      },
     },
     {
       JOB_ID: "372650",
@@ -73,7 +104,12 @@ export const JobList = [
       },
       POSTING_DATE: "18/05/23",
       APPLICATION_DEADLINE: "28/05/23",
-      DEPARTMENT: "Operations",
+      REQUIRED_EXPERIENCE: {
+        RANGE: {
+          ABSOLUTE: 2,
+        },
+        UNIT: "Year",
+      },
     },
     {
       JOB_ID: "490286",
@@ -84,7 +120,12 @@ export const JobList = [
       },
       POSTING_DATE: "02/06/23",
       APPLICATION_DEADLINE: "12/06/23",
-      DEPARTMENT: "Product Management",
+      REQUIRED_EXPERIENCE: {
+        RANGE: {
+          MINIMUM: 1,
+        },
+        UNIT: "Year",
+      },
     },
     {
       JOB_ID: "586024",
@@ -96,18 +137,30 @@ export const JobList = [
       },
       POSTING_DATE: "14/07/23",
       APPLICATION_DEADLINE: "24/07/23",
-      DEPARTMENT: "Customer Service",
+      REQUIRED_EXPERIENCE: {
+        RANGE: {
+          MINIMUM: 2,
+        },
+        UNIT: "Year",
+      },
     },
     {
       JOB_ID: "659428",
       JOB_TITLE: "Data Analyst",
       JOB_LOCATIONS: {
-        US: ["San Francisco", "Seattle"],
-        AU: ["Sydney"],
+        US: ["San Francisco"],
       },
       POSTING_DATE: "30/08/23",
       APPLICATION_DEADLINE: "09/09/23",
-      DEPARTMENT: "Data Analytics",
+      REQUIRED_EXPERIENCE: {
+        RANGE: {
+          MINIMUM: 2,
+          MAXIMUM: 5,
+        },
+        UNIT: "Year",
+      },
     },
   ];
+
+  export default JobList;
   

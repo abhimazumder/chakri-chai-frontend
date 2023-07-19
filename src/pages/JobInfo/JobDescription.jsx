@@ -1,5 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-unused-vars */
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Chip,
@@ -8,12 +9,12 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { SampleJob } from "../../templates/SampleJob";
-import "@fontsource/montserrat";
 import { useNavigate } from "react-router-dom";
+import { SampleJob } from "../../templates/SampleJob";
+import ShareRoundedIcon from "@mui/icons-material/ShareRounded";
+import "@fontsource/montserrat";
 
-const JobDesciption = () => {
+const JobDescription = () => {
   const styles = {
     roundedPaper: {
       paddingY: 2,
@@ -38,20 +39,24 @@ const JobDesciption = () => {
       fontFamily: "Montserrat, sans-serif",
     },
     applyButton: {
+      textTransform: "none",
       backgroundColor: "#ED1C24",
       borderRadius: 50,
-      width: 150,
-      height: 50,
+      width: 120,
+      height: 40,
       boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.50)",
-      margin: 3
+      margin: 3,
+      fontFamily: "Montserrat, sans-serif",
     },
     shareButton: {
-      backgroundColor: "#2F4F4F",
+      textTransform: "none",
+      backgroundColor: "#242424",
       borderRadius: 50,
-      width: 150,
-      height: 50,
+      width: 120,
+      height: 40,
       boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.50)",
-      margin: 3
+      margin: 3,
+      fontFamily: "Montserrat, sans-serif",
     },
   };
 
@@ -62,8 +67,8 @@ const JobDesciption = () => {
     setJobData(SampleJob);
   }, []);
 
-  const generateSection = (sections, sectionName) => {
-    const content = sections[sectionName];
+  const generateSection = (sectionDetails) => {
+    const sectionName = sectionDetails.SECTION_NAME;
     switch (sectionName.trim().toUpperCase()) {
       case "SKILLS":
         return (
@@ -87,7 +92,7 @@ const JobDesciption = () => {
               spacing={1}
               style={{ paddingTop: 7 }}
             >
-              {content.map((skill, index) => {
+              {sectionDetails?.CONTENT?.map((skill, index) => {
                 return (
                   <Grid item xs={"auto"} key={index}>
                     <Chip size="medium" label={skill} />
@@ -115,7 +120,7 @@ const JobDesciption = () => {
               {sectionName}
             </Typography>
             <Typography variant="paragraph" style={styles.paragraph}>
-              {content}
+              {sectionDetails?.CONTENT}
             </Typography>
           </Grid>
         );
@@ -127,8 +132,8 @@ const JobDesciption = () => {
       <Paper elevation={3} sx={styles.roundedPaper}>
           <Grid container spacing={2}>
             {jobData &&
-              Object.keys(jobData?.SECTIONS).map((sectionName) =>
-                generateSection(jobData?.SECTIONS, sectionName)
+              Object.values(jobData?.JOB_DESCRIPTION).map((section) =>
+                generateSection(section)
               )}
             <Grid
               item
@@ -139,13 +144,13 @@ const JobDesciption = () => {
               style={{marginBottom: 25}}
             >
               <Button
-                variant="contained"
-                style={styles.shareButton}
-                type="submit"
-                // onClick={() => navigate()}
-              >
-                {"Share"}
-              </Button>
+                  variant="contained"
+                  style={styles.shareButton}
+                  type="submit"
+                  endIcon={<ShareRoundedIcon />}
+                >
+                  {"Share"}
+                </Button>
               <Button
                 variant="contained"
                 style={styles.applyButton}
@@ -161,4 +166,4 @@ const JobDesciption = () => {
   );
 };
 
-export default JobDesciption;
+export default JobDescription;
