@@ -1,10 +1,23 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React from "react";
-import { Button, Container, Grid, Paper, Typography } from "@mui/material";
+import React, { useState } from "react";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  Modal,
+  Paper,
+  Typography,
+} from "@mui/material";
 import ShareRoundedIcon from "@mui/icons-material/ShareRounded";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import LinkIcon from "@mui/icons-material/Link";
 import "@fontsource/montserrat";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const JobCard = ({ jobData }) => {
   const styles = {
@@ -44,8 +57,31 @@ const JobCard = ({ jobData }) => {
       margin: 3,
       fontFamily: "Montserrat, sans-serif",
     },
+    modalStyle: {
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      position: "absolute",
+      backgroundColor: "#fff",
+      padding: 20,
+      borderRadius: 6,
+      minHeight: "200px",
+      minWidth: "300px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    iconWrapper: {
+      display: "flex",
+      justifyContent: "space-evenly",
+      color: "grey",
+    },
+    icon: {
+      fontSize: "48px",
+    },
   };
 
+  const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const {
@@ -56,6 +92,9 @@ const JobCard = ({ jobData }) => {
     APPLICATION_DEADLINE,
     REQUIRED_EXPERIENCE,
   } = jobData;
+
+  const handleModalOpen = () => setModalOpen(true);
+  const handleModalClose = () => setModalOpen(false);
 
   return (
     <Container>
@@ -112,7 +151,7 @@ const JobCard = ({ jobData }) => {
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6} md={2}>
-          <Typography
+            <Typography
               variant="body2"
               fontWeight="fontWeightBold"
               color="textSecondary"
@@ -120,8 +159,7 @@ const JobCard = ({ jobData }) => {
               {"Required Experience: "}
             </Typography>
             <Typography variant="h6" fontWeight="fontWeightBold">
-              {
-                Object.keys(REQUIRED_EXPERIENCE?.RANGE).length === 2
+              {Object.keys(REQUIRED_EXPERIENCE?.RANGE).length === 2
                 ? `${REQUIRED_EXPERIENCE?.RANGE?.MINIMUM} - ${REQUIRED_EXPERIENCE?.RANGE?.MAXIMUM} ${REQUIRED_EXPERIENCE.UNIT}`
                 : REQUIRED_EXPERIENCE?.RANGE?.MINIMUM
                 ? `> ${REQUIRED_EXPERIENCE?.RANGE?.MINIMUM} ${REQUIRED_EXPERIENCE.UNIT}`
@@ -129,8 +167,7 @@ const JobCard = ({ jobData }) => {
                 ? `< ${REQUIRED_EXPERIENCE?.RANGE?.MAXIMUM} ${REQUIRED_EXPERIENCE.UNIT}`
                 : REQUIRED_EXPERIENCE?.RANGE?.ABSOLUTE
                 ? `${REQUIRED_EXPERIENCE?.RANGE?.ABSOLUTE} ${REQUIRED_EXPERIENCE.UNIT}`
-                : ""
-              }
+                : ""}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6} md={2} style={styles.gridItem}>
@@ -141,6 +178,7 @@ const JobCard = ({ jobData }) => {
                   style={styles.shareButton}
                   type="submit"
                   endIcon={<ShareRoundedIcon />}
+                  onClick={handleModalOpen}
                 >
                   {"Share"}
                 </Button>
@@ -159,6 +197,17 @@ const JobCard = ({ jobData }) => {
           </Grid>
         </Grid>
       </Paper>
+      <Modal open={modalOpen} onClose={handleModalClose}>
+        <Box style={styles.modalStyle}>
+          <Box style={styles.iconWrapper}>
+            <WhatsAppIcon style={styles.icon} />
+            <FacebookIcon style={styles.icon} />
+            <LinkedInIcon style={styles.icon} />
+            <InstagramIcon style={styles.icon} />
+            <LinkIcon style={styles.icon} />
+          </Box>
+        </Box>
+      </Modal>
     </Container>
   );
 };

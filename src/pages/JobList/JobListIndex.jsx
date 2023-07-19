@@ -8,7 +8,7 @@ const JobListIndex = () => {
   const [jobListData, setJobListData] = useState(null);
 
   useEffect(() => {
-    console.log(JobList);
+    window.scrollTo(0, 0);
     setJobListData(JobList);
   }, []);
 
