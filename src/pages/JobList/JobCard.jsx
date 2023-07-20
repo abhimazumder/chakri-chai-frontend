@@ -37,6 +37,9 @@ const JobCard = ({ jobData }) => {
       marginBottom: 10,
       fontFamily: "Montserrat, sans-serif",
     },
+    fontStyle: {
+      fontFamily: "Montserrat, sans-serif",
+    },
     applyButton: {
       textTransform: "none",
       backgroundColor: "#ED1C24",
@@ -97,106 +100,120 @@ const JobCard = ({ jobData }) => {
   const handleModalClose = () => setModalOpen(false);
 
   return (
-    <Container>
-      <Paper elevation={3} style={styles.roundedPaper}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={12} md={4}>
-            <Typography variant="h5" component="h5" style={styles.jobTitle}>
-              {JOB_TITLE}
-            </Typography>
-            <Typography
-              variant="body2"
-              fontWeight="fontWeightBold"
-              color="textSecondary"
-            >
-              {`Job ID: ${JOB_ID}`}
-            </Typography>
-          </Grid>
-          <Grid item xs={12} sm={6} md={2}>
-            <Typography
-              variant="body2"
-              fontWeight="fontWeightBold"
-              color="textSecondary"
-            >
-              {"Location: "}
-            </Typography>
-            <Typography variant="h6" fontWeight="bold">
-              {Object.keys(JOB_LOCATIONS).length > 1
-                ? "Multiple"
-                : JOB_LOCATIONS[Object.keys(JOB_LOCATIONS)[0]].length > 1
-                ? "Multiple"
-                : JOB_LOCATIONS[Object.keys(JOB_LOCATIONS)[0]][0]}
-            </Typography>
-          </Grid>
-          <Grid item xs={12} sm={6} md={2}>
-            <Typography
-              variant="body2"
-              fontWeight="fontWeightBold"
-              color="textSecondary"
-            >
-              {"Posting Date: "}
-            </Typography>
-            <Typography variant="h6" fontWeight="fontWeightBold">
-              {POSTING_DATE}
-            </Typography>
-            <Typography
-              variant="body2"
-              fontWeight="fontWeightBold"
-              color="textSecondary"
-            >
-              {"Application Deadline: "}
-            </Typography>
-            <Typography variant="h6" fontWeight="fontWeightBold">
-              {APPLICATION_DEADLINE}
-            </Typography>
-          </Grid>
-          <Grid item xs={12} sm={6} md={2}>
-            <Typography
-              variant="body2"
-              fontWeight="fontWeightBold"
-              color="textSecondary"
-            >
-              {"Required Experience: "}
-            </Typography>
-            <Typography variant="h6" fontWeight="fontWeightBold">
-              {Object.keys(REQUIRED_EXPERIENCE?.RANGE).length === 2
-                ? `${REQUIRED_EXPERIENCE?.RANGE?.MINIMUM} - ${REQUIRED_EXPERIENCE?.RANGE?.MAXIMUM} ${REQUIRED_EXPERIENCE.UNIT}`
-                : REQUIRED_EXPERIENCE?.RANGE?.MINIMUM
-                ? `> ${REQUIRED_EXPERIENCE?.RANGE?.MINIMUM} ${REQUIRED_EXPERIENCE.UNIT}`
-                : REQUIRED_EXPERIENCE?.RANGE?.MAXIMUM
-                ? `< ${REQUIRED_EXPERIENCE?.RANGE?.MAXIMUM} ${REQUIRED_EXPERIENCE.UNIT}`
-                : REQUIRED_EXPERIENCE?.RANGE?.ABSOLUTE
-                ? `${REQUIRED_EXPERIENCE?.RANGE?.ABSOLUTE} ${REQUIRED_EXPERIENCE.UNIT}`
-                : ""}
-            </Typography>
-          </Grid>
-          <Grid item xs={12} sm={6} md={2} style={styles.gridItem}>
-            <Grid container spacing={1}>
-              <Grid item xs={12}>
-                <Button
-                  variant="contained"
-                  style={styles.shareButton}
-                  type="submit"
-                  endIcon={<ShareRoundedIcon />}
-                  onClick={handleModalOpen}
-                >
-                  {"Share"}
-                </Button>
-              </Grid>
-              <Grid item xs={12}>
-                <Button
-                  variant="contained"
-                  style={styles.applyButton}
-                  type="submit"
-                  onClick={() => navigate("/jobinfo")}
-                >
-                  {"Apply"}
-                </Button>
-              </Grid>
+    <Paper elevation={3} style={styles.roundedPaper}>
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={12} md={4}>
+          <Typography variant="h5" component="h5" style={styles.jobTitle}>
+            {JOB_TITLE}
+          </Typography>
+          <Typography
+            variant="body2"
+            fontWeight="fontWeightBold"
+            color="textSecondary"
+          >
+            {`Job ID: ${JOB_ID}`}
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sm={6} md={2}>
+          <Typography
+            variant="body2"
+            fontWeight="fontWeightBold"
+            color="textSecondary"
+          >
+            {"Location: "}
+          </Typography>
+          <Typography
+            variant="h6"
+            fontWeight="fontWeightBold"
+            style={styles.fontStyle}
+          >
+            {Object.keys(JOB_LOCATIONS).length > 1
+              ? "Multiple"
+              : JOB_LOCATIONS[Object.keys(JOB_LOCATIONS)[0]].length > 1
+              ? "Multiple"
+              : JOB_LOCATIONS[Object.keys(JOB_LOCATIONS)[0]][0]}
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sm={6} md={2}>
+          <Typography
+            variant="body2"
+            fontWeight="fontWeightBold"
+            color="textSecondary"
+          >
+            {"Posting Date: "}
+          </Typography>
+          <Typography
+            variant="h6"
+            fontWeight="fontWeightBold"
+            style={styles.fontStyle}
+          >
+            {POSTING_DATE}
+          </Typography>
+          <Typography
+            variant="body2"
+            fontWeight="fontWeightBold"
+            color="textSecondary"
+          >
+            {"Application Deadline: "}
+          </Typography>
+          <Typography
+            variant="h6"
+            fontWeight="fontWeightBold"
+            style={styles.fontStyle}
+          >
+            {APPLICATION_DEADLINE}
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sm={6} md={2}>
+          <Typography
+            variant="body2"
+            fontWeight="fontWeightBold"
+            color="textSecondary"
+          >
+            {"Required Experience: "}
+          </Typography>
+          <Typography
+            variant="h6"
+            fontWeight="fontWeightBold"
+            style={styles.fontStyle}
+          >
+            {Object.keys(REQUIRED_EXPERIENCE?.RANGE).length === 2
+              ? `${REQUIRED_EXPERIENCE?.RANGE?.MINIMUM} - ${REQUIRED_EXPERIENCE?.RANGE?.MAXIMUM} ${REQUIRED_EXPERIENCE.UNIT}`
+              : REQUIRED_EXPERIENCE?.RANGE?.MINIMUM
+              ? `> ${REQUIRED_EXPERIENCE?.RANGE?.MINIMUM} ${REQUIRED_EXPERIENCE.UNIT}`
+              : REQUIRED_EXPERIENCE?.RANGE?.MAXIMUM
+              ? `< ${REQUIRED_EXPERIENCE?.RANGE?.MAXIMUM} ${REQUIRED_EXPERIENCE.UNIT}`
+              : REQUIRED_EXPERIENCE?.RANGE?.ABSOLUTE
+              ? `${REQUIRED_EXPERIENCE?.RANGE?.ABSOLUTE} ${REQUIRED_EXPERIENCE.UNIT}`
+              : ""}
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sm={6} md={2} style={styles.gridItem}>
+          <Grid container spacing={1}>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                style={styles.shareButton}
+                type="submit"
+                endIcon={<ShareRoundedIcon />}
+                onClick={handleModalOpen}
+              >
+                {"Share"}
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                style={styles.applyButton}
+                type="submit"
+                onClick={() => navigate("/jobinfo")}
+              >
+                {"Apply"}
+              </Button>
             </Grid>
           </Grid>
         </Grid>
-      </Paper>
+      </Grid>
       <Modal open={modalOpen} onClose={handleModalClose}>
         <Box style={styles.modalStyle}>
           <Box style={styles.iconWrapper}>
@@ -208,7 +225,7 @@ const JobCard = ({ jobData }) => {
           </Box>
         </Box>
       </Modal>
-    </Container>
+    </Paper>
   );
 };
 
