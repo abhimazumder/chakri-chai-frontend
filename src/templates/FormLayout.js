@@ -186,6 +186,8 @@ const FromLayout = {
                 VALUE: '',
             },
         },
+        ERROR: false,
+        VALUE: '',
     },
 
     "Experience": {
@@ -273,6 +275,8 @@ const FromLayout = {
                 VALUE: '',
             },
         },
+        ERROR: false,
+        VALUE: '',
         CHILDREN: {},
     },
     "Education": {
@@ -377,6 +381,8 @@ const FromLayout = {
                 VALUE: '',
             }
         },
+        ERROR: false,
+        VALUE: '',
         CHILDREN: {},
     },
 

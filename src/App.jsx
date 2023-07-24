@@ -3,7 +3,10 @@ import Header from './components/Header'
 import JobInfoIndex from './pages/JobInfo/JobInfoIndex';
 import JobFormIndex from './pages/JobForm/JobFormIndex'
 import JobListIndex from './pages/JobList/JobListIndex';
+import CreateJobIndex from './pages/CreateJob/CreateJobIndex';
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 
 function App() {
   return (
@@ -12,9 +15,10 @@ function App() {
       <div style={{ marginTop: 100 }} />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<JobListIndex />} />
+          <Route path="/" element={<CreateJobIndex />} />
+          <Route path="/joblist" element={<JobListIndex />} />
           <Route path="/jobinfo" element={<JobInfoIndex />} />
-          <Route path="jobform" element={<JobFormIndex />} />
+          <Route path="/jobform" element={<JobFormIndex />} />
         </Routes>
       </BrowserRouter>
       <Footer />

@@ -15,10 +15,12 @@ import ShareRoundedIcon from "@mui/icons-material/ShareRounded";
 import "@fontsource/montserrat";
 
 const JobDescription = () => {
+  const navigate = useNavigate();
+  const [jobData, setJobData] = useState(null);
+  
   const styles = {
     roundedPaper: {
-      paddingY: 2,
-      paddingX: 5,
+      padding: 2,
       marginBottom: 1,
       borderRadius: 3,
     },
@@ -59,9 +61,6 @@ const JobDescription = () => {
       fontFamily: "Montserrat, sans-serif",
     },
   };
-
-  const navigate = useNavigate();
-  const [jobData, setJobData] = useState(null);
 
   useEffect(() => {
     setJobData(SampleJob);

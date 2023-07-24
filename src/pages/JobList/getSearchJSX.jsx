@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { Grid, InputAdornment, TextField } from "@mui/material";
+import { Grid, InputAdornment, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
 
@@ -10,7 +10,6 @@ const styles = {
 }
 
 const getSearchJSX = (field, handleOnChange) => {
-    console.log(field);
   switch (field.FIELD_TYPE) {
     case "Textfield":
       return (
@@ -35,6 +34,39 @@ const getSearchJSX = (field, handleOnChange) => {
           />
         </Grid>
       );
+
+      case "Dropdown":
+        return (
+          <Grid item xs={12} sm={field.SIZE} key={field?.FIELD_ID}>
+            <InputLabel>{field?.FIELD_LABLE}</InputLabel>
+            <Select
+              id={field?.FIELD_ID}
+              label={field?.FIELD_LABLE}
+              value={field?.VALUE}
+              onChange={(event) => {
+                handleOnChange(
+                  event.target.value,
+                  field?.FIELD_NAME,
+                );
+              }}
+              variant="outlined"
+              required={field?.REQUIRED}
+              disabled={field?.DISABLED}
+              fullWidth
+            >
+              {field?.OPTIONS.map((option) => (
+                <MenuItem
+                  key={option.VALUE}
+                  id={option.ID}
+                  value={option.VALUE}
+                  disabled={option.DISABLED ? true : false}
+                >
+                  {option.VALUE}
+                </MenuItem>
+              ))}
+            </Select>
+          </Grid>
+        );
 
     default:
       return null;

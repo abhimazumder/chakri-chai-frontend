@@ -20,6 +20,9 @@ import "@fontsource/montserrat";
 import { Link, useNavigate } from "react-router-dom";
 
 const JobCard = ({ jobData }) => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const navigate = useNavigate();
+  
   const styles = {
     roundedPaper: {
       padding: 20,
@@ -83,9 +86,6 @@ const JobCard = ({ jobData }) => {
       fontSize: "48px",
     },
   };
-
-  const [modalOpen, setModalOpen] = useState(false);
-  const navigate = useNavigate();
 
   const {
     JOB_ID,

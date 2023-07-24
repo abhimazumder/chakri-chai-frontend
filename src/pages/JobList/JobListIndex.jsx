@@ -27,6 +27,13 @@ const JobListIndex = () => {
 
   const handleOnChange = (value, fieldName) => {
     console.log("value", value);
+    setSearchForm({
+      ...searchForm,
+      [fieldName]: {
+        ...searchForm[fieldName],
+        VALUE: value
+      }
+    })
   }
 
   return (

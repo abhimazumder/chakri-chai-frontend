@@ -1,9 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import {
-  Alert,
   Backdrop,
   Box,
   Button,
@@ -11,7 +9,6 @@ import {
   Container,
   Grid,
   Paper,
-  Snackbar,
 } from "@mui/material";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -20,35 +17,13 @@ import getFieldJSX from "./getFieldJSX";
 import "@fontsource/montserrat";
 
 import { fetchCountryList, fetchStatesByCountry } from "../../services/apis";
+import { debounce } from "lodash";
 
 const JobFields = () => {
   const [formData, setFormData] = useState(FormLayout);
   const [open, setOpen] = useState(false);
 
-  const styles = {
-    roundedPaper: {
-      padding: 2,
-      marginBottom: 1,
-      borderRadius: 3,
-    },
-    buttonBox: {
-      display: "flex",
-      justifyContent: "flex-end",
-      marginTop: 40,
-      marginRight: 10,
-      marginBottom: 20,
-    },
-    submitButton: {
-      textTransform: "none",
-      backgroundColor: "#ED1C24",
-      borderRadius: 50,
-      width: 120,
-      height: 40,
-      boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.50)",
-      margin: 3,
-      fontFamily: "Montserrat, sans-serif",
-    },
-  };
+  const countryList = useMemo(() => fetchCountryList(), []);
 
   useEffect(() => {
     const fetchFormData = async () => {
@@ -59,39 +34,42 @@ const JobFields = () => {
       const parentFieldName = "Address";
       const subFieldName = "Country";
       if (formData !== null) {
-        setFormData({
-          ...formData,
+        setFormData((prevFormData) => ({
+          ...prevFormData,
           [parentFieldName]: {
-            ...formData[parentFieldName],
+            ...prevFormData[parentFieldName],
             SUB_FIELDS: {
-              ...formData[parentFieldName]?.SUB_FIELDS,
+              ...prevFormData[parentFieldName]?.SUB_FIELDS,
               [subFieldName]: {
-                ...formData[parentFieldName]?.SUB_FIELDS[subFieldName],
-                OPTIONS: fetchCountryList(),
+                ...prevFormData[parentFieldName]?.SUB_FIELDS[subFieldName],
+                OPTIONS: countryList,
               },
             },
           },
-        });
+        }));
       }
     };
 
+    fetchFormData();
     fetchOptionData();
-  }, []);
+  }, [countryList]);
 
   useEffect(() => {
     const fetchOptionData = () => {
       const parentFieldName = "Address";
       const subFieldName = "State/Province";
       if (formData !== null) {
-        if (formData?.["Address"]?.SUB_FIELDS?.["Country"]?.VALUE.length !== 0)
-          setFormData({
-            ...formData,
+        if (
+          formData?.["Address"]?.SUB_FIELDS?.["Country"]?.VALUE.length !== 0
+        ) {
+          setFormData((prevFormData) => ({
+            ...prevFormData,
             [parentFieldName]: {
-              ...formData[parentFieldName],
+              ...prevFormData[parentFieldName],
               SUB_FIELDS: {
-                ...formData[parentFieldName]?.SUB_FIELDS,
+                ...prevFormData[parentFieldName]?.SUB_FIELDS,
                 [subFieldName]: {
-                  ...formData[parentFieldName]?.SUB_FIELDS[subFieldName],
+                  ...prevFormData[parentFieldName]?.SUB_FIELDS[subFieldName],
                   DISABLED: false,
                   OPTIONS: fetchStatesByCountry(
                     formData?.["Address"]?.SUB_FIELDS?.["Country"]?.VALUE
@@ -99,7 +77,8 @@ const JobFields = () => {
                 },
               },
             },
-          });
+          }));
+        }
       }
     };
 
@@ -137,56 +116,81 @@ const JobFields = () => {
     return false;
   };
 
+  const debouncedSetFormData = debounce(
+    (formData) => setFormData(formData),
+    400
+  );
+
   const handleOnChange = (
     value,
     fieldName,
     parentFieldName = null,
     keyRef = null
   ) => {
-    const copyFormData = JSON.parse(JSON.stringify(formData));
-    if (parentFieldName && keyRef) {
-      setFormData({
-        ...copyFormData,
-        [parentFieldName]: {
-          ...copyFormData[parentFieldName],
-          CHILDREN: {
-            ...copyFormData[parentFieldName].CHILDREN,
-            [keyRef]: {
-              ...copyFormData[parentFieldName].CHILDREN[keyRef],
-              [fieldName]: {
-                ...copyFormData[parentFieldName].CHILDREN[keyRef][fieldName],
-                VALUE: value,
-                ERROR: isNullish(value) ? true : false,
-              },
-            },
-          },
-        },
-      });
-    } else if (parentFieldName) {
-      setFormData({
-        ...copyFormData,
-        [parentFieldName]: {
-          ...copyFormData[parentFieldName],
-          SUB_FIELDS: {
-            ...copyFormData[parentFieldName].SUB_FIELDS,
-            [fieldName]: {
-              ...copyFormData[parentFieldName].SUB_FIELDS[fieldName],
-              VALUE: value,
-              ERROR: isNullish(value) ? true : false,
-            },
-          },
-        },
-      });
-    } else {
-      setFormData({
-        ...copyFormData,
-        [fieldName]: {
+    const updateFormData = (formData) => {
+      const copyFormData = { ...formData };
+      if (parentFieldName && keyRef) {
+        copyFormData[parentFieldName].CHILDREN[keyRef][fieldName] = {
+          ...copyFormData[parentFieldName].CHILDREN[keyRef][fieldName],
+          VALUE: value,
+          ERROR: isNullish(value) ? true : false,
+        };
+      } else if (parentFieldName) {
+        copyFormData[parentFieldName].SUB_FIELDS[fieldName] = {
+          ...copyFormData[parentFieldName].SUB_FIELDS[fieldName],
+          VALUE: value,
+          ERROR: isNullish(value) ? true : false,
+        };
+      } else {
+        copyFormData[fieldName] = {
           ...copyFormData[fieldName],
           VALUE: value,
           ERROR: isNullish(value) ? true : false,
-        },
-      });
-    }
+        };
+      }
+      return copyFormData;
+    };
+
+    debouncedSetFormData(updateFormData);
+  };
+
+  const formFields = useMemo(
+    () =>
+      formData &&
+      Object.keys(formData).map((fieldName) =>
+        getFieldJSX(
+          formData[fieldName],
+          handleOnChange,
+          formData,
+          debouncedSetFormData
+        )
+      ),
+    [formData]
+  );
+
+  const styles = {
+    roundedPaper: {
+      padding: 2,
+      marginBottom: 1,
+      borderRadius: 3,
+    },
+    buttonBox: {
+      display: "flex",
+      justifyContent: "flex-end",
+      marginTop: 40,
+      marginRight: 10,
+      marginBottom: 20,
+    },
+    submitButton: {
+      textTransform: "none",
+      backgroundColor: "#ED1C24",
+      borderRadius: 50,
+      width: 120,
+      height: 40,
+      boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.50)",
+      margin: 3,
+      fontFamily: "Montserrat, sans-serif",
+    },
   };
 
   return (
@@ -196,15 +200,7 @@ const JobFields = () => {
           <Box p={1}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <Grid container spacing={2}>
-                {formData &&
-                  Object.keys(formData).map((fieldName) =>
-                    getFieldJSX(
-                      formData[fieldName],
-                      handleOnChange,
-                      formData,
-                      setFormData
-                    )
-                  )}
+                {formFields}
               </Grid>
             </LocalizationProvider>
           </Box>

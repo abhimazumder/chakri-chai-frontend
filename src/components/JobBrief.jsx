@@ -36,8 +36,8 @@ const JobBrief = () => {
       marginRight: "2px",
     },
     roundedPaper: {
-      paddingY: 2,
-      paddingX: 5,
+      padding: 2,
+      marginBottom: 1,
       borderRadius: 3,
     },
     backIconStyle: {
@@ -184,7 +184,6 @@ const JobBrief = () => {
           <Grid item xs={3} textAlign="right" key={"JOB_ID"}>
             <Typography
               sx={styles.slantedText}
-              onClick={() => navigate(-1)}
             >
               Job ID: {jobData && jobData?.JOB_META_DATA?.JOB_ID}
             </Typography>

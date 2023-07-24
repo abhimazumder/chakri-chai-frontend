@@ -125,6 +125,7 @@ const getFieldJSX = (
             }
             variant="outlined"
             required={field?.REQUIRED}
+            disabled={field?.DISABLED}
             fullWidth
           />
         </Grid>
@@ -288,9 +289,9 @@ const getFieldJSX = (
       return (
         <Grid item xs={12} sm={field?.SIZE} key={field?.FIELD_ID}>
           <Grid container spacing={2}>
-            <Grid item xs={12} key={`${field?.FIELD_ID}-lable`}>
+            <Grid item xs={12} key={`${field?.FIELD_ID}-label`}>
               <InputLabel style={{ paddingTop: 20 }}>
-                Enter your address below
+                {"Enter your address below"}
               </InputLabel>
             </Grid>
             {Object.keys(field?.SUB_FIELDS).map((subField) => {
@@ -312,7 +313,7 @@ const getFieldJSX = (
           <Grid container spacing={2} style={{ padding: 10 }}>
             <Grid item xs={11} style={{ paddingTop: 25 }}>
               <InputLabel>
-                Click on the plus icon to add {field?.FIELD_LABLE.toLowerCase()}
+               {`Click on the plus icon to add ${field?.FIELD_LABLE.toLowerCase()}`}
               </InputLabel>
             </Grid>
             <Grid item xs={1} alignItems="flex-end">
@@ -323,7 +324,7 @@ const getFieldJSX = (
                 }
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} key={`${field?.FIELD_LABEL}-children`}>
               <Grid container spacing={2}>
                 {Object.keys(formData[field?.FIELD_NAME]?.CHILDREN).map(
                   (childFieldName) => {
