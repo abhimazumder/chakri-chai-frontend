@@ -135,12 +135,7 @@ const JobDescription = () => {
                 generateSection(section)
               )}
             <Grid
-              item
-              xs={12}
-              container
-              justifyContent="flex-end"
-              alignItems="flex-end"
-              style={{marginBottom: 25}}
+              item xs={12} display="flex" justifyContent="flex-end"
             >
               <Button
                   variant="contained"

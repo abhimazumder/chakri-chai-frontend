@@ -87,7 +87,7 @@ const JobFields = () => {
 
   const handleOnSubmit = (event) => {
     event.preventDefault();
-    handleOpen("Backdrop");
+    handleOpen();
     setTimeout(() => {
       console.log(formData);
       console.log("Hurray!");
@@ -174,13 +174,6 @@ const JobFields = () => {
       marginBottom: 1,
       borderRadius: 3,
     },
-    buttonBox: {
-      display: "flex",
-      justifyContent: "flex-end",
-      marginTop: 40,
-      marginRight: 10,
-      marginBottom: 20,
-    },
     submitButton: {
       textTransform: "none",
       backgroundColor: "#ED1C24",
@@ -197,30 +190,32 @@ const JobFields = () => {
     <Container>
       <form onSubmit={handleOnSubmit}>
         <Paper elevation={3} sx={styles.roundedPaper}>
-          <Box p={1}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <Grid container spacing={2}>
-                {formFields}
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <Grid container spacing={2}>
+              {formFields}
+              <Grid item xs={12} display="flex" justifyContent="flex-end">
+                <Button
+                  variant="contained"
+                  style={styles.submitButton}
+                  type="submit"
+                >
+                  {"Let's Go"}
+                </Button>
               </Grid>
-            </LocalizationProvider>
-          </Box>
-          <Box style={styles.buttonBox}>
-            <Button
-              variant="contained"
-              style={styles.submitButton}
-              type="submit"
-            >
-              {"Let's Go"}
-            </Button>
-            <Backdrop
-              sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-              open={open}
-            >
-              <CircularProgress color="inherit" />
-            </Backdrop>
-          </Box>
+            </Grid>
+          </LocalizationProvider>
         </Paper>
       </form>
+      <Backdrop
+        sx={{
+          color: "#fff",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+        open={open}
+        onClick={handleClose}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Container>
   );
 };

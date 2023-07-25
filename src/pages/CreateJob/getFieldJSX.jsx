@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 import {
+  Box,
   Chip,
   FormControl,
   Grid,
   InputLabel,
   MenuItem,
-  NativeSelect,
   Select,
   TextField,
   Typography,
@@ -32,6 +32,21 @@ const styles = {
     color: "grey",
     fontSize: "1.7rem",
     cursor: "pointer",
+  },
+  addSectionStyle: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    width: "auto",
+    border: "4px solid grey",
+    borderRadius: 45,
+    color: "grey",
+    padding: 1,
+    cursor: "pointer",
+  },
+  addSectionIconStyle: {
+    marginRight: 2,
+    fontSize: "2rem",
   },
 };
 
@@ -181,9 +196,18 @@ const createCompensationObject = (field, setFormData) => {
   }));
 };
 
-const removeSectionObject = (childField, field, setFormData) => {
-  
+const removeSectionObject = (childFieldName, field, setFormData) => {
+  const copyChildren = { ...field.CHILDREN };
+  delete copyChildren[childFieldName];
+  setFormData((prevFormData) => ({
+    ...prevFormData,
+    [field.FIELD_NAME]: {
+      ...field,
+      CHILDREN: copyChildren,
+    },
+  }));
 };
+
 
 const createSectionObject = (field, setFormData) => {
   if (field.EXPANDABLE) {
@@ -272,14 +296,14 @@ const getFieldJSX = (
               label={FIELD_LABEL}
               labelId={`${FIELD_ID}-label`}
               value={VALUE}
-              onChange={(event) => {
+              onChange={(event) =>
                 handleOnChange(
                   event.target.value,
                   FIELD_NAME,
                   PARENT_FIELD_NAME,
                   keyRef
-                );
-              }}
+                )
+              }
               variant="outlined"
               required={REQUIRED}
               disabled={DISABLED}
@@ -307,7 +331,12 @@ const getFieldJSX = (
           <DatePicker
             id={FIELD_ID}
             onChange={(value) =>
-              handleOnChange(value, FIELD_NAME, PARENT_FIELD_NAME, keyRef)
+              handleOnChange(
+                value,
+                FIELD_NAME,
+                PARENT_FIELD_NAME,
+                keyRef
+              )
             }
             format="yyyy-MM-dd"
             required={REQUIRED}
@@ -370,17 +399,33 @@ const getFieldJSX = (
       return (
         <Grid item xs={12} sm={SIZE} key={FIELD_ID}>
           <Grid container spacing={2}>
-            <Grid item xs={11} key={`${FIELD_NAME}-label`}>
-              <InputLabel>{FIELD_LABEL}</InputLabel>
-              <Typography variant="body2" sx={{ color: "grey" }}>
-                {`Click on the plus icon to add ${FIELD_LABEL.toLowerCase()}`}
-              </Typography>
-            </Grid>
-            <Grid item xs={1} alignItems="flex-end">
-              <AddCircleOutlineOutlined
-                style={styles.addIconStyle}
-                onClick={() => createLocationObject(field, setFormData)}
-              />
+            <Grid item xs={12}>
+              <Grid container spacing={2} justifyContent="space-between">
+                <Grid
+                  item
+                  xs="auto"
+                  alignItems="flex-start"
+                  justifyContent="flex-start"
+                  key={`${FIELD_NAME}-label`}
+                >
+                  <InputLabel>{FIELD_LABEL}</InputLabel>
+                  <Typography variant="body2" sx={{ color: "grey" }}>
+                    {`Click on the plus icon to add ${FIELD_LABEL.toLowerCase()}`}
+                  </Typography>
+                </Grid>
+                <Grid
+                  item
+                  xs="auto"
+                  alignItems="flex-end"
+                  justifyContent="flex-end"
+                  key={`${FIELD_NAME}-icon`}
+                >
+                  <AddCircleOutlineOutlined
+                    style={styles.addIconStyle}
+                    onClick={() => createLocationObject(field, setFormData)}
+                  />
+                </Grid>
+              </Grid>
             </Grid>
             {Object.values(SUB_FIELDS).map((field) =>
               getFieldJSX(field, handleOnChange, formData, setFormData)
@@ -400,17 +445,33 @@ const getFieldJSX = (
       return (
         <Grid item xs={12} sm={SIZE} key={FIELD_ID}>
           <Grid container spacing={2}>
-            <Grid item xs={11} key={`${FIELD_NAME}-label`}>
-              <InputLabel>{FIELD_LABEL}</InputLabel>
-              <Typography variant="body2" sx={{ color: "grey" }}>
-                {`Click on the plus icon to add ${FIELD_LABEL.toLowerCase()}`}
-              </Typography>
-            </Grid>
-            <Grid item xs={1} alignItems="flex-end">
-              <AddCircleOutlineOutlined
-                style={styles.addIconStyle}
-                onClick={() => createExperienceObject(field, setFormData)}
-              />
+            <Grid item xs={12}>
+              <Grid container spacing={2} justifyContent="space-between">
+                <Grid
+                  item
+                  xs="auto"
+                  alignItems="flex-start"
+                  justifyContent="flex-start"
+                  key={`${FIELD_NAME}-label`}
+                >
+                  <InputLabel>{FIELD_LABEL}</InputLabel>
+                  <Typography variant="body2" sx={{ color: "grey" }}>
+                    {`Click on the plus icon to add ${FIELD_LABEL.toLowerCase()}`}
+                  </Typography>
+                </Grid>
+                <Grid
+                  item
+                  xs="auto"
+                  alignItems="flex-end"
+                  justifyContent="flex-end"
+                  key={`${FIELD_NAME}-icon`}
+                >
+                  <AddCircleOutlineOutlined
+                    style={styles.addIconStyle}
+                    onClick={() => createExperienceObject(field, setFormData)}
+                  />
+                </Grid>
+              </Grid>
             </Grid>
             {Object.values(SUB_FIELDS).map((field) => {
               return getFieldJSX(field, handleOnChange, formData, setFormData);
@@ -443,17 +504,33 @@ const getFieldJSX = (
       return (
         <Grid item xs={12} sm={SIZE} key={FIELD_ID}>
           <Grid container spacing={2}>
-            <Grid item xs={11} key={`${FIELD_NAME}-label`}>
-              <InputLabel>{FIELD_LABEL}</InputLabel>
-              <Typography variant="body2" sx={{ color: "grey" }}>
-                {`Click on the plus icon to add ${FIELD_LABEL.toLowerCase()}`}
-              </Typography>
-            </Grid>
-            <Grid item xs={1} alignItems="flex-end">
-              <AddCircleOutlineOutlined
-                style={styles.addIconStyle}
-                onClick={() => createCompensationObject(field, setFormData)}
-              />
+            <Grid item xs={12}>
+              <Grid container spacing={2} justifyContent="space-between">
+                <Grid
+                  item
+                  xs="auto"
+                  alignItems="flex-start"
+                  justifyContent="flex-start"
+                  key={`${FIELD_NAME}-label`}
+                >
+                  <InputLabel>{FIELD_LABEL}</InputLabel>
+                  <Typography variant="body2" sx={{ color: "grey" }}>
+                    {`Click on the plus icon to add ${FIELD_LABEL.toLowerCase()}`}
+                  </Typography>
+                </Grid>
+                <Grid
+                  item
+                  xs="auto"
+                  alignItems="flex-end"
+                  justifyContent="flex-end"
+                  key={`${FIELD_NAME}-icon`}
+                >
+                  <AddCircleOutlineOutlined
+                    style={styles.addIconStyle}
+                    onClick={() => createCompensationObject(field, setFormData)}
+                  />
+                </Grid>
+              </Grid>
             </Grid>
             {Object.values(SUB_FIELDS).map((field) => {
               return getFieldJSX(field, handleOnChange, formData, setFormData);
@@ -500,16 +577,33 @@ const getFieldJSX = (
       return (
         <Grid item xs={12} sm={SIZE} key={FIELD_ID}>
           <Grid container spacing={2}>
-            <Grid item xs={11}>
-              <InputLabel>
-                {`Click on the plus icon to add ${FIELD_LABEL.toLowerCase()}`}
-              </InputLabel>
-            </Grid>
-            <Grid item xs={1} alignItems="flex-end">
-              <AddCircleOutlineOutlined
-                style={styles.addIconStyle}
-                onClick={() => createSectionObject(field, setFormData)}
-              />
+            <Grid item xs={12}>
+              <Grid container spacing={2} justifyContent="space-between">
+                <Grid
+                  item
+                  xs="auto"
+                  alignItems="flex-start"
+                  justifyContent="flex-start"
+                  key={`${FIELD_NAME}-label`}
+                >
+                  <InputLabel>{FIELD_LABEL}</InputLabel>
+                  <Typography variant="body2" sx={{ color: "grey" }}>
+                    {`Click on the plus icon to add ${FIELD_LABEL.toLowerCase()}`}
+                  </Typography>
+                </Grid>
+                <Grid
+                  item
+                  xs="auto"
+                  alignItems="flex-end"
+                  justifyContent="flex-end"
+                  key={`${FIELD_NAME}-icon`}
+                >
+                  <AddCircleOutlineOutlined
+                    style={styles.addIconStyle}
+                    onClick={() => createSectionObject(field, setFormData)}
+                  />
+                </Grid>
+              </Grid>
             </Grid>
             <Grid item xs={12} key={`${FIELD_LABEL}-children`}>
               <Grid container spacing={2}>
@@ -517,7 +611,7 @@ const getFieldJSX = (
                   const childField = CHILDREN[childFieldName];
                   return (
                     <Grid item xs={12} key={childFieldName}>
-                      <Grid container spacing={2}>
+                      <Grid container spacing={2} style={{ paddingBottom: 40 }}>
                         <Grid item xs={12} alignItems="flex-end">
                           <RemoveCircleOutlineRoundedIcon
                             style={styles.removeIconStyle}
