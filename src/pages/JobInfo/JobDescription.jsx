@@ -69,38 +69,38 @@ const JobDescription = () => {
   const generateSection = (sectionDetails) => {
     const sectionName = sectionDetails.SECTION_NAME;
     switch (sectionName.trim().toUpperCase()) {
-      case "SKILLS":
-        return (
-          <Grid
-            item
-            xs={12}
-            alignItems="left"
-            key={sectionName}
-            style={styles.section}
-          >
-            <Typography
-              variant="h4"
-              component="h4"
-              style={styles.sectionHeader}
-            >
-              {sectionName}
-            </Typography>
-            <Grid
-              container
-              alignItems="left"
-              spacing={1}
-              style={{ paddingTop: 7 }}
-            >
-              {sectionDetails?.CONTENT?.map((skill, index) => {
-                return (
-                  <Grid item xs={"auto"} key={index}>
-                    <Chip size="medium" label={skill} />
-                  </Grid>
-                );
-              })}
-            </Grid>
-          </Grid>
-        );
+      // case "SKILLS":
+      //   return (
+      //     <Grid
+      //       item
+      //       xs={12}
+      //       alignItems="left"
+      //       key={sectionName}
+      //       style={styles.section}
+      //     >
+      //       <Typography
+      //         variant="h4"
+      //         component="h4"
+      //         style={styles.sectionHeader}
+      //       >
+      //         {sectionName}
+      //       </Typography>
+      //       <Grid
+      //         container
+      //         alignItems="left"
+      //         spacing={1}
+      //         style={{ paddingTop: 7 }}
+      //       >
+      //         {sectionDetails?.CONTENT?.map((skill, index) => {
+      //           return (
+      //             <Grid item xs={"auto"} key={index}>
+      //               <Chip size="medium" label={skill} />
+      //             </Grid>
+      //           );
+      //         })}
+      //       </Grid>
+      //     </Grid>
+      //   );
 
       default:
         return (
@@ -131,7 +131,7 @@ const JobDescription = () => {
       <Paper elevation={3} sx={styles.roundedPaper}>
           <Grid container spacing={2}>
             {jobData &&
-              Object.values(jobData?.JOB_DESCRIPTION).map((section) =>
+              Object.values(jobData?.DESCRIPTION).map((section) =>
                 generateSection(section)
               )}
             <Grid

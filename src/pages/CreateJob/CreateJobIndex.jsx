@@ -1,27 +1,50 @@
-import { useEffect, useState } from "react";
-import CreateJobFields from "./CreateJobFields";
+/* eslint-disable no-unused-vars */
+import React, { useEffect, useMemo, useState } from "react";
 import JobLayout from "../../templates/JobLayout";
+import CreateJobForm from "./CreateJobForm";
+import { fetchCountryList } from "../../services/apis";
+import shortid from "shortid";
 
 const CreateJobIndex = () => {
+  const [jobLayout, setJobLayout] = useState(null);
 
-const [jobLayout, setJobLayout] = useState(null);
+  const countryList = useMemo(() => fetchCountryList(), []);
 
   useEffect(() => {
-    const fetchJobLayout = () => {
-        setJobLayout(JobLayout);
-    }
-
-    fetchJobLayout();
     window.scrollTo(0, 0);
+
+    setJobLayout(JobLayout);
   }, []);
 
-  return (
-    <>
-      {
-        jobLayout && <CreateJobFields jobLayout={jobLayout}/>
-      }
-    </>
-  );
+  useEffect(() => {
+    const fetchCountryOptions = async () => {
+      setJobLayout((jobLayout) => ({
+        ...jobLayout,
+        ["Job ID"]: {
+          ...JobLayout["Job ID"],
+          VALUE: shortid.generate().slice(0, 12),
+        },
+        ["Posting Date"]: {
+          ...JobLayout["Posting Date"],
+          VALUE: new Date(),
+        },
+        ["Job Locations"]: {
+          ...jobLayout["Job Locations"],
+          SUB_FIELDS: {
+            ...jobLayout["Job Locations"].SUB_FIELDS,
+            Country: {
+              ...jobLayout["Job Locations"].SUB_FIELDS.Country,
+              OPTIONS: countryList,
+            },
+          },
+        },
+      }));
+    };
+
+    fetchCountryOptions();
+  }, [countryList]);
+
+  return <>{jobLayout && <CreateJobForm jobLayout={jobLayout} />}</>;
 };
 
 export default CreateJobIndex;

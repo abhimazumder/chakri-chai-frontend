@@ -185,27 +185,27 @@ const JobBrief = () => {
             <Typography
               sx={styles.slantedText}
             >
-              Job ID: {jobData && jobData?.JOB_META_DATA?.JOB_ID}
+              Job ID: {jobData && jobData?.META_DATA?.JOB_ID}
             </Typography>
           </Grid>
           <Grid item xs={12} key={"JOB_TITLE"}>
             <Typography variant="h4" sx={{ fontWeight: "bold" }}>
-              {jobData && jobData?.JOB_META_DATA?.JOB_TITLE}
+              {jobData && jobData?.META_DATA?.JOB_TITLE}
             </Typography>
           </Grid>
           <Grid item xs={12} key={"JOB_LOCATIONS"}>
             <Grid container alignItems="left" spacing={1}>
               {jobData &&
-                Object.keys(jobData?.JOB_META_DATA?.JOB_LOCATIONS).map((countryName, index) =>
-                  generateLocations(jobData?.JOB_META_DATA?.JOB_LOCATIONS, countryName, index)
+                Object.keys(jobData?.META_DATA?.JOB_LOCATIONS).map((countryName, index) =>
+                  generateLocations(jobData?.META_DATA?.JOB_LOCATIONS, countryName, index)
                 )}
             </Grid>
           </Grid>
           <Grid item xs={12} style={{ marginTop: 30 }} key={"JOB_FEATURES"}>
             <Grid container alignItems="left" spacing={2}>
               {jobData &&
-                Object.keys(jobData?.JOB_META_DATA?.JOB_FEATURES).map((featureName, index) =>
-                  generateFeatures(jobData?.JOB_META_DATA?.JOB_FEATURES, featureName, index)
+                Object.keys(jobData?.META_DATA?.JOB_FEATURES).map((featureName, index) =>
+                  generateFeatures(jobData?.META_DATA?.JOB_FEATURES, featureName, index)
                 )}
             </Grid>
           </Grid>
@@ -213,13 +213,13 @@ const JobBrief = () => {
             <Grid container spacing={2}>
               <Grid item xs={6} key={"POSTING_DATE"}>
                 <Typography>
-                  Posted on: {jobData && jobData?.JOB_META_DATA?.POSTING_DATE}
+                  Posted on: {jobData && jobData?.META_DATA?.POSTING_DATE}
                 </Typography>
               </Grid>
               <Grid item xs={6} textAlign="right" key={"APPLICATION_DEADLINE"}>
                 <Typography>
                   <span style={styles.asterisk}>* </span>Application deadline:{" "}
-                  {jobData && jobData?.JOB_META_DATA?.APPLICATION_DEADLINE}
+                  {jobData && jobData?.META_DATA?.APPLICATION_DEADLINE}
                 </Typography>
               </Grid>
             </Grid>
