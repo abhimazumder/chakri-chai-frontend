@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
-
 import HomeWorkRoundedIcon from "@mui/icons-material/HomeWorkRounded"; // Work Mode Icon
 import WorkRoundedIcon from "@mui/icons-material/WorkRounded";
 import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded"; // Rupee Icon
@@ -172,8 +171,8 @@ const JobBrief = () => {
   };
 
   return (
-    <Container>
-      <Paper elevation={3} sx={styles.roundedPaper}>
+      <Container>
+        <Paper elevation={3} sx={styles.roundedPaper}>
         <Grid container spacing={2}>
           <Grid item xs={9} key={"BACK_ICON"}>
             <ArrowBackRoundedIcon
@@ -226,7 +225,7 @@ const JobBrief = () => {
           </Grid>
         </Grid>
       </Paper>
-    </Container>
+      </Container>
   );
 };
 

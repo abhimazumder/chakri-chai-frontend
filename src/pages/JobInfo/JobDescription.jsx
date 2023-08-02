@@ -17,7 +17,7 @@ import "@fontsource/montserrat";
 const JobDescription = () => {
   const navigate = useNavigate();
   const [jobData, setJobData] = useState(null);
-  
+
   const styles = {
     roundedPaper: {
       padding: 2,
@@ -43,6 +43,7 @@ const JobDescription = () => {
     applyButton: {
       textTransform: "none",
       backgroundColor: "#ED1C24",
+      background: "linear-gradient(45deg, #ED1C24, #FF5733)",
       borderRadius: 50,
       width: 120,
       height: 40,
@@ -53,6 +54,7 @@ const JobDescription = () => {
     shareButton: {
       textTransform: "none",
       backgroundColor: "#242424",
+      background: "linear-gradient(45deg, #242424, #888888)",
       borderRadius: 50,
       width: 120,
       height: 40,
@@ -127,36 +129,34 @@ const JobDescription = () => {
   };
 
   return (
-    <Container>
-      <Paper elevation={3} sx={styles.roundedPaper}>
-          <Grid container spacing={2}>
-            {jobData &&
-              Object.values(jobData?.DESCRIPTION).map((section) =>
-                generateSection(section)
-              )}
-            <Grid
-              item xs={12} display="flex" justifyContent="flex-end"
+      <Container>
+        <Paper elevation={3} sx={styles.roundedPaper}>
+        <Grid container spacing={2}>
+          {jobData &&
+            Object.values(jobData?.DESCRIPTION).map((section) =>
+              generateSection(section)
+            )}
+          <Grid item xs={12} display="flex" justifyContent="flex-end">
+            <Button
+              variant="contained"
+              style={styles.shareButton}
+              type="submit"
+              endIcon={<ShareRoundedIcon />}
             >
-              <Button
-                  variant="contained"
-                  style={styles.shareButton}
-                  type="submit"
-                  endIcon={<ShareRoundedIcon />}
-                >
-                  {"Share"}
-                </Button>
-              <Button
-                variant="contained"
-                style={styles.applyButton}
-                type="submit"
-                onClick={() => navigate("/jobform")}
-              >
-                {"Apply"}
-              </Button>
-            </Grid>
+              {"Share"}
+            </Button>
+            <Button
+              variant="contained"
+              style={styles.applyButton}
+              type="submit"
+              onClick={() => navigate("/jobform")}
+            >
+              {"Apply"}
+            </Button>
           </Grid>
+        </Grid>
       </Paper>
-    </Container>
+      </Container>
   );
 };
 

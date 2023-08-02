@@ -1,62 +1,3 @@
-/* eslint-disable no-unused-vars */
-// import axios from 'axios';
-
-// export const fetchCountryListAlt = async () => {
-//   try {
-//     const username = 'abhishek2806'; // Replace with your Geonames username
-//     const url = `http://api.geonames.org/countryInfoJSON?username=${username}`;
-
-//     const response = await axios.get(url);
-//     const countries = response.data.geonames;
-
-//     const modifiedCountryList = countries.map((country) => ({
-//       VALUE: country.countryName,
-//       ID: country.countryCode,
-//       DISABLED: false
-//     }));
-
-//     return modifiedCountryList;
-//   } catch (error) {
-//     console.error('Error fetching country list:', error);
-//     return [];
-//   }
-// };
-
-// export const fetchStatesByCountryAlt = async (countryName) => {
-//   const otherValue = {
-//     VALUE: 'Other',
-//     ID: 'Others',
-//     DISABLED: false,
-//   };
-
-//   try {
-//     const username = 'abhishek2806'; // Replace with your Geonames username
-//     const encodedCountryName = encodeURIComponent(countryName);
-//     const url = `http://api.geonames.org/searchJSON?username=${username}&country=${encodedCountryName}&featureCode=ADM1`;
-
-//     const response = await axios.get(url);
-//     const states = response.data.geonames;
-
-//     if (!states || states.length === 0) {
-//       return [otherValue];
-//     }
-
-//     const transformedStates = states.map((state) => ({
-//       VALUE: state.adminName1,
-//       ID: state.adminCode1,
-//       DISABLED: false,
-//     }));
-
-//     transformedStates.push(otherValue);
-
-//     return transformedStates;
-//   } catch (error) {
-//     console.error('Error fetching states:', error);
-//     return [otherValue];
-//   }
-// };
-
-// ------------------------------------------------------------------------------------------------------------- //
 import { Country, State } from "country-state-city";
 
 export const fetchCountryList = () => {
@@ -93,3 +34,29 @@ export const fetchStatesByCountry = (countryName) => {
   modifiedStatesList.push(otherValue);
   return modifiedStatesList;
 };
+
+//-------------------- Lambda Function APIs --------------------//
+
+import axios from "axios";
+
+const baseURL = "https://kkidqp1w6l.execute-api.ap-south-1.amazonaws.com/dev";
+
+const instance = axios.create({
+  baseURL,
+});
+
+export const createJob = async (data) => {
+  console.log("----")
+  const res = await instance.post('/createjob', data);
+  return res;
+}
+
+export const getJob = async () => {
+  const res = await instance.post('/getjob');
+  return res;
+}
+
+export const jobList = async () => {
+  const res = await instance.post('/joblist');
+  return res;
+}

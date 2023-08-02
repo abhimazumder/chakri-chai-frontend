@@ -177,6 +177,7 @@ const JobFields = () => {
     submitButton: {
       textTransform: "none",
       backgroundColor: "#ED1C24",
+      background: "linear-gradient(45deg, #ED1C24, #FF5733)",
       borderRadius: 50,
       width: 120,
       height: 40,

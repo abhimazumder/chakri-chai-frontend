@@ -4,6 +4,7 @@ import JobLayout from "../../templates/JobLayout";
 import CreateJobForm from "./CreateJobForm";
 import { fetchCountryList } from "../../services/apis";
 import shortid from "shortid";
+import { Box } from "@mui/material";
 
 const CreateJobIndex = () => {
   const [jobLayout, setJobLayout] = useState(null);
@@ -44,7 +45,7 @@ const CreateJobIndex = () => {
     fetchCountryOptions();
   }, [countryList]);
 
-  return <>{jobLayout && <CreateJobForm jobLayout={jobLayout} />}</>;
+  return <Box>{jobLayout && <CreateJobForm jobLayout={jobLayout} />}</Box>;
 };
 
 export default CreateJobIndex;

@@ -12,6 +12,9 @@ import Number from "../../fields/Number";
 import Compensation from "../../fields/Compensation";
 import Description from "../../fields/Description";
 import DateField from "../../fields/DateField";
+import { createJob } from "../../services/apis";
+import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
+import { useNavigate } from "react-router-dom";
 
 const styles = {
   roundedPaper: {
@@ -22,6 +25,7 @@ const styles = {
   submitButton: {
     textTransform: "none",
     backgroundColor: "#ED1C24",
+    background: "linear-gradient(45deg, #ED1C24, #FF5733)",
     borderRadius: 50,
     width: 120,
     height: 40,
@@ -32,12 +36,18 @@ const styles = {
   previewButton: {
     textTransform: "none",
     backgroundColor: "#242424",
+    background: "linear-gradient(45deg, #242424, #888888)",
     borderRadius: 50,
     width: 120,
     height: 40,
     boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.50)",
     margin: 3,
     fontFamily: "Montserrat, sans-serif",
+  },
+  backIconStyle: {
+    color: "grey",
+    fontSize: "2.5rem",
+    cursor: "pointer",
   },
 };
 
@@ -228,7 +238,7 @@ const formDataReducer = (state, action) => {
     }
 
     case "REMOVE_SECTION_OBJECT": {
-      const newState = {...state};
+      const newState = { ...state };
       delete newState["Description"].CHILDREN[action.payload];
       return newState;
     }
@@ -240,6 +250,8 @@ const formDataReducer = (state, action) => {
 
 const CreateJobForm = (props) => {
   const [formData, dispatchFormData] = useReducer(formDataReducer, null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatchFormData({ type: "SET_FORM_DATA", payload: props.jobLayout });
@@ -323,65 +335,80 @@ const CreateJobForm = (props) => {
 
   const formatData = (formData) => {
     const DATA = {};
-    Object.values(formData).forEach(field => {
-      switch(field.FIELD_TYPE){
-        case 'Date':
-          DATA[field.FIELD_NAME] = field.VALUE.toString();
+    Object.values(formData).forEach((field) => {
+      switch (field.FIELD_TYPE) {
+        case "Date":
+          DATA[field.FIELD_NAME] = field.VALUE?.toString();
           break;
-        
-        case 'Description':
-          DATA[field.FIELD_NAME] = Object.values(field.CHILDREN).map(child => {
-            const value = {};
-            Object.values(child).forEach(childField => {
-              value[childField.FIELD_NAME] = childField.VALUE;
-            })
-            return value;
-          });
+
+        case "Description":
+          DATA[field.FIELD_NAME] = Object.values(field.CHILDREN).map(
+            (child) => {
+              const value = {};
+              Object.values(child).forEach((childField) => {
+                value[childField.FIELD_NAME] = childField.VALUE;
+              });
+              return value;
+            }
+          );
           break;
-        
+
         default:
           DATA[field.FIELD_NAME] = field.VALUE;
           break;
       }
-    })
+    });
     return DATA;
-  }
+  };
 
-  const handleOnSubmit = (event) => {
+  const handleOnSubmit = async (event) => {
+    const submitCreateJob = async (DATA) => {
+      const res = await createJob({ DATA });
+      return res;
+    };
+
     event.preventDefault();
     console.log(formData);
     const DATA = formatData(formData);
-    console.log("DATA", DATA)
-  }
+    const res = await submitCreateJob(DATA);
+    console.log("DATA", DATA);
+    console.log(res);
+  };
 
   return (
     <Container>
-      <form onSubmit={() => handleOnSubmit(event)}>
+      <form onSubmit={(event) => handleOnSubmit(event)}>
       <Paper elevation={3} sx={styles.roundedPaper}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <Grid container rowSpacing={8} columnSpacing={2} padding={2}>
+          <Grid item xs={9} key={"BACK_ICON"}>
+            <ArrowBackRoundedIcon
+              style={styles.backIconStyle}
+              onClick={() => navigate(-1)}
+            />
+          </Grid>
             {formData &&
               Object.values(formData).map((field) => (
                 <Grid item xs={12} sm={field?.SIZE} key={field?.FIELD_ID}>
                   {getFieldJSX(field)}
                 </Grid>
               ))}
-              <Grid item xs={12} display="flex" justifyContent="flex-end">
-                <Button variant="contained" style={styles.previewButton}>
-                  {"Preview"}
-                </Button>
-                <Button
-                  variant="contained"
-                  style={styles.submitButton}
-                  type="submit"
-                >
-                  {"Create"}
-                </Button>
-              </Grid>
+            <Grid item xs={12} display="flex" justifyContent="flex-end">
+              <Button variant="contained" style={styles.previewButton}>
+                {"Preview"}
+              </Button>
+              <Button
+                variant="contained"
+                style={styles.submitButton}
+                type="submit"
+              >
+                {"Create"}
+              </Button>
+            </Grid>
           </Grid>
         </LocalizationProvider>
       </Paper>
-      </form>
+    </form>
     </Container>
   );
 };

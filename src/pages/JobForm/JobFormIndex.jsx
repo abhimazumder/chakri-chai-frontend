@@ -1,19 +1,21 @@
+/* eslint-disable no-unused-vars */
+import React, { useEffect } from "react";
+import { Box } from "@mui/material";
 import JobFields from "./JobFields";
 import JobBrief from "../../components/JobBrief";
-import { useEffect } from "react";
 
 const JobFormIndex = () => {
-
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [])
+  }, []);
 
   return (
-    <>
-        <JobBrief />
-        <div style={{ marginTop: 20 }} />
+    <Box>
+      <JobBrief />
+      <Box sx={{ marginTop: 2 }}>
         <JobFields />
-=    </>
+      </Box>
+    </Box>
   );
 };
 

@@ -22,7 +22,7 @@ import { Link, useNavigate } from "react-router-dom";
 const JobCard = ({ jobData }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
-  
+
   const styles = {
     roundedPaper: {
       padding: 20,
@@ -46,6 +46,7 @@ const JobCard = ({ jobData }) => {
     applyButton: {
       textTransform: "none",
       backgroundColor: "#ED1C24",
+      background: "linear-gradient(45deg, #ED1C24, #FF5733)",
       borderRadius: 50,
       width: 120,
       height: 40,
@@ -56,6 +57,7 @@ const JobCard = ({ jobData }) => {
     shareButton: {
       textTransform: "none",
       backgroundColor: "#242424",
+      background: "linear-gradient(45deg, #242424, #888888)",
       borderRadius: 50,
       width: 120,
       height: 40,

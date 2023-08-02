@@ -313,7 +313,7 @@ const getFieldJSX = (
           <Grid container spacing={2} style={{ padding: 10 }}>
             <Grid item xs={11} style={{ paddingTop: 25 }}>
               <InputLabel>
-               {`Click on the plus icon to add ${field?.FIELD_LABLE.toLowerCase()}`}
+                {`Click on the plus icon to add ${field?.FIELD_LABLE.toLowerCase()}`}
               </InputLabel>
             </Grid>
             <Grid item xs={1} alignItems="flex-end">
