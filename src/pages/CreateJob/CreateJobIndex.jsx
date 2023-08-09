@@ -27,7 +27,7 @@ const CreateJobIndex = () => {
         },
         ["Posting Date"]: {
           ...JobLayout["Posting Date"],
-          VALUE: new Date(),
+          VALUE: new Date().toISOString(),
         },
         ["Job Locations"]: {
           ...jobLayout["Job Locations"],

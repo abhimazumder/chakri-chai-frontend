@@ -26,14 +26,13 @@ const DateField = (props) => {
     handleOnChange,
     dispatchFormData,
   } = props;
-
   return (
       <DatePicker
         id={FIELD_ID}
         label={FIELD_LABEL}
-        value={VALUE}
+        value={VALUE ? new Date(VALUE) : null}
         onChange={(value) =>
-          handleOnChange(value, FIELD_NAME, PARENT_FIELD_NAME, keyRef)
+          handleOnChange(value.toISOString(), FIELD_NAME, PARENT_FIELD_NAME, keyRef)
         }
         format="yyyy-MM-dd"
         disablePast={DISABLE_PAST}

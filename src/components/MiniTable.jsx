@@ -32,29 +32,28 @@ const styles = {
     fontWeight: "bold",
     fontFamily: "Montserrat, sans-serif",
     color: "#FFFFFF",
+    fontSize: 14,
   },
   tableTypography: {
     fontFamily: "Montserrat, sans-serif",
+    fontSize: 13,
   },
   cellData: {
     fontWeight: "bold",
     fontFamily: "Montserrat, sans-serif",
+    fontSize: 13,
   },
   booleanYes: {
     color: "#2F9931",
     fontWeight: "bold",
     fontFamily: "Montserrat, sans-serif",
+    fontSize: 13,
   },
   booleanNo: {
     color: "#E03131",
     fontWeight: "bold",
     fontFamily: "Montserrat, sans-serif",
-  },
-  tableRowHover: {
-    "&:hover": {
-      backgroundColor: "#F5F5F5",
-      cursor: "pointer",
-    },
+    fontSize: 13,
   },
 };
 
@@ -68,6 +67,10 @@ const MiniTable = ({ headerNames, rows }) => {
   const handleMouseLeave = () => {
     setHoveredRowIndex(null);
   };
+
+  const handleRowClick = (rowId) => {
+    console.log("Clicked on", rowId);
+  }
 
   return (
     <Table>
@@ -93,9 +96,9 @@ const MiniTable = ({ headerNames, rows }) => {
         </TableRow>
       </TableHead>
       <TableBody>
-        {rows.map((row, index) => (
+        {Object.entries(rows).map(([rowId, rowData], index) => (
           <TableRow
-            key={index}
+            key={rowId}
             onMouseEnter={() => handleMouseEnter(index)}
             onMouseLeave={handleMouseLeave}
             sx={
@@ -109,17 +112,17 @@ const MiniTable = ({ headerNames, rows }) => {
                 : null
             }
           >
-            {Object.values(row).map((data, dataIndex) => (
+            {Object.values(rowData).map((data, dataIndex) => (
               <TableCell
                 align="center"
                 style={
                   dataIndex === 0
                     ? styles.tableCellHeaderLeft
-                    : dataIndex === Object.values(row).length - 1
+                    : dataIndex === Object.values(rowData).length - 1
                     ? styles.tableCellHeaderRight
                     : styles.tableCell
                 }
-                key={dataIndex}
+                key={`${index}-${dataIndex}`}
               >
                 {typeof data === "boolean" ? (
                   data ? (

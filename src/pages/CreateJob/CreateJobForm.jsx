@@ -15,6 +15,8 @@ import DateField from "../../fields/DateField";
 import { createJob } from "../../services/apis";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import {setCreateJobFromReduxState} from "../../services/createJobFormSlice";
 
 const styles = {
   roundedPaper: {
@@ -238,9 +240,16 @@ const formDataReducer = (state, action) => {
     }
 
     case "REMOVE_SECTION_OBJECT": {
-      const newState = { ...state };
-      delete newState["Description"].CHILDREN[action.payload];
-      return newState;
+      const updatedDescriptionChildren = { ...state["Description"].CHILDREN };
+      delete updatedDescriptionChildren[action.payload];
+      
+      return {
+        ...state,
+        ["Description"]: {
+          ...state["Description"],
+          CHILDREN: updatedDescriptionChildren,
+        },
+      };
     }
 
     default:
@@ -375,6 +384,13 @@ const CreateJobForm = (props) => {
     console.log(res);
   };
 
+  const dispatch = useDispatch();
+
+  const handlePreviewClick = () => {
+    dispatch(setCreateJobFromReduxState({ formData: formData }));
+
+  }
+
   return (
     <Container>
       <form onSubmit={(event) => handleOnSubmit(event)}>
@@ -394,7 +410,7 @@ const CreateJobForm = (props) => {
                 </Grid>
               ))}
             <Grid item xs={12} display="flex" justifyContent="flex-end">
-              <Button variant="contained" style={styles.previewButton}>
+              <Button variant="contained" style={styles.previewButton} onClick={() => handlePreviewClick()}>
                 {"Preview"}
               </Button>
               <Button

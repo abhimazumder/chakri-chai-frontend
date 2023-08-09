@@ -14,9 +14,9 @@ const footerStyles = {
   },
   icon: {
     color: "white",
-    margin: "0 5px",
   },
 };
+
 
 const Footer = () => {
   const handleEmailClick = () => {
@@ -24,7 +24,6 @@ const Footer = () => {
   };
 
   return (
-    <>
       <BottomNavigation style={footerStyles.footer}>
         <BottomNavigationAction
           icon={<GitHubIcon style={footerStyles.icon} />}
@@ -43,7 +42,6 @@ const Footer = () => {
           onClick={handleEmailClick}
         />
       </BottomNavigation>
-    </>
   );
 };
 
