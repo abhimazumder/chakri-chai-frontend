@@ -46,13 +46,12 @@ const instance = axios.create({
 });
 
 export const createJob = async (data) => {
-  console.log("----")
   const res = await instance.post('/createjob', data);
   return res;
 }
 
-export const getJob = async () => {
-  const res = await instance.post('/getjob');
+export const getJob = async (data) => {
+  const res = await instance.post('/getjob', data);
   return res;
 }
 

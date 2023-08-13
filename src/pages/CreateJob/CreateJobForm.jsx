@@ -16,7 +16,7 @@ import { createJob } from "../../services/apis";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import {setCreateJobFromReduxState} from "../../services/createJobFormSlice";
+import { setCreateJobFromReduxState } from "../../services/createJobFormSlice";
 
 const styles = {
   roundedPaper: {
@@ -242,7 +242,7 @@ const formDataReducer = (state, action) => {
     case "REMOVE_SECTION_OBJECT": {
       const updatedDescriptionChildren = { ...state["Description"].CHILDREN };
       delete updatedDescriptionChildren[action.payload];
-      
+
       return {
         ...state,
         ["Description"]: {
@@ -261,6 +261,7 @@ const CreateJobForm = (props) => {
   const [formData, dispatchFormData] = useReducer(formDataReducer, null);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatchFormData({ type: "SET_FORM_DATA", payload: props.jobLayout });
@@ -371,60 +372,47 @@ const CreateJobForm = (props) => {
   };
 
   const handleOnSubmit = async (event) => {
-    const submitCreateJob = async (DATA) => {
-      const res = await createJob({ DATA });
-      return res;
-    };
-
     event.preventDefault();
-    console.log(formData);
-    const DATA = formatData(formData);
-    const res = await submitCreateJob(DATA);
-    console.log("DATA", DATA);
-    console.log(res);
-  };
-
-  const dispatch = useDispatch();
-
-  const handlePreviewClick = () => {
     dispatch(setCreateJobFromReduxState({ formData: formData }));
-
-  }
+    const DATA = formatData(formData);
+    DATA["Active Status"] = false;
+    console.log(DATA);
+    const res = await createJob({ DATA });
+    const url = `/jobinfo?jobid=${DATA["Job ID"]}&adminview=true`;
+    navigate(url);
+  };
 
   return (
     <Container>
       <form onSubmit={(event) => handleOnSubmit(event)}>
-      <Paper elevation={3} sx={styles.roundedPaper}>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <Grid container rowSpacing={8} columnSpacing={2} padding={2}>
-          <Grid item xs={9} key={"BACK_ICON"}>
-            <ArrowBackRoundedIcon
-              style={styles.backIconStyle}
-              onClick={() => navigate(-1)}
-            />
-          </Grid>
-            {formData &&
-              Object.values(formData).map((field) => (
-                <Grid item xs={12} sm={field?.SIZE} key={field?.FIELD_ID}>
-                  {getFieldJSX(field)}
-                </Grid>
-              ))}
-            <Grid item xs={12} display="flex" justifyContent="flex-end">
-              <Button variant="contained" style={styles.previewButton} onClick={() => handlePreviewClick()}>
-                {"Preview"}
-              </Button>
-              <Button
-                variant="contained"
-                style={styles.submitButton}
-                type="submit"
-              >
-                {"Create"}
-              </Button>
+        <Paper elevation={3} sx={styles.roundedPaper}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <Grid container rowSpacing={8} columnSpacing={2} padding={2}>
+              <Grid item xs={9} key={"BACK_ICON"}>
+                <ArrowBackRoundedIcon
+                  style={styles.backIconStyle}
+                  onClick={() => navigate(-1)}
+                />
+              </Grid>
+              {formData &&
+                Object.values(formData).map((field) => (
+                  <Grid item xs={12} sm={field?.SIZE} key={field?.FIELD_ID}>
+                    {getFieldJSX(field)}
+                  </Grid>
+                ))}
+              <Grid item xs={12} display="flex" justifyContent="flex-end">
+                <Button
+                  variant="contained"
+                  style={styles.submitButton}
+                  type="submit"
+                >
+                  {"Save"}
+                </Button>
+              </Grid>
             </Grid>
-          </Grid>
-        </LocalizationProvider>
-      </Paper>
-    </form>
+          </LocalizationProvider>
+        </Paper>
+      </form>
     </Container>
   );
 };

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
@@ -21,42 +22,50 @@ import CurrencyPoundRoundedIcon from "@mui/icons-material/CurrencyPoundRounded";
 import SavingsRoundedIcon from "@mui/icons-material/SavingsRounded"; // Other currency symbol Icon
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 
-import { SampleJob } from "../templates/SampleJob";
 import { useNavigate } from "react-router-dom";
 
-const JobBrief = () => {
-  const styles = {
-    slantedText: {
-      transform: "skew(-10deg)",
-      marginLeft: "auto",
-    },
-    asterisk: {
-      color: "red",
-      marginRight: "2px",
-    },
-    roundedPaper: {
-      padding: 2,
-      marginBottom: 1,
-      borderRadius: 3,
-    },
-    backIconStyle: {
-      color: "grey",
-      fontSize: "2.5rem",
-      cursor: "pointer",
-    },
-  };
+const styles = {
+  slantedText: {
+    transform: "skew(-10deg)",
+    marginLeft: "auto",
+  },
+  asterisk: {
+    color: "red",
+    marginRight: "2px",
+  },
+  roundedPaper: {
+    padding: 2,
+    marginBottom: 1,
+    borderRadius: 3,
+  },
+  backIconStyle: {
+    color: "grey",
+    fontSize: "2.5rem",
+    cursor: "pointer",
+  },
+};
 
+const convertISOTimeStamp = (isoTimeStamp) => {
+  const date = new Date(isoTimeStamp);
+  return `${date.getUTCDate() || "--"}/${
+    date.getUTCMonth() + 1 || "--"
+  }/${date.getUTCFullYear() || "----"}`;
+};
+
+const JobBrief = (props) => {
   const navigate = useNavigate();
-  const [jobData, setJobData] = useState(null);
+  const [metaData, setMetaData] = useState(null);
 
   useEffect(() => {
-    setJobData(SampleJob);
-  }, []);
+    // console.log("Job Bief", props.metaData);
+    setMetaData(props.metaData);
+  }, [props.metaData]);
 
   const generateFeatures = (jobFeatures, featureName, index) => {
     const feature = jobFeatures[featureName];
     switch (featureName) {
       case "REQUIRED_EXPERIENCE":
+        if(Object.keys(feature).length === 0) return;
         return (
           <Tooltip title={"Required Experience"} arrow key={index}>
             <Grid item xs="auto">
@@ -64,7 +73,7 @@ const JobBrief = () => {
                 size="large"
                 icon={<WorkRoundedIcon />}
                 label={
-                  Object.keys(feature?.RANGE).length === 2
+                  Object.keys(feature?.RANGE)?.length === 2
                     ? `${feature?.RANGE?.MINIMUM} - ${feature?.RANGE?.MAXIMUM} ${feature.UNIT}`
                     : feature?.RANGE?.MINIMUM
                     ? `> ${feature?.RANGE?.MINIMUM} ${feature.UNIT}`
@@ -80,6 +89,7 @@ const JobBrief = () => {
         );
 
       case "COMPENSATION":
+        if(Object.keys(feature).length === 0) return;
         return (
           <Tooltip title={"Compensation"} arrow key={index}>
             <Grid item xs="auto">
@@ -101,7 +111,7 @@ const JobBrief = () => {
                   )
                 }
                 label={
-                  Object.keys(feature?.RANGE).length === 2
+                  Object.keys(feature?.RANGE)?.length === 2
                     ? `${feature?.RANGE?.MINIMUM} - ${feature?.RANGE?.MAXIMUM}`
                     : feature?.RANGE?.MINIMUM
                     ? `> ${feature?.RANGE?.MINIMUM}`
@@ -117,6 +127,7 @@ const JobBrief = () => {
         );
 
       case "EMPLOYMENT_TYPE":
+        if(feature === "") return;
         return (
           <Tooltip title={"Employment Type"} arrow key={index}>
             <Grid item xs="auto">
@@ -126,6 +137,7 @@ const JobBrief = () => {
         );
 
       case "WORK_MODE":
+        if(feature === "") return;
         return (
           <Tooltip title={"Work Mode"} arrow key={index}>
             <Grid item xs="auto">
@@ -139,6 +151,7 @@ const JobBrief = () => {
         );
 
       case "OPENNINGS":
+        if(feature === "") return;
         return (
           <Tooltip title={"Opennings"} arrow key={index}>
             <Grid item xs="auto">
@@ -171,8 +184,8 @@ const JobBrief = () => {
   };
 
   return (
-      <Container>
-        <Paper elevation={3} sx={styles.roundedPaper}>
+    <Container>
+      <Paper elevation={3} sx={styles.roundedPaper}>
         <Grid container spacing={2}>
           <Grid item xs={9} key={"BACK_ICON"}>
             <ArrowBackRoundedIcon
@@ -181,30 +194,28 @@ const JobBrief = () => {
             />
           </Grid>
           <Grid item xs={3} textAlign="right" key={"JOB_ID"}>
-            <Typography
-              sx={styles.slantedText}
-            >
-              Job ID: {jobData && jobData?.META_DATA?.JOB_ID}
+            <Typography sx={styles.slantedText}>
+              Job ID: {metaData && metaData?.JOB_ID}
             </Typography>
           </Grid>
           <Grid item xs={12} key={"JOB_TITLE"}>
             <Typography variant="h4" sx={{ fontWeight: "bold" }}>
-              {jobData && jobData?.META_DATA?.JOB_TITLE}
+              {metaData && metaData?.JOB_TITLE}
             </Typography>
           </Grid>
           <Grid item xs={12} key={"JOB_LOCATIONS"}>
             <Grid container alignItems="left" spacing={1}>
-              {jobData &&
-                Object.keys(jobData?.META_DATA?.JOB_LOCATIONS).map((countryName, index) =>
-                  generateLocations(jobData?.META_DATA?.JOB_LOCATIONS, countryName, index)
+              {metaData &&
+                Object.keys(metaData?.JOB_LOCATIONS).map((countryName, index) =>
+                  generateLocations(metaData?.JOB_LOCATIONS, countryName, index)
                 )}
             </Grid>
           </Grid>
           <Grid item xs={12} style={{ marginTop: 30 }} key={"JOB_FEATURES"}>
             <Grid container alignItems="left" spacing={2}>
-              {jobData &&
-                Object.keys(jobData?.META_DATA?.JOB_FEATURES).map((featureName, index) =>
-                  generateFeatures(jobData?.META_DATA?.JOB_FEATURES, featureName, index)
+              {metaData &&
+                Object.keys(metaData?.JOB_FEATURES).map((featureName, index) =>
+                  generateFeatures(metaData?.JOB_FEATURES, featureName, index)
                 )}
             </Grid>
           </Grid>
@@ -212,20 +223,20 @@ const JobBrief = () => {
             <Grid container spacing={2}>
               <Grid item xs={6} key={"POSTING_DATE"}>
                 <Typography>
-                  Posted on: {jobData && jobData?.META_DATA?.POSTING_DATE}
+                  Posted on: {metaData && convertISOTimeStamp(metaData?.POSTING_DATE)}
                 </Typography>
               </Grid>
               <Grid item xs={6} textAlign="right" key={"APPLICATION_DEADLINE"}>
                 <Typography>
                   <span style={styles.asterisk}>* </span>Application deadline:{" "}
-                  {jobData && jobData?.META_DATA?.APPLICATION_DEADLINE}
+                  {metaData && convertISOTimeStamp(metaData?.APPLICATION_DEADLINE)}
                 </Typography>
               </Grid>
             </Grid>
           </Grid>
         </Grid>
       </Paper>
-      </Container>
+    </Container>
   );
 };
 
