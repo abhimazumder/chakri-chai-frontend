@@ -5,9 +5,10 @@ import Footer from "./components/Footer";
 import Header from "./components/Header";
 import JobFormIndex from "./pages/JobForm/JobFormIndex";
 import JobInfoIndex from "./pages/JobInfo/JobInfoIndex";
-import JobPostingsIndex from "./pages/JobPostings/JobPostingsIndex";
+import JobListIndex from "./pages/JobList/JobListIndex";
 import CreateJobIndex from "./pages/CreateJob/CreateJobIndex";
 import AdminConsoleIndex from "./pages/AdminConsole/AdminConsoleIndex";
+import JobPostingsIndex from "./pages/JobPostings/JobPostingsIndex";
 
 function App() {
   return (
@@ -17,8 +18,9 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<AdminConsoleIndex />} />
-            <Route path="/createjob" element={<CreateJobIndex />} />
             <Route path="/jobpostings" element={<JobPostingsIndex />} />
+            <Route path="/createjob" element={<CreateJobIndex />} />
+            <Route path="/joblist" element={<JobListIndex />} />
             <Route path="/jobinfo" element={<JobInfoIndex />} />
             <Route path="/jobform" element={<JobFormIndex />} />
           </Routes>

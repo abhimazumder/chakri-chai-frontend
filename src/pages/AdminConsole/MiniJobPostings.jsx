@@ -37,7 +37,7 @@ const styles = {
   },
 };
 
-const MiniJobList = () => {
+const MiniJobPostings = () => {
 
   const navigate = useNavigate();
 
@@ -100,4 +100,4 @@ const MiniJobList = () => {
   );
 };
 
-export default MiniJobList;
+export default MiniJobPostings;

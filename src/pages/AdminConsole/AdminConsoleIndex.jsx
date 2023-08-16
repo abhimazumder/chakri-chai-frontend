@@ -2,7 +2,7 @@
 import { Box, Container, Grid } from "@mui/material";
 import React from "react";
 import TitleCard from "./TitleCard";
-import MiniJobList from "./MiniJobList";
+import MiniJobPostings from "./MiniJobPostings";
 import MiniJobApplications from "./MiniJobApplications";
 
 const AdminConsoleIndex = () => {
@@ -12,7 +12,7 @@ const AdminConsoleIndex = () => {
       <Box sx={{ marginTop: 2 }}>
         <Grid container spacing={2}>
             <Grid item md={6} xs={12}>
-                <MiniJobList/>
+                <MiniJobPostings/>
             </Grid>
             <Grid item md={6} xs={12}>
                 <MiniJobApplications/>

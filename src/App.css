@@ -2,6 +2,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: #f8f8f8;
+  overflow-y: scroll;
 }
 
 .app-container {
@@ -12,6 +13,14 @@ body {
 
 .content {
   flex: 1;
-  padding: 20px; /* Add some padding to separate content from header and footer */
-  margin-top: 84px; /* Set the margin-top to the height of the header to avoid content being hidden behind it */
+  padding: 20px;
+  margin-top: 84px; 
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  scrollbar-width: none;
 }
