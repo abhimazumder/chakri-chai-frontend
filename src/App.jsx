@@ -9,6 +9,7 @@ import JobListIndex from "./pages/JobList/JobListIndex";
 import CreateJobIndex from "./pages/CreateJob/CreateJobIndex";
 import AdminConsoleIndex from "./pages/AdminConsole/AdminConsoleIndex";
 import JobPostingsIndex from "./pages/JobPostings/JobPostingsIndex";
+import HomeIndex from "./pages/Home/HomeIndex";
 
 function App() {
   return (
@@ -17,7 +18,8 @@ function App() {
       <Box className="content">
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<AdminConsoleIndex />} />
+            <Route path="/" element={<HomeIndex />} />
+            <Route path="/console" element={<AdminConsoleIndex />} />
             <Route path="/jobpostings" element={<JobPostingsIndex />} />
             <Route path="/createjob" element={<CreateJobIndex />} />
             <Route path="/joblist" element={<JobListIndex />} />

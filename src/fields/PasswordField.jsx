@@ -19,9 +19,9 @@ const PasswordField = ({
   VALUE,
   keyRef,
   handleOnChange,
+  setError,
   dispatchFormData,
 }) => {
-  const [error, setError] = useState(false);
   const [helperText, setHelperText] = useState("");
 
   const validatePassword = (password) => {
@@ -33,13 +33,13 @@ const PasswordField = ({
     handleOnChange(value, FIELD_NAME);
 
     if (REQUIRED && value === "") {
-      setError(true);
+      setError(true, FIELD_NAME);
       setHelperText("Password is required.");
     } else if (!validatePassword(value)) {
-      setError(true);
+      setError(true, FIELD_NAME);
       setHelperText("Password must be at least 8 characters.");
     } else {
-      setError(false);
+      setError(false, FIELD_NAME);
       setHelperText("");
     }
   };
@@ -51,7 +51,7 @@ const PasswordField = ({
       type="password"
       value={VALUE}
       onChange={handleChange}
-      error={error}
+      error={ERROR}
       helperText={helperText}
       variant="outlined"
       required={REQUIRED}

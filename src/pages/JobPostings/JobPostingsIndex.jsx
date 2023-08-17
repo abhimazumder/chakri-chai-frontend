@@ -38,28 +38,12 @@ const columns = [
   {
     field: "POSTING_DATE",
     headerName: "Posting Date",
-    type: "date",
     width: 120,
-    valueGetter: (params) => {
-      const postingDateStr = params.row.POSTING_DATE;
-      if (postingDateStr) {
-        return new Date(postingDateStr);
-      }
-      return null;
-    },
   },
   {
     field: "APPLICATION_DEADLINE",
     headerName: "Application Deadline",
-    type: "date",
     width: 120,
-    valueGetter: (params) => {
-      const deadlineDateStr = params.row.APPLICATION_DEADLINE;
-      if (deadlineDateStr) {
-        return new Date(deadlineDateStr);
-      }
-      return null;
-    },
   },
   {
     field: "TOTAL_APPLICATIONS",
@@ -72,11 +56,11 @@ const columns = [
     width: 130,
     renderCell: (params) => (
       <Switch
-        {...params}
         checked={params.row.ACTIVE_STATUS}
         // Handle toggle logic here
       />
     ),
+    sortable:false
   },
   {
     field: "EDIT",

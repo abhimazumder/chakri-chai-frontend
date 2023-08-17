@@ -19,9 +19,9 @@ const EmailField = ({
   VALUE,
   keyRef,
   handleOnChange,
+  setError,
   dispatchFormData,
 }) => {
-  const [error, setError] = useState(false);
   const [helperText, setHelperText] = useState("");
 
   const validateEmail = (email) => {
@@ -34,13 +34,13 @@ const EmailField = ({
     handleOnChange(value, FIELD_NAME);
 
     if (REQUIRED && value === "") {
-      setError(true);
+      setError(true, FIELD_NAME);
       setHelperText("Email is required.");
     } else if (!validateEmail(value)) {
-      setError(true);
+      setError(true, FIELD_NAME);
       setHelperText("Invalid email format.");
     } else {
-      setError(false);
+      setError(false, FIELD_NAME);
       setHelperText("");
     }
   };
@@ -52,7 +52,7 @@ const EmailField = ({
       type="email"
       value={VALUE}
       onChange={handleChange}
-      error={error}
+      error={ERROR}
       helperText={helperText}
       variant="outlined"
       required={REQUIRED}

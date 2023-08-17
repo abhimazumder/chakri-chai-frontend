@@ -49,11 +49,14 @@ const headerStyles = {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    height: window.innerWidth <= 900 ? "30vh" : "50vh",
-    width: window.innerWidth <= 900 ? "80vh" : "30vw",
+    height: window.innerWidth <= 900 ? "40vh" : "50vh",
+    width: window.innerWidth <= 900 ? "80vw" : "30vw",
     bgcolor: "background.paper",
     boxShadow: 24,
-    p: 4,
+    paddingTop: 6,
+    paddingBottom: 6,
+    paddingLeft: 2,
+    paddingRight: 2,
     borderRadius: 5,
   },
 };
@@ -101,27 +104,27 @@ const Header = () => {
           <Fade in={modalOpen}>
             <Box sx={headerStyles.modalStyle}>
               <Box style={{ height: "100%" }}>
-                  <TabContext value={tabValue}>
-                    <Box>
-                      <TabList
-                        onChange={handleTabChange}
-                        centered
-                        textColor="inherit"
-                        TabIndicatorProps={{
-                          style: {
-                            backgroundColor: "#ED1C24",
-                          },
-                        }}
-                      >
-                        <Tab label="Log In" value="login" />
-                        <Tab label="Sign Up" value="signup"/>
-                      </TabList>
-                    </Box>
-                    <TabPanel value="login">
-                      <Login />
-                    </TabPanel>
-                    <TabPanel value="signup">Work for later!</TabPanel>
-                  </TabContext>
+                <TabContext value={tabValue}>
+                  <Box>
+                    <TabList
+                      onChange={handleTabChange}
+                      centered
+                      textColor="inherit"
+                      TabIndicatorProps={{
+                        style: {
+                          backgroundColor: "#ED1C24",
+                        },
+                      }}
+                    >
+                      <Tab label="Log In" value="login" />
+                      <Tab label="Sign Up" value="signup" />
+                    </TabList>
+                  </Box>
+                  <TabPanel value="login">
+                    <Login />
+                  </TabPanel>
+                  <TabPanel value="signup">Work for later!</TabPanel>
+                </TabContext>
               </Box>
             </Box>
           </Fade>
