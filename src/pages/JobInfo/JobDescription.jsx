@@ -13,6 +13,7 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import ShareRoundedIcon from "@mui/icons-material/ShareRounded";
 import "@fontsource/montserrat";
+import { useSelector } from "react-redux";
 
 const styles = {
   roundedPaper: {
@@ -61,15 +62,14 @@ const styles = {
 };
 
 const JobDescription = (props) => {
-  const navigate = useNavigate();
   const location = useLocation();
   const [description, setDescription] = useState(null);
   const [activeStatus, setActiveStatus] = useState(null);
-  const [adminView, setAdminView] = useState(null);
+  const isAuthenticated = useSelector(state => state.userAuth.isAuthenticated);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    setAdminView(searchParams.get("adminview") === "true" ? true : false);
     setDescription(props.description);
     setActiveStatus(props.activeStatus);
   }, [props, location.search]);
@@ -110,7 +110,7 @@ const JobDescription = (props) => {
               generateSection(section)
             )}
           <Grid item xs={12} display="flex" justifyContent="flex-end">
-            {adminView ? (
+            {isAuthenticated ? (
               <>
                 {activeStatus ? (
                   <>

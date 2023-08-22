@@ -12,11 +12,11 @@ import Number from "../../fields/Number";
 import Compensation from "../../fields/Compensation";
 import Description from "../../fields/Description";
 import DateField from "../../fields/DateField";
-import { createJob } from "../../services/apis";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setCreateJobFromReduxState } from "../../services/createJobFormSlice";
+import useAxiosInstance from "../../hooks/useAxiosInstance";
 
 const styles = {
   roundedPaper: {
@@ -262,6 +262,7 @@ const CreateJobForm = (props) => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const instance = useAxiosInstance();
 
   useEffect(() => {
     dispatchFormData({ type: "SET_FORM_DATA", payload: props.jobLayout });
@@ -377,8 +378,8 @@ const CreateJobForm = (props) => {
     const DATA = formatData(formData);
     DATA["Active Status"] = false;
     console.log(DATA);
-    const res = await createJob({ DATA });
-    const url = `/jobinfo?jobid=${DATA["Job ID"]}&adminview=true`;
+    const res = await instance.post("/jobs/createjob", { DATA });
+    const url = `/jobinfo?jobid=${DATA["Job ID"]}`;
     navigate(url);
   };
 

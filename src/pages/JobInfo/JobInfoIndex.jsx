@@ -5,15 +5,16 @@ import { Box } from "@mui/material";
 import JobBrief from "../../components/JobBrief";
 import JobDescription from "./JobDescription";
 import { useLocation } from "react-router-dom";
-import { getJob } from "../../services/apis";
+import useAxiosInstance from "../../hooks/useAxiosInstance";
 
 const JobInfoIndex = () => {
   const [jobData, setJobData] = useState(null);
   const location = useLocation();
+  const instance = useAxiosInstance();
 
   useEffect(() => {
-    const setJobInfo = async (JOB_ID) => {
-      const res = await getJob({ JOB_ID });
+    const setupJobInfo = async (JOB_ID) => {
+      const res = await instance.post("/jobs/getjob", { JOB_ID });
       console.log("JobInfo Index", res.data);
       setJobData(res.data);
     };
@@ -21,7 +22,7 @@ const JobInfoIndex = () => {
     window.scrollTo(0, 0);
     const searchParams = new URLSearchParams(location.search);
     const JOB_ID = searchParams.get("jobid");
-    setJobInfo(JOB_ID);
+    setupJobInfo(JOB_ID);
   }, []);
 
   return (

@@ -12,10 +12,13 @@ import {
   Backdrop,
   Tab,
   Grid,
+  CircularProgress,
 } from "@mui/material";
 import "@fontsource/montserrat";
 import Login from "./Login";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
+import { useSelector } from "react-redux";
+import Logout from "./Logout";
 
 const headerStyles = {
   appBar: {
@@ -49,24 +52,30 @@ const headerStyles = {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    height: window.innerWidth <= 900 ? "40vh" : "50vh",
-    width: window.innerWidth <= 900 ? "80vw" : "30vw",
     bgcolor: "background.paper",
     boxShadow: 24,
-    paddingTop: 6,
-    paddingBottom: 6,
-    paddingLeft: 2,
-    paddingRight: 2,
+    paddingTop: 7,
+    paddingBottom: 7,
+    paddingLeft: 1.5,
+    paddingRight: 1.5,
     borderRadius: 5,
   },
 };
 
 const Header = () => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const handleModalOpen = () => setModalOpen(true);
-  const handleModalClose = () => setModalOpen(false);
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const handleLoginModalOpen = () => setLoginModalOpen(true);
+  const handleLoginModalClose = () => setLoginModalOpen(false);
+
+  const [logoutModalOpen, setLogoutModalOpen] = useState(false);
+  const handleLogoutModalOpen = () => setLogoutModalOpen(true);
+  const handleLogoutModalClose = () => setLogoutModalOpen(false);
 
   const [tabValue, setTabValue] = useState("login");
+
+  const isAuthenticated = useSelector(
+    (state) => state.userAuth.isAuthenticated
+  );
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
@@ -83,16 +92,26 @@ const Header = () => {
         <Typography variant="h6" style={headerStyles.title}>
           {"chakri chai"}
         </Typography>
-        <Button
-          variant="contained"
-          style={headerStyles.loginButton}
-          onClick={handleModalOpen}
-        >
-          {"Log in"}
-        </Button>
+        {isAuthenticated ? (
+          <Button
+            variant="contained"
+            style={headerStyles.loginButton}
+            onClick={handleLogoutModalOpen}
+          >
+            {"Log Out"}
+          </Button>
+        ) : (
+          <Button
+            variant="contained"
+            style={headerStyles.loginButton}
+            onClick={handleLoginModalOpen}
+          >
+            {"Log in"}
+          </Button>
+        )}
         <Modal
-          open={modalOpen}
-          onClose={handleModalClose}
+          open={logoutModalOpen}
+          onClose={handleLogoutModalClose}
           closeAfterTransition
           slots={{ backdrop: Backdrop }}
           slotProps={{
@@ -101,8 +120,46 @@ const Header = () => {
             },
           }}
         >
-          <Fade in={modalOpen}>
-            <Box sx={headerStyles.modalStyle}>
+          <Fade in={logoutModalOpen}>
+            <Box
+              sx={{
+                ...headerStyles.modalStyle,
+                height: window.innerWidth <= 900 ? "10vh" : "15vh",
+                width: window.innerWidth <= 900 ? "80vw" : "30vw",
+              }}
+            >
+              <Box style={{ height: "100%" }}>
+                <Grid container rowSpacing={2}>
+                  <Grid item xs={12}>
+                    <Logout
+                      handleModalOpen={handleLogoutModalOpen}
+                      handleModalClose={handleLogoutModalClose}
+                    />
+                  </Grid>
+                </Grid>
+              </Box>
+            </Box>
+          </Fade>
+        </Modal>
+        <Modal
+          open={loginModalOpen}
+          onClose={handleLoginModalClose}
+          closeAfterTransition
+          slots={{ backdrop: Backdrop }}
+          slotProps={{
+            backdrop: {
+              timeout: 500,
+            },
+          }}
+        >
+          <Fade in={loginModalOpen}>
+            <Box
+              sx={{
+                ...headerStyles.modalStyle,
+                height: window.innerWidth <= 900 ? "40vh" : "50vh",
+                width: window.innerWidth <= 900 ? "80vw" : "30vw",
+              }}
+            >
               <Box style={{ height: "100%" }}>
                 <TabContext value={tabValue}>
                   <Box>
@@ -121,7 +178,10 @@ const Header = () => {
                     </TabList>
                   </Box>
                   <TabPanel value="login">
-                    <Login />
+                    <Login
+                      handleModalOpen={handleLoginModalOpen}
+                      handleModalClose={handleLoginModalClose}
+                    />
                   </TabPanel>
                   <TabPanel value="signup">Work for later!</TabPanel>
                 </TabContext>
