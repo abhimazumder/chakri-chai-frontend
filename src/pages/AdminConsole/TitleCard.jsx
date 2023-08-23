@@ -3,6 +3,7 @@ import React from "react";
 import { Button, Chip, Grid, Paper, Typography } from "@mui/material";
 import "@fontsource/montserrat";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const styles = {
   roundedPaper: {
@@ -58,6 +59,7 @@ const styles = {
 
 const TitleCard = () => {
   const navigate = useNavigate();
+  const userFirstName = useSelector(state => state.userAuth.user.FIRST_NAME);
 
   return (
     <Paper elevation={3} sx={styles.roundedPaper}>
@@ -66,12 +68,12 @@ const TitleCard = () => {
           <Grid container>
             <Grid item xs={12}>
               <Typography variant="h3" sx={styles.responsiveGreeting}>
-                Hi,
+                {"Hi,"}
               </Typography>
             </Grid>
             <Grid item xs={12}>
               <Typography variant="h1" sx={styles.responsiveName}>
-                Abhishek
+                {userFirstName}
               </Typography>
             </Grid>
           </Grid>
@@ -80,7 +82,7 @@ const TitleCard = () => {
           <Grid container rowSpacing={2} sx={styles.centerContent}>
             <Grid item xs={12}>
               <Button variant="contained" sx={styles.createJobButton} onClick={() => navigate('/createjob')}>
-                Create Job
+                {"Create Job"}
               </Button>
             </Grid>
           </Grid>

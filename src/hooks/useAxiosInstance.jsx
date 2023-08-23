@@ -9,12 +9,10 @@ const useAxiosInstance = () => {
     const refresh = useRefresh();
     const accessToken = useSelector(state => state.userAuth.accessToken);
   
-    useEffect(() => {
-      console.log("useEffect triggered with accessToken:", accessToken);
-  
+    useEffect(() => {  
       const requestIntercept = instance.interceptors.request.use(
         config => {
-          console.log("Request Intercept:", config.headers['Authorization']);
+          // console.log("Request Intercept:", config.headers['Authorization']);
           if (!config.headers['Authorization'] && accessToken) {
             config.headers['Authorization'] = `Bearer ${accessToken}`;
           }

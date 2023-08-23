@@ -129,14 +129,10 @@ const Header = () => {
               }}
             >
               <Box style={{ height: "100%" }}>
-                <Grid container rowSpacing={2}>
-                  <Grid item xs={12}>
                     <Logout
                       handleModalOpen={handleLogoutModalOpen}
                       handleModalClose={handleLogoutModalClose}
                     />
-                  </Grid>
-                </Grid>
               </Box>
             </Box>
           </Fade>

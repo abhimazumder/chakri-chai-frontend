@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 const styles = {
   textStyle: {
     textTransform: "none",
-    color: "#ED1C24",
+    color: "#E03131",
     fontFamily: "Montserrat, sans-serif",
   },
   logoutButton: {
@@ -56,7 +56,7 @@ const Logout = ({ handleModalOpen, handleModalClose }) => {
         navigate("/");
     }
   return (
-    <Grid container spacing={4}>
+    <Grid container rowSpacing={4}>
       <Grid item xs={12} container justifyContent="center">
         <Typography sx={styles.textStyle}>
           {"Are you sure you want to log out?"}

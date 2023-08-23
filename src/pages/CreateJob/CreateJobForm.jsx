@@ -14,7 +14,7 @@ import Description from "../../fields/Description";
 import DateField from "../../fields/DateField";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setCreateJobFromReduxState } from "../../services/createJobFormSlice";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
 
@@ -263,6 +263,7 @@ const CreateJobForm = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const instance = useAxiosInstance();
+  const userId = useSelector((state) => state.userAuth?.user?.USER_ID);
 
   useEffect(() => {
     dispatchFormData({ type: "SET_FORM_DATA", payload: props.jobLayout });
@@ -377,10 +378,15 @@ const CreateJobForm = (props) => {
     dispatch(setCreateJobFromReduxState({ formData: formData }));
     const DATA = formatData(formData);
     DATA["Active Status"] = false;
+    DATA["User ID"] = userId;
     console.log(DATA);
-    const res = await instance.post("/jobs/createjob", { DATA });
-    const url = `/jobinfo?jobid=${DATA["Job ID"]}`;
-    navigate(url);
+    try {
+      const res = await instance.post("/jobs/createjob", { DATA });
+      const url = `/jobinfo?jobid=${DATA["Job ID"]}`;
+      navigate(url);
+    } catch (error) {
+      console.error(error.response.data);
+    }
   };
 
   return (

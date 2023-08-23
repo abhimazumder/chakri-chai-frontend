@@ -1,19 +1,25 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import {
+  Backdrop,
+  Box,
   Button,
-  Chip,
   Container,
+  Fade,
   Grid,
+  Modal,
   Paper,
+  Tooltip,
   Typography,
 } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
-import ShareRoundedIcon from "@mui/icons-material/ShareRounded";
-import "@fontsource/montserrat";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import useAxiosInstance from "../../hooks/useAxiosInstance";
+
+import ShareRoundedIcon from "@mui/icons-material/ShareRounded";
+import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
+import "@fontsource/montserrat";
 
 const styles = {
   roundedPaper: {
@@ -59,20 +65,69 @@ const styles = {
     margin: 3,
     fontFamily: "Montserrat, sans-serif",
   },
+  modalStyle: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    bgcolor: "background.paper",
+    boxShadow: 24,
+    paddingTop: 6,
+    paddingBottom: 6,
+    paddingLeft: 1.5,
+    paddingRight: 1.5,
+    borderRadius: 5,
+  },
+  textStyle: {
+    textTransform: "none",
+    color: "#2F9931",
+    fontFamily: "Montserrat, sans-serif",
+  },
+  copyBox: {
+    display: "flex",
+    alignItems: "center",
+    backgroundColor: "lightgrey",
+    padding: "10px",
+    borderRadius: 1,
+    width: "fit-content",
+    cursor: "pointer",
+    color: "grey",
+    fontFamily: "Montserrat, sans-serif",
+    fontSize: 15
+  },
+  copyIcon: {
+    fontSize: "24px",
+    marginRight: "5px",
+    color: "grey",
+  },
 };
 
 const JobDescription = (props) => {
-  const location = useLocation();
   const [description, setDescription] = useState(null);
   const [activeStatus, setActiveStatus] = useState(null);
-  const isAuthenticated = useSelector(state => state.userAuth.isAuthenticated);
+  const [jobId, setJobId] = useState(null);
+
+  const [toolTipMessage, setTooltipMessage] = useState("Click to copy");
+
+  const [successModalOpen, setSuccessModalOpen] = useState(false);
+  const handleSuccessModalOpen = () => setSuccessModalOpen(true);
+  const handleSuccessModalClose = () => {
+    setSuccessModalOpen(false);
+    navigate("/jobpostings");
+  }
+
+  const isAuthenticated = useSelector(
+    (state) => state.userAuth.isAuthenticated
+  );
 
   const navigate = useNavigate();
+  const instance = useAxiosInstance();
 
   useEffect(() => {
     setDescription(props.description);
     setActiveStatus(props.activeStatus);
-  }, [props, location.search]);
+    setJobId(props.jobId);
+  }, [props]);
 
   const generateSection = (sectionDetails) => {
     const sectionName = sectionDetails.SECTION_NAME;
@@ -100,6 +155,29 @@ const JobDescription = (props) => {
         );
     }
   };
+
+  const hadndlePublish = async () => {
+    try {
+      const res = await instance.post("/jobs/toggleactivestatus", {
+        JOB_ID: jobId,
+        ACTIVE_STATUS: true,
+      });
+      handleSuccessModalOpen();
+    } catch (error) {
+      console.error(error.response.data);
+    }
+  };
+
+  const handleCopyOnClick = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setTooltipMessage('Copied!');
+  }
+
+  const handleCopyBoxMouseEnter = () => {
+    if (toolTipMessage === 'Copied!') {
+      setTooltipMessage('Copy to Clipboard');
+    }
+  }
 
   return (
     <Container>
@@ -135,7 +213,7 @@ const JobDescription = (props) => {
                     <Button
                       variant="contained"
                       style={styles.applyButton}
-                      onClick={() => navigate("/jobform")}
+                      onClick={() => hadndlePublish()}
                     >
                       {"Publish"}
                     </Button>
@@ -155,6 +233,7 @@ const JobDescription = (props) => {
                 <Button
                   variant="contained"
                   style={styles.applyButton}
+                  disabled={!activeStatus}
                   onClick={() => navigate("/jobform")}
                 >
                   {"Apply"}
@@ -164,6 +243,45 @@ const JobDescription = (props) => {
           </Grid>
         </Grid>
       </Paper>
+      <Modal
+        open={successModalOpen}
+        onClose={handleSuccessModalClose}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+        <Fade in={successModalOpen}>
+          <Box
+            sx={{
+              ...styles.modalStyle,
+              height: window.innerWidth <= 900 ? "10vh" : "15vh",
+              width: window.innerWidth <= 900 ? "80vw" : "35vw",
+            }}
+          >
+            <Box style={{ height: "100%" }}>
+              <Grid container rowSpacing={2}>
+                <Grid item xs={12} container justifyContent="center">
+                  <Typography sx={styles.textStyle}>
+                    {"Your job posting has been published."}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} container justifyContent="center">
+                <Tooltip title={toolTipMessage} arrow>
+                <Box sx={styles.copyBox} onMouseEnter={handleCopyBoxMouseEnter} onClick={() => handleCopyOnClick()}>
+                    <ContentCopyRoundedIcon sx={styles.copyIcon} />
+                    {`${window.location.href}`}
+                  </Box>
+                </Tooltip>
+                </Grid>
+              </Grid>
+            </Box>
+          </Box>
+        </Fade>
+      </Modal>
     </Container>
   );
 };

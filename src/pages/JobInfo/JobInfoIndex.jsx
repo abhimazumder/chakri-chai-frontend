@@ -33,6 +33,7 @@ const JobInfoIndex = () => {
           <JobDescription
             activeStatus={jobData.ACTIVE_STATUS}
             description={jobData.DESCRIPTION}
+            jobId={jobData.META_DATA.JOB_ID}
           />
         )}
       </Box>
