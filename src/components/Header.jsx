@@ -19,6 +19,7 @@ import Login from "./Login";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { useSelector } from "react-redux";
 import Logout from "./Logout";
+import ForgotPassword from "./ForgotPassword";
 
 const headerStyles = {
   appBar: {
@@ -54,7 +55,7 @@ const headerStyles = {
     transform: "translate(-50%, -50%)",
     bgcolor: "background.paper",
     boxShadow: 24,
-    paddingTop: 7,
+    paddingTop: 5,
     paddingBottom: 7,
     paddingLeft: 1.5,
     paddingRight: 1.5,
@@ -63,9 +64,18 @@ const headerStyles = {
 };
 
 const Header = () => {
+  const transitionDelay = 500;
+
+  const [forgotPassword, setForgotPassword] = useState(false);
+  const handleForgotPasswordTrue = () => setForgotPassword(true);
+  const handleForgotPasswordFalse = () => setForgotPassword(false);
+
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const handleLoginModalOpen = () => setLoginModalOpen(true);
-  const handleLoginModalClose = () => setLoginModalOpen(false);
+  const handleLoginModalClose = () => {
+    setLoginModalOpen(false);
+    setTimeout(() => handleForgotPasswordFalse(), transitionDelay);
+  };
 
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
   const handleLogoutModalOpen = () => setLogoutModalOpen(true);
@@ -116,7 +126,7 @@ const Header = () => {
           slots={{ backdrop: Backdrop }}
           slotProps={{
             backdrop: {
-              timeout: 500,
+              timeout: transitionDelay,
             },
           }}
         >
@@ -129,10 +139,10 @@ const Header = () => {
               }}
             >
               <Box style={{ height: "100%" }}>
-                    <Logout
-                      handleModalOpen={handleLogoutModalOpen}
-                      handleModalClose={handleLogoutModalClose}
-                    />
+                <Logout
+                  handleModalOpen={handleLogoutModalOpen}
+                  handleModalClose={handleLogoutModalClose}
+                />
               </Box>
             </Box>
           </Fade>
@@ -144,7 +154,7 @@ const Header = () => {
           slots={{ backdrop: Backdrop }}
           slotProps={{
             backdrop: {
-              timeout: 500,
+              timeout: transitionDelay,
             },
           }}
         >
@@ -174,10 +184,14 @@ const Header = () => {
                     </TabList>
                   </Box>
                   <TabPanel value="login">
-                    <Login
-                      handleModalOpen={handleLoginModalOpen}
-                      handleModalClose={handleLoginModalClose}
-                    />
+                    {forgotPassword === false ? (
+                      <Login
+                        handleModalClose={handleLoginModalClose}
+                        handleForgotPasswordTrue={handleForgotPasswordTrue}
+                      />
+                    ) : (
+                      <ForgotPassword handleModalClose={handleLoginModalClose} handleForgotPasswordFalse={handleForgotPasswordFalse}/>
+                    )}
                   </TabPanel>
                   <TabPanel value="signup">Work for later!</TabPanel>
                 </TabContext>

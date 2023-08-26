@@ -12,7 +12,6 @@ const useAxiosInstance = () => {
     useEffect(() => {  
       const requestIntercept = instance.interceptors.request.use(
         config => {
-          // console.log("Request Intercept:", config.headers['Authorization']);
           if (!config.headers['Authorization'] && accessToken) {
             config.headers['Authorization'] = `Bearer ${accessToken}`;
           }

@@ -2,7 +2,6 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable no-unused-vars */
 import React, { useCallback, useEffect, useReducer, useState } from "react";
-import "@fontsource/montserrat";
 import LoginFormLayout from "../templates/LoginForm";
 import { Grid, Typography } from "@mui/material";
 import EmailField from "../fields/EmailField";
@@ -10,10 +9,12 @@ import PasswordField from "../fields/PasswordField";
 import { useDispatch } from "react-redux";
 import { setUserLogin } from "../services/userAuthSlice";
 import { LoadingButton } from "@mui/lab";
-import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import { useNavigate } from "react-router-dom";
 import CryptoJS from "crypto-js";
-import useAxiosInstance from "../hooks/useAxiosInstance";
+
+import "@fontsource/montserrat";
+import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
+import { instance } from "../services/apis";
 
 const styles = {
   loginButton: {
@@ -67,7 +68,7 @@ const formDataReducer = (state, action) => {
   }
 };
 
-const Login = ({ handleModalClose }) => {
+const Login = ({ handleModalClose, handleForgotPasswordTrue }) => {
   const [formData, dispatchFormData] = useReducer(formDataReducer, null);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -76,7 +77,6 @@ const Login = ({ handleModalClose }) => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const instance = useAxiosInstance();
 
   useEffect(() => {
     dispatchFormData({ type: "SET_FORM_DATA", payload: LoginFormLayout });
@@ -156,7 +156,6 @@ const Login = ({ handleModalClose }) => {
         ).toString();
       });
       const res = await instance.post("/auth/login", data);
-
       if (res.status === 200) {
         dispatch(
           setUserLogin({
@@ -168,10 +167,10 @@ const Login = ({ handleModalClose }) => {
         handleModalClose();
         navigate("/console");
       } else {
-        setMessage(res.data.message);
+        setMessage(res?.data?.message);
       }
     } catch (error) {
-      setMessage("An error occurred.");
+      setMessage(error?.response?.data?.message || "An error occured");
     } finally {
       setLoading(false);
     }
@@ -205,6 +204,7 @@ const Login = ({ handleModalClose }) => {
                 ? { ...styles.hoverStyle, color: "#ED1C24" }
                 : { color: "darkgrey" }
             }
+            onClick={() => handleForgotPasswordTrue()}
           >
             {"Forgot password?"}
           </Typography>
