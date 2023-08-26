@@ -13,6 +13,10 @@ import { useDispatch } from "react-redux";
 import { setUserLogin } from "../services/userAuthSlice";
 import { useNavigate } from "react-router-dom";
 import { instance } from "../services/apis";
+import { LoadingButton } from "@mui/lab";
+
+import SendRoundedIcon from "@mui/icons-material/SendRounded";
+import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
 
 const styles = {
   textStylePrimary: {
@@ -142,6 +146,8 @@ const ForgotPassword = ({ handleModalClose, handleForgotPasswordFalse }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     dispatchFormData({
       type: "SET_FORM_DATA",
@@ -207,6 +213,7 @@ const ForgotPassword = ({ handleModalClose, handleForgotPasswordFalse }) => {
     )
       return;
     try {
+      setLoading(true);
       const encryptedEmailId = CryptoJS.AES.encrypt(
         formData["Email Address"].VALUE,
         import.meta.env.VITE_CRYPTO_SECRET_KEY
@@ -217,6 +224,7 @@ const ForgotPassword = ({ handleModalClose, handleForgotPasswordFalse }) => {
       });
 
       setStage(messages.OnSend);
+      handleShowCountdownTrue();
       dispatchFormData({ type: "TOGGLE_DISABLE" });
 
       const decryptedSessionId = CryptoJS.AES.decrypt(
@@ -231,13 +239,15 @@ const ForgotPassword = ({ handleModalClose, handleForgotPasswordFalse }) => {
         textMessage: error?.response?.data?.message,
       });
     } finally {
-      handleShowCountdownTrue();
+      setLoading(false);
     }
   };
 
   const handleVerifyOnClick = async () => {
     if (formData["OTP"].VALUE?.length !== 4) return;
     try {
+      setLoading(true);
+
       const encryptedOTP = CryptoJS.AES.encrypt(
         formData["OTP"].VALUE,
         import.meta.env.VITE_CRYPTO_SECRET_KEY
@@ -246,7 +256,7 @@ const ForgotPassword = ({ handleModalClose, handleForgotPasswordFalse }) => {
         sessionId,
         import.meta.env.VITE_CRYPTO_SECRET_KEY
       ).toString();
-      
+
       const res = await instance.post("/auth/verifyotp", {
         SESSION_ID: encryptedSessionId,
         OTP: encryptedOTP,
@@ -268,6 +278,8 @@ const ForgotPassword = ({ handleModalClose, handleForgotPasswordFalse }) => {
         ...messages.OnOTPError,
         textMessage: error?.response?.data?.message,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -328,17 +340,28 @@ const ForgotPassword = ({ handleModalClose, handleForgotPasswordFalse }) => {
           </Button>
         </Grid>
         <Grid item xs={6} container justifyContent="center">
-          <Button
+          <LoadingButton
             variant="contained"
             style={styles.actionButton}
             onClick={
-              stage.currentStage === "Initial" || stage.currentStage === "OnEmailError"
+              stage.currentStage === "Initial" ||
+              stage.currentStage === "OnEmailError"
                 ? () => handleSendOnClick()
                 : () => handleVerifyOnClick()
             }
+            loading={loading}
+            loadingPosition="start"
+            startIcon={
+              stage.currentStage === "Initial" ||
+              stage.currentStage === "OnEmailError" ? (
+                <SendRoundedIcon />
+              ) : (
+                <DoneRoundedIcon />
+              )
+            }
           >
-            {stage.buttonMessage}
-          </Button>
+            <span>{stage.buttonMessage}</span>
+          </LoadingButton>
         </Grid>
       </Grid>
     </form>
