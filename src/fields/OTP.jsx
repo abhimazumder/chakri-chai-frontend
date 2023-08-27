@@ -3,7 +3,6 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import { MuiOtpInput } from "mui-one-time-password-input";
-import { Box } from "@mui/material";
 
 const OTP = (props) => {
   const {

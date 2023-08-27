@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { DataGrid } from "@mui/x-data-grid";
 import React, { useEffect, useReducer, useState } from "react";
-import { Switch, Tooltip } from "@mui/material";
+import { Box, Switch, Tooltip } from "@mui/material";
 import { useSelector } from "react-redux";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
 import { format } from "date-fns";
@@ -9,8 +9,15 @@ import { format } from "date-fns";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
-import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
+import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 import { useNavigate } from "react-router-dom";
+
+const convertISOTimeStamp = (isoTimeStamp) => {
+  const date = new Date(isoTimeStamp);
+  return `${date.getUTCDate() || "--"}/${date.getUTCMonth() + 1 || "--"}/${
+    date.getUTCFullYear() || "----"
+  }`;
+};
 
 const dataReducer = (state, action) => {
   switch (action.type) {
@@ -77,20 +84,19 @@ const JobTable = () => {
     {
       field: "JOB_ID",
       headerName: "Job ID",
-      width: 110,
+      width: 120,
     },
     {
       field: "JOB_TITLE",
       headerName: "Job Title",
-      width: 200,
+      width: 240,
     },
     {
       field: "POSTING_DATE",
       headerName: "Posting Date",
       width: 120,
       valueGetter: (params) => {
-        const postingDate = new Date(params.row.POSTING_DATE);
-        return format(postingDate, "yyyy-MM-dd");
+        return convertISOTimeStamp(params.row.POSTING_DATE);
       },
     },
     {
@@ -98,14 +104,13 @@ const JobTable = () => {
       headerName: "Application Deadline",
       width: 120,
       valueGetter: (params) => {
-        const deadlineDate = new Date(params.row.APPLICATION_DEADLINE);
-        return format(deadlineDate, "yyyy-MM-dd");
+        return convertISOTimeStamp(params.row.APPLICATION_DEADLINE);
       },
     },
     {
       field: "TOTAL_APPLICATIONS",
       headerName: "Total Applications",
-      width: 110,
+      width: 120,
     },
     {
       field: "ACTIVE_STATUS",
@@ -114,7 +119,6 @@ const JobTable = () => {
       renderCell: (params) => (
         <Switch
           checked={params.row.ACTIVE_STATUS}
-          // Handle toggle logic here
           onChange={(event) =>
             handleActiveStatusChange(event, params.row.JOB_ID)
           }
@@ -123,61 +127,56 @@ const JobTable = () => {
       sortable: false,
     },
     {
-      field: "EDIT",
-      headerName: "Edit",
-      width: 70,
+      field: "ACTIONS",
+      headerName: "Actions",
+      width: 220,
       renderCell: (params) => (
-        <EditRoundedIcon
-          onClick={() => {
-            // Handle edit logic here
-          }}
-          style={{ cursor: "pointer" }}
-        />
-      ),
-      sortable: false,
-    },
-    {
-      field: "DELETE",
-      headerName: "Delete",
-      width: 70,
-      renderCell: (params) => (
-        <DeleteRoundedIcon
-          onClick={() => {
-            // Handle delete logic here
-          }}
-          style={{ cursor: "pointer" }}
-        />
-      ),
-      sortable: false,
-    },
-    {
-      field: "VIEW_MORE",
-      headerName: "View More",
-      width: 70,
-      renderCell: (params) => (
-        <ArrowForwardRoundedIcon
-          onClick={() => {
-            navigate(`/jobinfo?jobid=${params.row.JOB_ID}`)
-          }}
-          style={{ cursor: "pointer" }}
-        />
-      ),
-      sortable: false,
-    },
-    {
-      field: "COPY_LINK",
-      headerName: "Copy Link",
-      width: 70,
-      renderCell: (params) => (
-        <Tooltip title={"Click to copy"} arrow>
-          <ContentCopyRoundedIcon
-          onClick={() => {
-            const rootDomain = window.location.href.match(/^https?:\/\/[^/]+/)?.[0] || '';
-            navigator.clipboard.writeText(`${rootDomain}/jobinfo?jobid=${params.row.JOB_ID}`)
-          }}
-          style={{ cursor: "pointer" }}
-        />
-        </Tooltip>
+        <>
+          <Box marginRight={4}>
+            <Tooltip title={"Edit"} arrow>
+              <EditRoundedIcon
+                onClick={() => {
+                  // Handle edit logic here
+                }}
+                style={{ cursor: "pointer" }}
+              />
+            </Tooltip>
+          </Box>
+          <Box marginRight={4}>
+            <Tooltip title={"Delete"} arrow>
+              <DeleteRoundedIcon
+                onClick={() => {
+                  // Handle delete logic here
+                }}
+                style={{ cursor: "pointer" }}
+              />
+            </Tooltip>
+          </Box>
+          <Box marginRight={4}>
+            <Tooltip title={"View"} arrow>
+              <ArrowForwardRoundedIcon
+                onClick={() => {
+                  navigate(`/jobinfo?jobid=${params.row.JOB_ID}`);
+                }}
+                style={{ cursor: "pointer" }}
+              />
+            </Tooltip>
+          </Box>
+          <Box marginRight={0}>
+            <Tooltip title={"Click to copy"} arrow>
+              <ContentCopyRoundedIcon
+                onClick={() => {
+                  const rootDomain =
+                    window.location.href.match(/^https?:\/\/[^/]+/)?.[0] || "";
+                  navigator.clipboard.writeText(
+                    `${rootDomain}/jobinfo?jobid=${params.row.JOB_ID}`
+                  );
+                }}
+                style={{ cursor: "pointer" }}
+              />
+            </Tooltip>
+          </Box>
+        </>
       ),
       sortable: false,
     },

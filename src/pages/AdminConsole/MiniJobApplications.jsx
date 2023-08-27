@@ -5,6 +5,7 @@ import "@fontsource/montserrat";
 import MiniTable from "../../components/MiniTable";
 import Link from "@mui/material/Link";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const styles = {
   roundedPaper: {
@@ -40,6 +41,7 @@ const styles = {
 const MiniJobApplications = () => {
 
   const navigate = useNavigate();
+  const userId = useSelector(state => state.userAuth.user.USER_ID);
 
   const headerNames = [
     {HEADER_LABEL: "Applicantion ID", HEADER_ID: "Applicantion ID"},
@@ -87,7 +89,7 @@ const MiniJobApplications = () => {
           <Link
             component="button"
             onClick={() => {
-              navigate('/joblist')
+              navigate(`/joblist?userid=${userId}`)
             }}
             underline="hover"
             style={{ color: "#ED1C24" }}

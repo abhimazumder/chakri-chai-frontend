@@ -17,7 +17,7 @@ const SearchJob = {
     "Country": {
         SIZE: 3,
         FIELD_TYPE: "Dropdown",
-        FIELD_LABLE: "Country",
+        FIELD_LABEL: "Country",
         FIELD_ID: "search-field-2",
         FIELD_NAME: "Country",
         PLACEHOLDER: "",
@@ -33,7 +33,7 @@ const SearchJob = {
     "City": {
         SIZE: 3,
         FIELD_TYPE: "Dropdown",
-        FIELD_LABLE: "City",
+        FIELD_LABEL: "City",
         FIELD_ID: "search-field-3",
         FIELD_NAME: "City",
         PLACEHOLDER: "",
@@ -49,7 +49,7 @@ const SearchJob = {
     "Experience": {
         SIZE: 3,
         FIELD_TYPE: "Dropdown",
-        FIELD_LABLE: "Experience",
+        FIELD_LABEL: "Experience",
         FIELD_ID: "search-field-4",
         FIELD_NAME: "Experience",
         PLACEHOLDER: "",
@@ -113,7 +113,7 @@ const SearchJob = {
     "Sort By": {
         SIZE: 3,
         FIELD_TYPE: "Dropdown",
-        FIELD_LABLE: "Sort By",
+        FIELD_LABEL: "Sort By",
         FIELD_ID: "search-field-5",
         FIELD_NAME: "Sort By",
         PLACEHOLDER: "",

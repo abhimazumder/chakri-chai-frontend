@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
@@ -23,7 +22,7 @@ const JobInfoIndex = () => {
     const searchParams = new URLSearchParams(location.search);
     const JOB_ID = searchParams.get("jobid");
     setupJobInfo(JOB_ID);
-  }, []);
+  }, [instance, location.search]);
 
   return (
     <Box>

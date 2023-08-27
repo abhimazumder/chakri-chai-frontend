@@ -13,9 +13,13 @@ import Compensation from "../../fields/Compensation";
 import Description from "../../fields/Description";
 import DateField from "../../fields/DateField";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
+import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setCreateJobFromReduxState } from "../../services/createJobFormSlice";
+import {
+  clearCreateJobFromReduxState,
+  setCreateJobFromReduxState,
+} from "../../services/createJobFormSlice";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
 
 const styles = {
@@ -46,7 +50,7 @@ const styles = {
     margin: 3,
     fontFamily: "Montserrat, sans-serif",
   },
-  backIconStyle: {
+  iconStyle: {
     color: "grey",
     fontSize: "2.5rem",
     cursor: "pointer",
@@ -395,10 +399,14 @@ const CreateJobForm = (props) => {
         <Paper elevation={3} sx={styles.roundedPaper}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Grid container rowSpacing={8} columnSpacing={2} padding={2}>
-              <Grid item xs={9} key={"BACK_ICON"}>
+              <Grid item container xs={12} alignItems="center">
                 <ArrowBackRoundedIcon
-                  style={styles.backIconStyle}
+                  style={styles.iconStyle}
                   onClick={() => navigate(-1)}
+                />
+                <ClearRoundedIcon
+                  style={{ ...styles.iconStyle, marginLeft: "auto" }}
+                  onClick={() => dispatch(clearCreateJobFromReduxState())}
                 />
               </Grid>
               {formData &&
