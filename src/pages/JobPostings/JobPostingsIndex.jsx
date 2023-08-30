@@ -46,13 +46,13 @@ const JobPostingsIndex = () => {
           <Grid item container xs={12} alignItems="center">
             <ArrowBackRoundedIcon
               style={styles.backIconStyle}
-              onClick={() => navigate(-1)}
+              onClick={() => navigate("/console")}
             />
             <Button
               variant="contained"
               style={{ ...styles.buttonStyle, marginLeft: "auto" }}
               endIcon={<OpenInNewIcon />}
-              onClick={() => navigate(`/joblist?userid=${userId}`)}
+              onClick={() => window.open(`/joblist?userid=${userId}`, "_blank")}
             >
               {"View Public Site"}
             </Button>

@@ -55,7 +55,7 @@ const headerStyles = {
     transform: "translate(-50%, -50%)",
     bgcolor: "background.paper",
     boxShadow: 24,
-    paddingTop: 5,
+    paddingTop: 7,
     paddingBottom: 7,
     paddingLeft: 1.5,
     paddingRight: 1.5,

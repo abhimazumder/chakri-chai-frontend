@@ -31,11 +31,11 @@ const EmailField = ({
 
   const handleChange = (event) => {
     const value = event.target.value;
-    handleOnChange(value, FIELD_NAME);
+    handleOnChange(value, FIELD_NAME, PARENT_FIELD_NAME, keyRef);
 
     if (REQUIRED && value === "") {
       setError(true, FIELD_NAME);
-      setHelperText("Email is required.");
+      setHelperText(`${FIELD_NAME} is required.`);
     } else if (!validateEmail(value)) {
       setError(true, FIELD_NAME);
       setHelperText("Invalid email format.");
@@ -58,7 +58,6 @@ const EmailField = ({
       required={REQUIRED}
       disabled={DISABLED}
       fullWidth
-      autoComplete="username"
     />
   );
 };

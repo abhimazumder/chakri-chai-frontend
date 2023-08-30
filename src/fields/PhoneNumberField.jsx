@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 /* eslint-disable react-refresh/only-export-components */
-import React, { useState } from "react";
 import { TextField } from "@mui/material";
+import React, { useState } from "react";
 
-const PasswordField = ({
+const PhoneNumber = ({
   SIZE,
   FIELD_TYPE,
   FIELD_LABEL,
@@ -24,32 +24,33 @@ const PasswordField = ({
 }) => {
   const [helperText, setHelperText] = useState("");
 
-  const validatePassword = (password) => {
-    return password.length >= 8;
-  };
-
   const handleChange = (event) => {
     const value = event.target.value;
-    handleOnChange(value, FIELD_NAME);
+    handleOnChange(
+      value,
+      FIELD_NAME,
+      PARENT_FIELD_NAME,
+      keyRef
+    );
 
     if (REQUIRED && value === "") {
       setError(true, FIELD_NAME);
-      setHelperText("Password is required.");
-    } else if (!validatePassword(value)) {
+      setHelperText(`${FIELD_NAME} is required.`);
+    } else if (value.replace(/\D/g, '').length !== 10){
       setError(true, FIELD_NAME);
-      setHelperText("Password must be at least 8 characters.");
+      setHelperText(`${FIELD_NAME} should be of 10 digits.`);
     } else {
       setError(false, FIELD_NAME);
       setHelperText("");
     }
-  };
+  }
 
   return (
     <TextField
       id={FIELD_ID}
       label={FIELD_LABEL}
-      type="password"
       value={VALUE}
+      type="number"
       onChange={handleChange}
       error={ERROR}
       helperText={helperText}
@@ -61,4 +62,4 @@ const PasswordField = ({
   );
 };
 
-export default React.memo(PasswordField);
+export default React.memo(PhoneNumber);

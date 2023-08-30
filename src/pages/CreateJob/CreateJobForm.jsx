@@ -1,6 +1,16 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import { Button, Container, Grid, Paper } from "@mui/material";
+import {
+  Backdrop,
+  Box,
+  Button,
+  Container,
+  Fade,
+  Grid,
+  Modal,
+  Paper,
+  Typography,
+} from "@mui/material";
 import React, { useCallback, useEffect, useReducer, useState } from "react";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -50,24 +60,55 @@ const styles = {
     margin: 3,
     fontFamily: "Montserrat, sans-serif",
   },
+  cancelButton: {
+    textTransform: "none",
+    background: "linear-gradient(45deg, #242424, #888888)",
+    borderRadius: 35,
+    fontSize: "1rem",
+    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.50)",
+    fontFamily: "Montserrat, sans-serif",
+    color: "#FFFFFF",
+    marginLeft: 5,
+    marginRight: 5,
+    height: "50px",
+    width: "45%",
+  },
+  confirmButton: {
+    textTransform: "none",
+    background: "linear-gradient(45deg, #ED1C24, #FF5733)",
+    borderRadius: 35,
+    fontSize: "1rem",
+    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.50)",
+    fontFamily: "Montserrat, sans-serif",
+    color: "#FFFFFF",
+    marginLeft: 5,
+    marginRight: 5,
+    height: "50px",
+    width: "45%",
+  },
   iconStyle: {
     color: "grey",
     fontSize: "2.5rem",
     cursor: "pointer",
   },
-};
-
-const isNullish = (field) => {
-  if (field?.REQUIRED === true) {
-    if (
-      field?.value === null ||
-      field?.value === undefined ||
-      field?.value === ""
-    ) {
-      return true;
-    }
-  }
-  return false;
+  modalStyle: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    bgcolor: "background.paper",
+    boxShadow: 24,
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 1.5,
+    paddingRight: 1.5,
+    borderRadius: 5,
+  },
+  textStyle: {
+    textTransform: "none",
+    color: "#E03131",
+    fontFamily: "Montserrat, sans-serif",
+  },
 };
 
 const formDataReducer = (state, action) => {
@@ -90,7 +131,6 @@ const formDataReducer = (state, action) => {
                 [fieldName]: {
                   ...state[parentFieldName]?.CHILDREN?.[keyRef]?.[fieldName],
                   VALUE: value,
-                  ERROR: isNullish(value),
                 },
               },
             },
@@ -106,7 +146,6 @@ const formDataReducer = (state, action) => {
               [fieldName]: {
                 ...state[parentFieldName]?.SUB_FIELDS?.[fieldName],
                 VALUE: value,
-                ERROR: isNullish(value),
               },
             },
           },
@@ -117,7 +156,6 @@ const formDataReducer = (state, action) => {
           [fieldName]: {
             ...state[fieldName],
             VALUE: value,
-            ERROR: isNullish(value),
           },
         };
       }
@@ -263,6 +301,9 @@ const formDataReducer = (state, action) => {
 
 const CreateJobForm = (props) => {
   const [formData, dispatchFormData] = useReducer(formDataReducer, null);
+  const [open, setOpen] = useState(false);
+  const handleModalOpen = () => setOpen(true);
+  const handleModalClose = () => setOpen(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -393,6 +434,12 @@ const CreateJobForm = (props) => {
     }
   };
 
+  const handleClearForm = () => {
+    dispatchFormData({ type: "SET_FORM_DATA", payload: props.jobLayout });
+    dispatch(clearCreateJobFromReduxState());
+    handleModalClose();
+  };
+
   return (
     <Container>
       <form onSubmit={(event) => handleOnSubmit(event)}>
@@ -406,7 +453,7 @@ const CreateJobForm = (props) => {
                 />
                 <ClearRoundedIcon
                   style={{ ...styles.iconStyle, marginLeft: "auto" }}
-                  onClick={() => dispatch(clearCreateJobFromReduxState())}
+                  onClick={handleModalOpen}
                 />
               </Grid>
               {formData &&
@@ -425,6 +472,49 @@ const CreateJobForm = (props) => {
                 </Button>
               </Grid>
             </Grid>
+            <Modal
+              open={open}
+              onClose={handleModalClose}
+              closeAfterTransition
+              slots={{ backdrop: Backdrop }}
+              slotProps={{
+                backdrop: {
+                  timeout: 500,
+                },
+              }}
+            >
+              <Fade in={open}>
+                <Box
+                  sx={{
+                    ...styles.modalStyle,
+                    height: window.innerWidth <= 900 ? "10vh" : "15vh",
+                    width: window.innerWidth <= 900 ? "80vw" : "30vw",
+                  }}
+                >
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} container justifyContent="center">
+                      <Typography style={styles.textStyle}>
+                        {"Are you sure you want to clear the form?"}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} container justifyContent="center">
+                      <Button
+                        style={styles.cancelButton}
+                        onClick={handleModalClose}
+                      >
+                        {"Cancel"}
+                      </Button>
+                      <Button
+                        style={styles.confirmButton}
+                        onClick={() => handleClearForm()}
+                      >
+                        {"Clear"}
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </Box>
+              </Fade>
+            </Modal>
           </LocalizationProvider>
         </Paper>
       </form>

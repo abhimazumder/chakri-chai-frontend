@@ -40,7 +40,7 @@ export const fetchStatesByCountry = (countryName) => {
 
 import axios from "axios";
 
-const baseURL = "https://ucrn5b4nrj.execute-api.ap-south-1.amazonaws.com/dev";
+const baseURL = "https://20aa1756gi.execute-api.ap-south-1.amazonaws.com/dev";
 
 export const instance = axios.create({
   baseURL,

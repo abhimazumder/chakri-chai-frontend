@@ -141,7 +141,7 @@ const ForgotPassword = ({ handleModalClose, handleForgotPasswordFalse }) => {
   const handleShowCountdownTrue = () => setShowCountdown(true);
   const handleShowCountdownFalse = () => setShowCountdown(false);
 
-  const [sessionId, setSessionId] = useState("");
+  const [sessionToken, setSessionToken] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -227,12 +227,12 @@ const ForgotPassword = ({ handleModalClose, handleForgotPasswordFalse }) => {
       handleShowCountdownTrue();
       dispatchFormData({ type: "TOGGLE_DISABLE" });
 
-      const decryptedSessionId = CryptoJS.AES.decrypt(
-        res.data.SESSION_ID,
+      const decryptedSessionToken = CryptoJS.AES.decrypt(
+        res.data.SESSION_TOKEN,
         import.meta.env.VITE_CRYPTO_SECRET_KEY
       ).toString(CryptoJS.enc.Utf8);
 
-      setSessionId(decryptedSessionId);
+      setSessionToken(decryptedSessionToken);
     } catch (error) {
       setStage({
         ...messages.OnEmailError,
@@ -252,13 +252,13 @@ const ForgotPassword = ({ handleModalClose, handleForgotPasswordFalse }) => {
         formData["OTP"].VALUE,
         import.meta.env.VITE_CRYPTO_SECRET_KEY
       ).toString();
-      const encryptedSessionId = CryptoJS.AES.encrypt(
-        sessionId,
+      const encryptedSessionToken = CryptoJS.AES.encrypt(
+        sessionToken,
         import.meta.env.VITE_CRYPTO_SECRET_KEY
       ).toString();
 
       const res = await instance.post("/auth/verifyotp", {
-        SESSION_ID: encryptedSessionId,
+        SESSION_TOKEN: encryptedSessionToken,
         OTP: encryptedOTP,
       });
 

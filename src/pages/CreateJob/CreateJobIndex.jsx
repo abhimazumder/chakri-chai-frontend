@@ -16,15 +16,9 @@ const CreateJobIndex = () => {
 
   const countryList = useMemo(() => fetchCountryList(), []);
 
-  const [open, setOpen] = useState(true);
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  }
+  const [loader, setLoader] = useState(true);
+  const handleLoaderOpen = () => setLoader(true);
+  const handleLoaderClose = () => setLoader(false);
 
   const setupJobLayout = useCallback(
     (JobLayout) => {
@@ -54,15 +48,15 @@ const CreateJobIndex = () => {
   );
 
   useEffect(() => {
+    handleLoaderOpen();
     window.scrollTo(0, 0);
-
     if (formData === null) {
       const updatedJobLayout = setupJobLayout(JobLayout);
       setJobLayout(updatedJobLayout);
       dispatch(setCreateJobFromReduxState({ formData: updatedJobLayout }));
     } else setJobLayout(formData);
 
-    handleClose();
+    handleLoaderClose();
   }, [formData, setupJobLayout, dispatch]);
 
   return (
@@ -73,8 +67,7 @@ const CreateJobIndex = () => {
           color: "#fff",
           zIndex: (theme) => theme.zIndex.drawer + 1,
         }}
-        open={open}
-        onClick={handleClose}
+        open={loader}
       >
         <CircularProgress color="inherit" />
       </Backdrop>

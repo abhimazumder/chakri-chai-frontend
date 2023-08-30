@@ -16,9 +16,16 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
+import Divider from "@mui/material/Divider";
 
 import ShareRoundedIcon from "@mui/icons-material/ShareRounded";
-import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
+import LinkRoundedIcon from "@mui/icons-material/LinkRounded";
+import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
+
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import TwitterIcon from "@mui/icons-material/Twitter";
 import "@fontsource/montserrat";
 
 const styles = {
@@ -86,19 +93,45 @@ const styles = {
   copyBox: {
     display: "flex",
     alignItems: "center",
-    backgroundColor: "lightgrey",
     padding: "10px",
+    border: "1px solid grey",
     borderRadius: 1,
     width: "fit-content",
     cursor: "pointer",
-    color: "grey",
-    fontFamily: "Montserrat, sans-serif",
-    fontSize: 15
   },
-  copyIcon: {
+  linkIcon: {
     fontSize: "24px",
     marginRight: "5px",
     color: "grey",
+  },
+  doneIcon: {
+    color: "#2F9931",
+    fontSize: "40px",
+  },
+  linkTextStyle: {
+    fontFamily: "Montserrat, sans-serif",
+    fontSize: 15,
+    marginLeft: 5,
+  },
+  linkedinStyle: {
+    color: "#0A66C2",
+    fontSize: "30px",
+    cursor: "pointer",
+  },
+  whatsappStyle: {
+    color: "#25D366",
+    fontSize: "30px",
+    cursor: "pointer",
+  },
+  facebookStyle: {
+    color: "#1877F2",
+    fontSize: "30px",
+    cursor: "pointer",
+  },
+  twitterIcon: {
+    color: "#00acee",
+    fontSize: "30px",
+    cursor: "pointer",
   },
 };
 
@@ -114,7 +147,11 @@ const JobDescription = (props) => {
   const handleSuccessModalClose = () => {
     setSuccessModalOpen(false);
     navigate("/jobpostings");
-  }
+  };
+
+  const [shareModalOpen, setShareModalOpen] = useState(false);
+  const handleShareModalOpen = () => setShareModalOpen(true);
+  const handleShareModalClose = () => setShareModalOpen(false);
 
   const isAuthenticated = useSelector(
     (state) => state.userAuth.isAuthenticated
@@ -156,7 +193,7 @@ const JobDescription = (props) => {
     }
   };
 
-  const hadndlePublish = async () => {
+  const handlePublish = async () => {
     try {
       const res = await instance.post("/jobs/toggleactivestatus", {
         JOB_ID: jobId,
@@ -170,14 +207,103 @@ const JobDescription = (props) => {
 
   const handleCopyOnClick = () => {
     navigator.clipboard.writeText(window.location.href);
-    setTooltipMessage('Copied!');
-  }
+    setTooltipMessage("Copied!");
+  };
 
   const handleCopyBoxMouseEnter = () => {
-    if (toolTipMessage === 'Copied!') {
-      setTooltipMessage('Copy to Clipboard');
+    if (toolTipMessage === "Copied!") {
+      setTooltipMessage("Copy to Clipboard");
     }
-  }
+  };
+
+  const handleShareClick = (platform) => {
+    const url = window.location.href;
+    const message = `Hey, checkout this job on Chakri Chai\n${url}`;
+
+    switch (platform) {
+      case "linkedin":
+        window.open(
+          `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(
+            url
+          )}&title=${encodeURIComponent(message)}`,
+          "_blank"
+        );
+        break;
+      case "whatsapp":
+        window.open(
+          `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`,
+          "_blank"
+        );
+        break;
+      case "facebook":
+        window.open(
+          `https://www.facebook.com/sharer.php?u=${encodeURIComponent(url)}`,
+          "_blank"
+        );
+        break;
+      case "twitter":
+        window.open(
+          `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+            message
+          )}`,
+          "_blank"
+        );
+        break;
+      default:
+        break;
+    }
+  };
+
+  const shareOptions = (
+    <>
+      <Grid item xs={12} container justifyContent="center" alignItems="center">
+        <Grid item xs={3} container justifyContent="center">
+          <Typography style={{ ...styles.linkTextStyle, fontWeight: "bold" }}>
+            {"Share it on:"}
+          </Typography>
+        </Grid>
+        <Grid item xs={2.25} container justifyContent="center">
+          <LinkedInIcon
+            sx={styles.linkedinStyle}
+            onClick={() => handleShareClick("linkedin")}
+          />
+        </Grid>
+        <Grid item xs={2.25} container justifyContent="center">
+          <WhatsAppIcon
+            sx={styles.whatsappStyle}
+            onClick={() => handleShareClick("whatsapp")}
+          />
+        </Grid>
+        <Grid item xs={2.25} container justifyContent="center">
+          <FacebookIcon
+            sx={styles.facebookStyle}
+            onClick={() => handleShareClick("facebook")}
+          />
+        </Grid>
+        <Grid item xs={2.25} container justifyContent="center">
+          <TwitterIcon
+            sx={styles.twitterIcon}
+            onClick={() => handleShareClick("twitter")}
+          />
+        </Grid>
+      </Grid>
+      <Grid item xs={12} container justifyContent="center">
+        <Tooltip title={toolTipMessage} arrow>
+          <Box
+            sx={styles.copyBox}
+            onMouseEnter={handleCopyBoxMouseEnter}
+            onClick={() => handleCopyOnClick()}
+          >
+            <LinkRoundedIcon sx={styles.linkIcon} />
+            <Divider orientation="vertical" flexItem />
+            <Typography style={styles.linkTextStyle}>
+              {`${window.location.href}`}
+            </Typography>
+          </Box>
+        </Tooltip>
+      </Grid>
+    </>
+  );
 
   return (
     <Container>
@@ -196,7 +322,7 @@ const JobDescription = (props) => {
                       variant="contained"
                       style={styles.shareButton}
                       endIcon={<ShareRoundedIcon />}
-                      onClick={() => navigate(-1)}
+                      onClick={() => handleShareModalOpen()}
                     >
                       {"Share"}
                     </Button>
@@ -206,14 +332,14 @@ const JobDescription = (props) => {
                     <Button
                       variant="contained"
                       style={styles.shareButton}
-                      onClick={() => navigate(-1)}
+                      onClick={() => handleShareModalOpen()}
                     >
                       {"Go Back"}
                     </Button>
                     <Button
                       variant="contained"
                       style={styles.applyButton}
-                      onClick={() => hadndlePublish()}
+                      onClick={() => handlePublish()}
                     >
                       {"Publish"}
                     </Button>
@@ -226,7 +352,7 @@ const JobDescription = (props) => {
                   variant="contained"
                   style={styles.shareButton}
                   endIcon={<ShareRoundedIcon />}
-                  onClick={() => navigate(-1)}
+                  onClick={() => handleShareModalOpen()}
                 >
                   {"Share"}
                 </Button>
@@ -234,7 +360,7 @@ const JobDescription = (props) => {
                   variant="contained"
                   style={styles.applyButton}
                   disabled={!activeStatus}
-                  onClick={() => navigate("/jobform")}
+                  onClick={() => navigate(`/jobform?jobid=${props.jobId}`)}
                 >
                   {"Apply"}
                 </Button>
@@ -258,25 +384,55 @@ const JobDescription = (props) => {
           <Box
             sx={{
               ...styles.modalStyle,
-              height: window.innerWidth <= 900 ? "10vh" : "15vh",
+              height: window.innerWidth <= 900 ? "30vh" : "30vh",
               width: window.innerWidth <= 900 ? "80vw" : "35vw",
             }}
           >
             <Box style={{ height: "100%" }}>
-              <Grid container rowSpacing={2}>
-                <Grid item xs={12} container justifyContent="center">
-                  <Typography sx={styles.textStyle}>
-                    {"Your job posting has been published."}
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} container justifyContent="center">
-                <Tooltip title={toolTipMessage} arrow>
-                <Box sx={styles.copyBox} onMouseEnter={handleCopyBoxMouseEnter} onClick={() => handleCopyOnClick()}>
-                    <ContentCopyRoundedIcon sx={styles.copyIcon} />
-                    {`${window.location.href}`}
+              <Grid container rowSpacing={3}>
+                <Grid
+                  item
+                  xs={12}
+                  container
+                  justifyContent="center"
+                  alignItems="center"
+                  textAlign="center"
+                >
+                  <Box position="relative">
+                    <CheckCircleOutlineRoundedIcon sx={styles.doneIcon} />
+                    <Typography sx={styles.textStyle}>
+                      {"Your job posting has been published."}
+                    </Typography>
                   </Box>
-                </Tooltip>
                 </Grid>
+                {shareOptions}
+              </Grid>
+            </Box>
+          </Box>
+        </Fade>
+      </Modal>
+      <Modal
+        open={shareModalOpen}
+        onClose={handleShareModalClose}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+        <Fade in={shareModalOpen}>
+          <Box
+            sx={{
+              ...styles.modalStyle,
+              height: window.innerWidth <= 900 ? "15vh" : "15vh",
+              width: window.innerWidth <= 900 ? "80vw" : "35vw",
+            }}
+          >
+            <Box style={{ height: "100%" }}>
+              <Grid container rowSpacing={3}>
+                {shareOptions}
               </Grid>
             </Box>
           </Box>

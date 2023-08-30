@@ -219,7 +219,7 @@ const JobCard = ({ jobData }) => {
                 variant="contained"
                 style={styles.applyButton}
                 type="submit"
-                onClick={() => navigate("/jobinfo")}
+                onClick={() => navigate(`/jobinfo?jobid=${JOB_ID}`)}
               >
                 {"Apply"}
               </Button>

@@ -8,6 +8,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Dropdown from "../../fields/Dropdown";
 import SearchBar from "../../fields/SearchBar";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const styles = {
   roundedPaper: {
@@ -61,6 +63,10 @@ const JobListIndex = () => {
   const [jobListData, setJobListData] = useState([]);
   const [formData, dispatchFormData] = useReducer(formDataReducer, null);
 
+  const [loader, setLoader] = useState(true);
+  const handleLoaderOpen = () => setLoader(true);
+  const handleLoaderClose = () => setLoader(false);
+
   const instance = useAxiosInstance();
   const navigate = useNavigate();
   const location = useLocation();
@@ -71,6 +77,7 @@ const JobListIndex = () => {
       console.log(res.data.Items);
       setJobListData(res.data.Items);
     } 
+    handleLoaderOpen();
     window.scrollTo(0, 0);
     dispatchFormData({
       type: "SET_FORM_DATA",
@@ -79,6 +86,7 @@ const JobListIndex = () => {
     const searchParams = new URLSearchParams(location.search);
     const USER_ID = searchParams.get("userid");
     setupJobList(USER_ID);
+    handleLoaderClose();
   }, [instance, location.search]);
 
   const handleOnChange = useCallback(
@@ -135,6 +143,12 @@ const JobListIndex = () => {
             </Grid>
           ))}
       </Grid>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loader}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Container>
   );
 };

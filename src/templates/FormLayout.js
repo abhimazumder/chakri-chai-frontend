@@ -5,7 +5,7 @@ const FromLayout = {
     "First Name": {
         SIZE: 6,
         FIELD_TYPE: "Textfield",
-        FIELD_LABLE: "First Name",
+        FIELD_LABEL: "First Name",
         FIELD_ID: "form-field-1",
         FIELD_NAME: "First Name",
         EXPANDABLE: false,
@@ -20,7 +20,7 @@ const FromLayout = {
     "Last Name": {
         SIZE: 6,
         FIELD_TYPE: "Textfield",
-        FIELD_LABLE: "Last Name",
+        FIELD_LABEL: "Last Name",
         FIELD_ID: "form-field-2",
         FIELD_NAME: "Last Name",
         EXPANDABLE: false,
@@ -35,7 +35,7 @@ const FromLayout = {
     "Date of Birth": {
         SIZE: 6,
         FIELD_TYPE: "Date",
-        FIELD_LABLE: "Date of Birth",
+        FIELD_LABEL: "Date of Birth",
         FIELD_ID: "form-field-3",
         FIELD_NAME: "Date of Birth",
         EXPANDABLE: false,
@@ -50,7 +50,7 @@ const FromLayout = {
     "Gender": {
         SIZE: 6,
         FIELD_TYPE: "Dropdown",
-        FIELD_LABLE: "Gender",
+        FIELD_LABEL: "Gender",
         FIELD_ID: "form-field-4",
         FIELD_NAME: "Gender",
         EXPANDABLE: false,
@@ -68,12 +68,12 @@ const FromLayout = {
         VALUE: '',
     },
 
-    "E-mail": {
+    "Email": {
         SIZE: 6,
-        FIELD_TYPE: "Email",
-        FIELD_LABLE: "E-mail",
+        FIELD_TYPE: "EmailField",
+        FIELD_LABEL: "Email",
         FIELD_ID: "form-field-5",
-        FIELD_NAME: "E-mail",
+        FIELD_NAME: "Email",
         EXPANDABLE: false,
         REQUIRED: true,
         DISABLED: false,
@@ -83,12 +83,12 @@ const FromLayout = {
         VALUE: '',
     },
 
-    "Phone": {
+    "Phone Number": {
         SIZE: 6,
-        FIELD_TYPE: "Phone Number",
-        FIELD_LABLE: "Phone",
+        FIELD_TYPE: "PhoneNumberField",
+        FIELD_LABEL: "Phone Number",
         FIELD_ID: "form-field-6",
-        FIELD_NAME: "Phone",
+        FIELD_NAME: "Phone Number",
         EXPANDABLE: false,
         REQUIRED: true,
         DISABLED: false,
@@ -100,7 +100,7 @@ const FromLayout = {
 
     "Address": {
         FIELD_TYPE: "Address",
-        FIELD_LABLE: "Address",
+        FIELD_LABEL: "Enter your address below",
         FIELD_ID: "form-field-7",
         FIELD_NAME: "Address",
         EXPANDABLE: false,
@@ -112,7 +112,7 @@ const FromLayout = {
             "Country": {
                 SIZE: 6,
                 FIELD_TYPE: "Dropdown",
-                FIELD_LABLE: "Country",
+                FIELD_LABEL: "Country",
                 FIELD_ID: "form-field-7-a",
                 FIELD_NAME: "Country",
                 EXPANDABLE: false,
@@ -128,7 +128,7 @@ const FromLayout = {
             "State/Province": {
                 SIZE: 6,
                 FIELD_TYPE: "Dropdown",
-                FIELD_LABLE: "State/Province",
+                FIELD_LABEL: "State/Province",
                 FIELD_ID: "form-field-7-b",
                 FIELD_NAME: "State/Province",
                 EXPANDABLE: false,
@@ -144,7 +144,7 @@ const FromLayout = {
             "City/Town": {
                 SIZE: 6,
                 FIELD_TYPE: "Textfield",
-                FIELD_LABLE: "City/Town",
+                FIELD_LABEL: "City/Town",
                 FIELD_ID: "form-field-7-c",
                 FIELD_NAME: "City/Town",
                 EXPANDABLE: false,
@@ -159,7 +159,7 @@ const FromLayout = {
             "Pincode": {
                 SIZE: 6,
                 FIELD_TYPE: "Number",
-                FIELD_LABLE: "Pincode",
+                FIELD_LABEL: "Pincode",
                 FIELD_ID: "form-field-7-d",
                 FIELD_NAME: "Pincode",
                 EXPANDABLE: false,
@@ -174,7 +174,7 @@ const FromLayout = {
             "Street Address": {
                 SIZE: 12,
                 FIELD_TYPE: "Textfield",
-                FIELD_LABLE: "Street Address",
+                FIELD_LABEL: "Street Address",
                 FIELD_ID: "form-field-7-e",
                 FIELD_NAME: "Street Address",
                 EXPANDABLE: false,
@@ -192,7 +192,7 @@ const FromLayout = {
 
     "Experience": {
         FIELD_TYPE: "Experience",
-        FIELD_LABLE: "Experience",
+        FIELD_LABEL: "Experience",
         FIELD_ID: "form-field-8",
         FIELD_NAME: "Experience",
         EXPANDABLE: true,
@@ -204,7 +204,7 @@ const FromLayout = {
             "Job Title/Role": {
                 SIZE: 12,
                 FIELD_TYPE: "Textfield",
-                FIELD_LABLE: "Job Title/Role",
+                FIELD_LABEL: "Job Title/Role",
                 FIELD_ID: "form-field-8-a",
                 FIELD_NAME: "Job Title/Role",
                 EXPANDABLE: false,
@@ -219,7 +219,7 @@ const FromLayout = {
             "Company Name": {
                 SIZE: 12,
                 FIELD_TYPE: "Textfield",
-                FIELD_LABLE: "Company Name",
+                FIELD_LABEL: "Company Name",
                 FIELD_ID: "form-field-8-b",
                 FIELD_NAME: "Company Name",
                 EXPANDABLE: false,
@@ -234,7 +234,7 @@ const FromLayout = {
             "Current Job": {
                 SIZE: 12,
                 FIELD_TYPE: "Checkbox",
-                FIELD_LABLE: "Is this your current job?",
+                FIELD_LABEL: "Is this your current job?",
                 FIELD_ID: "form-field-8-c",
                 FIELD_NAME: "Current Job",
                 EXPANDABLE: false,
@@ -248,10 +248,11 @@ const FromLayout = {
 
             "Start Date": {
                 SIZE: 6,
-                FIELD_TYPE: "Date",
-                FIELD_LABLE: "Start Date",
+                FIELD_TYPE: "DateField",
+                FIELD_LABEL: "Start Date",
                 FIELD_ID: "form-field-8-d",
                 FIELD_NAME: "Start Date",
+                DISABLE_FUTURE: true,
                 EXPANDABLE: false,
                 REQUIRED: true,
                 DISABLED: false,
@@ -262,10 +263,11 @@ const FromLayout = {
             },
             "End Date": {
                 SIZE: 6,
-                FIELD_TYPE: "Date",
-                FIELD_LABLE: "End Date",
+                FIELD_TYPE: "DateField",
+                FIELD_LABEL: "End Date",
                 FIELD_ID: "form-field-8-e",
                 FIELD_NAME: "End Date",
+                DISABLE_FUTURE: true,
                 EXPANDABLE: false,
                 REQUIRED: true,
                 DISABLED: false,
@@ -281,7 +283,7 @@ const FromLayout = {
     },
     "Education": {
         FIELD_TYPE: "Education",
-        FIELD_LABLE: "Education",
+        FIELD_LABEL: "Education",
         FIELD_ID: "form-field-9",
         FIELD_NAME: "Education",
         EXPANDABLE: true,
@@ -293,7 +295,7 @@ const FromLayout = {
             "Degree": {
                 SIZE: 12,
                 FIELD_TYPE: "Dropdown",
-                FIELD_LABLE: "Degree",
+                FIELD_LABEL: "Degree",
                 FIELD_ID: "form-field-9-a",
                 FIELD_NAME: "Degree",
                 EXPANDABLE: false,
@@ -309,7 +311,7 @@ const FromLayout = {
             "Specialization": {
                 SIZE: 12,
                 FIELD_TYPE: "Textfield",
-                FIELD_LABLE: "Specialization",
+                FIELD_LABEL: "Specialization",
                 FIELD_ID: "form-field-9-b",
                 FIELD_NAME: "Specialization",
                 EXPANDABLE: false,
@@ -324,7 +326,7 @@ const FromLayout = {
             "College/Universisty": {
                 SIZE: 12,
                 FIELD_TYPE: "Textfield",
-                FIELD_LABLE: "College/University",
+                FIELD_LABEL: "College/University",
                 FIELD_ID: "form-field-9-c",
                 FIELD_NAME: "College/Universisty",
                 EXPANDABLE: false,
@@ -338,10 +340,11 @@ const FromLayout = {
 
             "From": {
                 SIZE: 6,
-                FIELD_TYPE: "Date",
-                FIELD_LABLE: "From",
+                FIELD_TYPE: "DateField",
+                FIELD_LABEL: "From",
                 FIELD_ID: "form-field-9-d",
                 FIELD_NAME: "From",
+                DISABLE_FUTURE: true,
                 EXPANDABLE: false,
                 REQUIRED: true,
                 DISABLED: false,
@@ -353,10 +356,11 @@ const FromLayout = {
 
             "To": {
                 SIZE: 6,
-                FIELD_TYPE: "Date",
-                FIELD_LABLE: "To",
+                FIELD_TYPE: "DateField",
+                FIELD_LABEL: "To",
                 FIELD_ID: "form-field-9-e",
                 FIELD_NAME: "To",
+                DISABLE_FUTURE: true,
                 EXPANDABLE: false,
                 REQUIRED: true,
                 DISABLED: false,
@@ -369,7 +373,7 @@ const FromLayout = {
             "CGPA/Percentage" : {
                 SIZE: 12,
                 FIELD_TYPE: "Number",
-                FIELD_LABLE: "CGPA/Percentage",
+                FIELD_LABEL: "CGPA/Percentage",
                 FIELD_ID: "form-field-9-f",
                 FIELD_NAME: "CGPA/Percentage",
                 EXPANDABLE: false,
@@ -389,7 +393,7 @@ const FromLayout = {
     "Question 1": {
         SIZE: 12,
         FIELD_TYPE: "Dropdown",
-        FIELD_LABLE: "Are you authorized to work in the country specified for this role?",
+        FIELD_LABEL: "Are you authorized to work in the country specified for this role?",
         FIELD_ID: "form-field-10",
         FIELD_NAME: "Question 1",
         EXPANDABLE: false,
@@ -411,7 +415,7 @@ const FromLayout = {
     "Question 2": {
         SIZE: 12,
         FIELD_TYPE: "Dropdown",
-        FIELD_LABLE: "How did you find out about this job?",
+        FIELD_LABEL: "How did you find out about this job?",
         FIELD_ID: "form-field-11",
         FIELD_NAME: "Question 2",
         EXPANDABLE: false,
@@ -433,7 +437,7 @@ const FromLayout = {
     "Question 3": {
         SIZE: 12,
         FIELD_TYPE: "Dropdown",
-        FIELD_LABLE: "Are you subject to a notice period at your current employer?",
+        FIELD_LABEL: "Are you subject to a notice period at your current employer?",
         FIELD_ID: "form-field-12",
         FIELD_NAME: "Question 3",
         EXPANDABLE: false,
@@ -455,7 +459,7 @@ const FromLayout = {
     "Question 4": {
         SIZE: 12,
         FIELD_TYPE: "Number",
-        FIELD_LABLE: "Mention your notice period in number of days",
+        FIELD_LABEL: "Mention your notice period in number of days",
         FIELD_ID: "form-field-13",
         FIELD_NAME: "Question 4",
         EXPANDABLE: false,
@@ -470,7 +474,7 @@ const FromLayout = {
     "Question 5": {
         SIZE: 12,
         FIELD_TYPE: "Dropdown",
-        FIELD_LABLE: "Are you subject to any prior or existing agreements which would limit, restrict, or prevent you from performing the duties of the position for which you have applied, such as a non-solicitation or a non-competition agreement?",
+        FIELD_LABEL: "Are you subject to any prior or existing agreements which would limit, restrict, or prevent you from performing the duties of the position for which you have applied, such as a non-solicitation or a non-competition agreement?",
         FIELD_ID: "form-field-14",
         FIELD_NAME: "Question 5",
         EXPANDABLE: false,
@@ -492,7 +496,7 @@ const FromLayout = {
     "Resume/CV": {
         SIZE: 12,
         FIELD_TYPE: "Attachment",
-        FIELD_LABLE: "Drop your Resume/CV here",
+        FIELD_LABEL: "Drop your Resume/CV here",
         FIELD_ID: "form-field-15",
         FIELD_NAME: "Resume/CV",
         EXPANDABLE: false,
