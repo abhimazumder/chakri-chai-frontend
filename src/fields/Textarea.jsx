@@ -4,25 +4,25 @@
 import { TextField } from "@mui/material";
 import React from "react";
 
-const Textarea = (props) => {
-  const {
-    SIZE,
-    FIELD_TYPE,
-    FIELD_LABEL,
-    FIELD_ID,
-    FIELD_NAME,
-    EXPANDABLE,
-    REQUIRED,
-    DISABLED,
-    PARENT_FIELD_NAME,
-    PARENT_FIELD_ID,
-    OPTIONS,
-    ERROR,
-    VALUE,
-    keyRef,
-    handleOnChange,
-    dispatchFormData,
-  } = props;
+const Textarea = ({
+  SIZE,
+  FIELD_TYPE,
+  FIELD_LABEL,
+  FIELD_ID,
+  FIELD_NAME,
+  EXPANDABLE,
+  REQUIRED,
+  DISABLED,
+  PARENT_FIELD_NAME,
+  PARENT_FIELD_ID,
+  OPTIONS,
+  ERROR,
+  VALUE,
+  keyRef,
+  handleOnChange,
+  setError,
+  dispatchFormData,
+}) => {
   return (
     <TextField
       id={FIELD_ID}

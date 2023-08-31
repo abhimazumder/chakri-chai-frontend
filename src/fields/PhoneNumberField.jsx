@@ -26,24 +26,19 @@ const PhoneNumber = ({
 
   const handleChange = (event) => {
     const value = event.target.value;
-    handleOnChange(
-      value,
-      FIELD_NAME,
-      PARENT_FIELD_NAME,
-      keyRef
-    );
+    handleOnChange(value, FIELD_NAME, PARENT_FIELD_NAME, keyRef);
 
     if (REQUIRED && value === "") {
-      setError(true, FIELD_NAME);
+      setError(true, FIELD_NAME, PARENT_FIELD_NAME, keyRef);
       setHelperText(`${FIELD_NAME} is required.`);
-    } else if (value.replace(/\D/g, '').length !== 10){
-      setError(true, FIELD_NAME);
+    } else if (value.replace(/\D/g, "").length !== 10) {
+      setError(true, FIELD_NAME, PARENT_FIELD_NAME, keyRef);
       setHelperText(`${FIELD_NAME} should be of 10 digits.`);
     } else {
-      setError(false, FIELD_NAME);
+      setError(false, FIELD_NAME, PARENT_FIELD_NAME, keyRef);
       setHelperText("");
     }
-  }
+  };
 
   return (
     <TextField

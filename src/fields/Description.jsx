@@ -36,28 +36,27 @@ const styles = {
   },
 };
 
-const Description = (props) => {
-  const {
-    SIZE,
-    FIELD_TYPE,
-    FIELD_LABEL,
-    FIELD_ID,
-    FIELD_NAME,
-    EXPANDABLE,
-    REQUIRED,
-    DISABLED,
-    PARENT_FIELD_NAME,
-    PARENT_FIELD_ID,
-    OPTIONS,
-    SUB_FIELDS,
-    ERROR,
-    VALUE,
-    CHILDREN,
-    keyRef,
-    handleOnChange,
-    dispatchFormData,
-  } = props;
-
+const Description = ({
+  SIZE,
+  FIELD_TYPE,
+  FIELD_LABEL,
+  FIELD_ID,
+  FIELD_NAME,
+  EXPANDABLE,
+  REQUIRED,
+  DISABLED,
+  PARENT_FIELD_NAME,
+  PARENT_FIELD_ID,
+  OPTIONS,
+  SUB_FIELDS,
+  ERROR,
+  VALUE,
+  CHILDREN,
+  keyRef,
+  handleOnChange,
+  setError,
+  dispatchFormData,
+}) => {
   const [forceRender, setForceRender] = useState(false);
 
   const getFieldJSX = (field, childFieldName) => {

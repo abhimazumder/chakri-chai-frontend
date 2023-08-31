@@ -4,26 +4,25 @@
 import React from "react";
 import { MuiOtpInput } from "mui-one-time-password-input";
 
-const OTP = (props) => {
-  const {
-    SIZE,
-    FIELD_TYPE,
-    FIELD_LABEL,
-    FIELD_ID,
-    FIELD_NAME,
-    EXPANDABLE,
-    REQUIRED,
-    DISABLED,
-    PARENT_FIELD_NAME,
-    PARENT_FIELD_ID,
-    OPTIONS,
-    ERROR,
-    VALUE,
-    keyRef,
-    handleOnChange,
-    dispatchFormData,
-  } = props;
-
+const OTP = ({
+  SIZE,
+  FIELD_TYPE,
+  FIELD_LABEL,
+  FIELD_ID,
+  FIELD_NAME,
+  EXPANDABLE,
+  REQUIRED,
+  DISABLED,
+  PARENT_FIELD_NAME,
+  PARENT_FIELD_ID,
+  OPTIONS,
+  ERROR,
+  VALUE,
+  keyRef,
+  handleOnChange,
+  setError,
+  dispatchFormData,
+}) => {
   const matchIsNumeric = (text) => {
     const isNumber = typeof text === "number";
     return (isNumber || text !== "") && !isNaN(Number(text));
@@ -33,25 +32,19 @@ const OTP = (props) => {
     return matchIsNumeric(value);
   };
   return (
-      <MuiOtpInput
+    <MuiOtpInput
       id={FIELD_ID}
       value={VALUE}
       onChange={(value) =>
-        handleOnChange(
-          value,
-          FIELD_NAME,
-          PARENT_FIELD_NAME,
-          keyRef
-        )
+        handleOnChange(value, FIELD_NAME, PARENT_FIELD_NAME, keyRef)
       }
       length={4}
       validateChar={validateChar}
       display="flex"
       gap={1}
-      TextFieldsProps={{ disabled: DISABLED, size: 'medium' }}
-      style={{paddingLeft:"3rem", paddingRight:"3rem"}}
+      TextFieldsProps={{ disabled: DISABLED, size: "medium" }}
+      style={{ paddingLeft: "3rem", paddingRight: "3rem" }}
     />
-
   );
 };
 

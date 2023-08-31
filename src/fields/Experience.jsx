@@ -8,6 +8,7 @@ import AddCircleOutlineOutlined from "@mui/icons-material/AddCircleOutlineOutlin
 import RemoveCircleOutlineRoundedIcon from "@mui/icons-material/RemoveCircleOutlineRounded";
 import DateField from "./DateField";
 import Textfield from "./Textfield";
+import CheckboxSingle from "./CheckboxSingle";
 
 const styles = {
   addIconStyle: {
@@ -49,12 +50,31 @@ const Experience = ({
           <Textfield
             {...field}
             handleOnChange={handleOnChange}
+            setError={setError}
             keyRef={keyRef}
           />
         );
 
+      case "CheckboxSingle":
+        return (
+          <CheckboxSingle
+            {...field}
+            handleOnChange={handleOnChange}
+            setError={setError}
+            keyRef={keyRef}
+            dispatchFormData={dispatchFormData}
+          />
+        );
+
       case "DateField":
-        return <DateField {...field} handleOnChange={handleOnChange} keyRef={keyRef} />;
+        return (
+          <DateField
+            {...field}
+            handleOnChange={handleOnChange}
+            setError={setError}
+            keyRef={keyRef}
+          />
+        );
 
       default:
         return null;
@@ -66,9 +86,9 @@ const Experience = ({
       dispatchFormData({
         type: "ADD_NEW_FIELD",
         payload: {
-          fieldName: FIELD_NAME
+          fieldName: FIELD_NAME,
         },
-      });  
+      });
     }
   };
 
@@ -99,7 +119,7 @@ const Experience = ({
         <Grid container spacing={2}>
           {Object.entries(CHILDREN).map(([childFieldName, childField]) => {
             return (
-              <Grid item xs={12} key={childField.FIELD_ID}>
+              <Grid item xs={12} key={childFieldName}>
                 <Grid container spacing={2} style={{ paddingBottom: 40 }}>
                   <Grid item xs={12} alignItems="flex-end">
                     <RemoveCircleOutlineRoundedIcon

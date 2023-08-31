@@ -1,5 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import React, { useCallback, useEffect, useReducer } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useState,
+} from "react";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { Button, Container, Grid, Paper } from "@mui/material";
@@ -12,6 +19,12 @@ import PhoneNumberField from "../../fields/PhoneNumberField";
 import Address from "../../fields/Address";
 import Experience from "../../fields/Experience";
 import Education from "../../fields/Education";
+import { fetchCountryList, fetchStatesByCountry } from "../../services/apis";
+import Attachment from "../../fields/Attachment";
+import Number from "../../fields/Number";
+
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const styles = {
   roundedPaper: {
@@ -37,10 +50,45 @@ const formDataReducer = (state, action) => {
     case "SET_FORM_DATA":
       return action.payload;
 
+    case "SET_COUNTRY_OPTIONS": {
+      const { countryList } = action.payload;
+      return {
+        ...state,
+        ["Address"]: {
+          ...state["Address"],
+          SUB_FIELDS: {
+            ...state["Address"].SUB_FIELDS,
+            ["Country"]: {
+              ...state["Address"].SUB_FIELDS["Country"],
+              OPTIONS: countryList,
+            },
+          },
+        },
+      };
+    }
+
+    case "UPDATE_STATE_OPTIONS":
+      return {
+        ...state,
+        ["Address"]: {
+          ...state["Address"],
+          SUB_FIELDS: {
+            ...state["Address"]?.SUB_FIELDS,
+            ["State/Province"]: {
+              ...state["Address"]?.SUB_FIELDS["State/Province"],
+              DISABLED: false,
+              OPTIONS: fetchStatesByCountry(
+                state?.["Address"]?.SUB_FIELDS?.["Country"]?.VALUE
+              ),
+            },
+          },
+        },
+      };
+
     case "UPDATE_FIELD": {
       const { value, fieldName, parentFieldName, keyRef } = action.payload;
 
-      if (parentFieldName && keyRef) {
+      if (keyRef) {
         return {
           ...state,
           [parentFieldName]: {
@@ -84,13 +132,46 @@ const formDataReducer = (state, action) => {
 
     case "SET_ERROR": {
       const { error, fieldName, parentFieldName, keyRef } = action.payload;
-      return {
-        ...state,
-        [fieldName]: {
-          ...state[fieldName],
-          ERROR: error,
-        },
-      };
+      if (keyRef) {
+        return {
+          ...state,
+          [parentFieldName]: {
+            ...state[parentFieldName],
+            CHILDREN: {
+              ...state[parentFieldName]?.CHILDREN,
+              [keyRef]: {
+                ...state[parentFieldName]?.CHILDREN?.[keyRef],
+                [fieldName]: {
+                  ...state[parentFieldName]?.CHILDREN?.[keyRef]?.[fieldName],
+                  ERROR: error,
+                },
+              },
+            },
+          },
+        };
+      } else if (parentFieldName) {
+        return {
+          ...state,
+          [parentFieldName]: {
+            ...state[parentFieldName],
+            SUB_FIELDS: {
+              ...state[parentFieldName]?.SUB_FIELDS,
+              [fieldName]: {
+                ...state[parentFieldName]?.SUB_FIELDS?.[fieldName],
+                ERROR: error,
+              },
+            },
+          },
+        };
+      } else {
+        return {
+          ...state,
+          [fieldName]: {
+            ...state[fieldName],
+            ERROR: error,
+          },
+        };
+      }
     }
 
     case "ADD_NEW_FIELD": {
@@ -134,6 +215,27 @@ const formDataReducer = (state, action) => {
       return newState;
     }
 
+    case "TOGGLE_DISABLE_END_DATE": {
+      const { childKeyName, checked } = action.payload;
+      return {
+        ...state,
+        ["Experience"]: {
+          ...state["Experience"],
+          CHILDREN: {
+            ...state["Experience"].CHILDREN,
+            [childKeyName]: {
+              ...state["Experience"].CHILDREN[childKeyName],
+              ["End Date"]: {
+                ...state["Experience"].CHILDREN[childKeyName]["End Date"],
+                DISABLED: checked,
+                REQUIRED: !checked,
+              },
+            },
+          },
+        },
+      };
+    }
+
     default:
       return state;
   }
@@ -142,9 +244,23 @@ const formDataReducer = (state, action) => {
 const JobForm = () => {
   const [formData, dispatchFormData] = useReducer(formDataReducer, null);
 
+  const countryList = useMemo(() => fetchCountryList(), []);
+
+  const [loader, setLoader] = useState(false);
+  const handleLoaderOpen = () => setLoader(true);
+  const handleLoaderClose = () => setLoader(false);
+
   useEffect(() => {
     dispatchFormData({ type: "SET_FORM_DATA", payload: FormLayout });
-  }, []);
+    dispatchFormData({
+      type: "SET_COUNTRY_OPTIONS",
+      payload: { countryList },
+    });
+  }, [countryList]);
+
+  useEffect(() => {
+    dispatchFormData({ type: "UPDATE_STATE_OPTIONS" });
+  }, [formData?.["Address"]?.SUB_FIELDS?.["Country"]?.VALUE]);
 
   const setError = useCallback(
     (error, fieldName, parentFieldName = null, keyRef = null) => {
@@ -179,7 +295,13 @@ const JobForm = () => {
   const getFieldJSX = (field) => {
     switch (field.FIELD_TYPE) {
       case "Textfield":
-        return <Textfield {...field} handleOnChange={handleOnChange} setError={setError} />;
+        return (
+          <Textfield
+            {...field}
+            handleOnChange={handleOnChange}
+            setError={setError}
+          />
+        );
 
       case "Date":
         return (
@@ -187,11 +309,18 @@ const JobForm = () => {
             {...field}
             handleOnChange={handleOnChange}
             dispatchFormData={dispatchFormData}
+            setError={setError}
           />
         );
 
       case "Dropdown":
-        return <Dropdown {...field} handleOnChange={handleOnChange} />;
+        return (
+          <Dropdown
+            {...field}
+            handleOnChange={handleOnChange}
+            setError={setError}
+          />
+        );
 
       case "EmailField":
         return (
@@ -212,13 +341,20 @@ const JobForm = () => {
         );
 
       case "Address":
-        return <Address {...field} handleOnChange={handleOnChange} />;
+        return (
+          <Address
+            {...field}
+            handleOnChange={handleOnChange}
+            setError={setError}
+          />
+        );
 
       case "Experience":
         return (
           <Experience
             {...field}
             handleOnChange={handleOnChange}
+            setError={setError}
             dispatchFormData={dispatchFormData}
           />
         );
@@ -228,6 +364,26 @@ const JobForm = () => {
           <Education
             {...field}
             handleOnChange={handleOnChange}
+            setError={setError}
+            dispatchFormData={dispatchFormData}
+          />
+        );
+
+      case "Number":
+        return (
+          <Number
+            {...field}
+            handleOnChange={handleOnChange}
+            setError={setError}
+          />
+        );
+
+      case "Attachment":
+        return (
+          <Attachment
+            {...field}
+            handleOnChange={handleOnChange}
+            setError={setError}
             dispatchFormData={dispatchFormData}
           />
         );
@@ -237,32 +393,126 @@ const JobForm = () => {
     }
   };
 
+  const handleSubmit = async (event) => {
+    try {
+      event.preventDefault();
+      handleLoaderOpen();
+      let DATA = {};
+      Object.values(formData).forEach((field) => {
+        const data = {};
+        if (field.CHILDREN) {
+          const childrenData = {};
+          Object.entries(field.CHILDREN).forEach(([childKey, childField]) => {
+            const subFieldsData = {};
+            Object.values(childField).forEach((childSubField) => {
+              if (
+                childSubField.ERROR){
+                const error = new Error("Some fields have invalid value!");
+                error.focus = `${childSubField.FIELD_NAME}*${field.FIELD_NAME}*${childKey}`
+                throw error;
+              }
+              if (
+                childSubField.REQUIRED &&
+                (childSubField.VALUE === "" || childSubField.VALUE === null)
+              ){
+                const error = new Error("All required fields must be filled!");
+                error.focus = `${childSubField.FIELD_NAME}*${field.FIELD_NAME}*${childKey}`
+                throw error;
+              }
+              subFieldsData[childSubField.FIELD_NAME] = childSubField.VALUE;
+            });
+
+            childrenData[childKey] = subFieldsData;
+          });
+
+          data[field.FIELD_NAME] = childrenData;
+        } else if (field.SUB_FIELDS) {
+          const subFieldsData = {};
+          Object.values(field.SUB_FIELDS).forEach((subField) => {
+            if(subField.ERROR){
+              const error = new Error("Some fields have invalid value!");
+              error.focus = `${subField.FIELD_NAME}*${field.FIELD_NAME}`
+              throw error;
+            }
+            if (
+              subField.REQUIRED &&
+              (subField.VALUE === "" || subField.VALUE === null)
+            ){
+              const error = new Error("All required fields must be filled!");
+              error.focus = `${subField.FIELD_NAME}*${field.FIELD_NAME}`
+              throw error;
+            }
+
+            subFieldsData[subField.FIELD_NAME] = subField.VALUE;
+          });
+
+          data[field.FIELD_NAME] = subFieldsData;
+        } else {
+          if(field.ERROR){
+            const error = new Error("Some fields have invalid value!");
+            error.focus = `${field.FIELD_NAME}`
+            throw error;
+          }
+          if (field.REQUIRED && (field.VALUE === "" || field.VALUE === null))
+          {
+            const error = new Error("All required fields must be filled!");
+            error.focus = `${field.FIELD_NAME}`
+            throw error;
+          }
+          data[field.FIELD_NAME] = field.VALUE;
+        }
+        DATA = {
+          ...DATA,
+          ...data,
+        };
+      });
+      console.log(DATA);
+      // API CALL HERE
+    } catch (error) {
+      console.error(error.message);
+      const [fieldName, parentFieldName, keyRef] = error.focus.split("*");
+      dispatchFormData({type: "SET_ERROR", payload: {
+        error: true,
+        fieldName,
+        parentFieldName,
+        keyRef,
+      }})
+    } finally {
+      handleLoaderClose();
+    }
+  };
+
   return (
     <Container>
-      <form onSubmit={(event) => event.preventDefault()}>
+      <form onSubmit={(event) => handleSubmit(event)}>
         <Paper elevation={3} sx={styles.roundedPaper}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <Grid container rowSpacing={8} columnSpacing={2} padding={2}>
-                {formData &&
-                  Object.values(formData).map((field) => (
-                    <Grid item xs={12} sm={field?.SIZE} key={field?.FIELD_ID}>
-                      {getFieldJSX(field)}
-                    </Grid>
-                  ))}
-                <Grid item xs={12} display="flex" justifyContent="flex-end">
-                  <Button
-                    variant="contained"
-                    style={styles.submitButton}
-                    type="submit"
-                    onClick={() => console.log(formData)}
-                  >
-                    {"Let's Go"}
-                  </Button>
-                </Grid>
+            <Grid container rowSpacing={8} columnSpacing={2} padding={2}>
+              {formData &&
+                Object.values(formData).map((field) => (
+                  <Grid item xs={12} sm={field?.SIZE} key={field?.FIELD_ID}>
+                    {getFieldJSX(field)}
+                  </Grid>
+                ))}
+              <Grid item xs={12} display="flex" justifyContent="flex-end">
+                <Button
+                  variant="contained"
+                  style={styles.submitButton}
+                  type="submit"
+                >
+                  {"Let's Go"}
+                </Button>
               </Grid>
+            </Grid>
           </LocalizationProvider>
         </Paper>
       </form>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loader}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Container>
   );
 };

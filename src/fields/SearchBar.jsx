@@ -13,25 +13,25 @@ const styles = {
   },
 };
 
-const SearchBar = (props) => {
-  const {
-    SIZE,
-    FIELD_TYPE,
-    FIELD_LABEL,
-    FIELD_ID,
-    FIELD_NAME,
-    EXPANDABLE,
-    REQUIRED,
-    DISABLED,
-    PARENT_FIELD_NAME,
-    PARENT_FIELD_ID,
-    OPTIONS,
-    ERROR,
-    VALUE,
-    keyRef,
-    handleOnChange,
-    dispatchFormData,
-  } = props;
+const SearchBar = ({
+  SIZE,
+  FIELD_TYPE,
+  FIELD_LABEL,
+  FIELD_ID,
+  FIELD_NAME,
+  EXPANDABLE,
+  REQUIRED,
+  DISABLED,
+  PARENT_FIELD_NAME,
+  PARENT_FIELD_ID,
+  OPTIONS,
+  ERROR,
+  VALUE,
+  keyRef,
+  handleOnChange,
+  setError,
+  dispatchFormData,
+}) => {
   return (
     <TextField
       id={FIELD_ID}

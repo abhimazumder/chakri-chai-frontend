@@ -424,7 +424,6 @@ const CreateJobForm = (props) => {
     const DATA = formatData(formData);
     DATA["Active Status"] = false;
     DATA["User ID"] = userId;
-    console.log(DATA);
     try {
       const res = await instance.post("/jobs/createjob", { DATA });
       const url = `/jobinfo?jobid=${DATA["Job ID"]}`;

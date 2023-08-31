@@ -37,27 +37,26 @@ const styles = {
   },
 };
 
-const RequiredExperience = (props) => {
-  const {
-    SIZE,
-    FIELD_TYPE,
-    FIELD_LABEL,
-    FIELD_ID,
-    FIELD_NAME,
-    EXPANDABLE,
-    REQUIRED,
-    DISABLED,
-    PARENT_FIELD_NAME,
-    PARENT_FIELD_ID,
-    OPTIONS,
-    ERROR,
-    SUB_FIELDS,
-    VALUE,
-    keyRef,
-    handleOnChange,
-    dispatchFormData,
-  } = props;
-
+const RequiredExperience = ({
+  SIZE,
+  FIELD_TYPE,
+  FIELD_LABEL,
+  FIELD_ID,
+  FIELD_NAME,
+  EXPANDABLE,
+  REQUIRED,
+  DISABLED,
+  PARENT_FIELD_NAME,
+  PARENT_FIELD_ID,
+  OPTIONS,
+  ERROR,
+  SUB_FIELDS,
+  VALUE,
+  keyRef,
+  handleOnChange,
+  setError,
+  dispatchFormData,
+}) => {
   const getFieldJSX = (field) => {
     switch (field.FIELD_TYPE) {
       case "Textfield":
@@ -76,7 +75,7 @@ const RequiredExperience = (props) => {
 
   const createExperienceObject = () => {
     let flag = false;
-    let newExperienceObject = {...VALUE};
+    let newExperienceObject = { ...VALUE };
     Object.values(SUB_FIELDS).forEach((subField) => {
       if (subField.VALUE === "") flag = true;
     });
@@ -84,27 +83,32 @@ const RequiredExperience = (props) => {
     if (flag) return;
 
     if (SUB_FIELDS["Range Type"].VALUE === "Absolute") {
-        newExperienceObject = {
+      newExperienceObject = {
         RANGE: {
-          [SUB_FIELDS["Range Type"].VALUE.toUpperCase()]: SUB_FIELDS["Range Value"].VALUE,
+          [SUB_FIELDS["Range Type"].VALUE.toUpperCase()]:
+            SUB_FIELDS["Range Value"].VALUE,
         },
         UNIT: SUB_FIELDS["Unit"].VALUE,
       };
     } else {
-        newExperienceObject = {
+      newExperienceObject = {
         RANGE: {
           ...newExperienceObject?.RANGE,
-          [SUB_FIELDS["Range Type"].VALUE.toUpperCase()]: SUB_FIELDS["Range Value"].VALUE,
+          [SUB_FIELDS["Range Type"].VALUE.toUpperCase()]:
+            SUB_FIELDS["Range Value"].VALUE,
         },
         UNIT: SUB_FIELDS["Unit"].VALUE,
       };
       delete newExperienceObject?.RANGE?.ABSOLUTE;
     }
-    dispatchFormData({type: 'CREATE_EXPERIENCE_OBJECT', payload: newExperienceObject});
+    dispatchFormData({
+      type: "CREATE_EXPERIENCE_OBJECT",
+      payload: newExperienceObject,
+    });
   };
 
   const removeExperienceObject = () => {
-    dispatchFormData({type: 'REMOVE_EXPERIENCE_OBJECT'});
+    dispatchFormData({ type: "REMOVE_EXPERIENCE_OBJECT" });
   };
 
   return (

@@ -33,13 +33,13 @@ const PasswordField = ({
     handleOnChange(value, FIELD_NAME);
 
     if (REQUIRED && value === "") {
-      setError(true, FIELD_NAME);
+      setError(true, FIELD_NAME, PARENT_FIELD_NAME, keyRef);
       setHelperText("Password is required.");
     } else if (!validatePassword(value)) {
-      setError(true, FIELD_NAME);
+      setError(true, FIELD_NAME, PARENT_FIELD_NAME, keyRef);
       setHelperText("Password must be at least 8 characters.");
     } else {
-      setError(false, FIELD_NAME);
+      setError(false, FIELD_NAME, PARENT_FIELD_NAME, keyRef);
       setHelperText("");
     }
   };

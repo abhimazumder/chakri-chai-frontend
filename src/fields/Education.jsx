@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React from "react";
@@ -50,15 +51,17 @@ const Education = ({
           <Dropdown
             {...field}
             handleOnChange={handleOnChange}
+            setError={setError}
             keyRef={keyRef}
           />
         );
-        
+
       case "Textfield":
         return (
           <Textfield
             {...field}
             handleOnChange={handleOnChange}
+            setError={setError}
             keyRef={keyRef}
           />
         );
@@ -68,13 +71,19 @@ const Education = ({
           <DateField
             {...field}
             handleOnChange={handleOnChange}
+            setError={setError}
             keyRef={keyRef}
           />
         );
 
       case "Number":
         return (
-          <Number {...field} handleOnChange={handleOnChange} keyRef={keyRef} />
+          <Number
+            {...field}
+            handleOnChange={handleOnChange}
+            setError={setError}
+            keyRef={keyRef}
+          />
         );
 
       default:
@@ -117,7 +126,7 @@ const Education = ({
         <Grid container spacing={2}>
           {Object.entries(CHILDREN).map(([childFieldName, childField]) => {
             return (
-              <Grid item xs={12} key={childField.FIELD_ID}>
+              <Grid item xs={12} key={childFieldName}>
                 <Grid container spacing={2} style={{ paddingBottom: 40 }}>
                   <Grid item xs={12} alignItems="flex-end">
                     <RemoveCircleOutlineRoundedIcon
@@ -149,4 +158,4 @@ const Education = ({
   );
 };
 
-export default Education;
+export default React.memo(Education);

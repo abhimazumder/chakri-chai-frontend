@@ -29,13 +29,31 @@ const Address = ({
   const getFieldJSX = (field) => {
     switch (field.FIELD_TYPE) {
       case "Dropdown":
-        return <Dropdown {...field} handleOnChange={handleOnChange} />;
+        return (
+          <Dropdown
+            {...field}
+            handleOnChange={handleOnChange}
+            setError={setError}
+          />
+        );
 
       case "Textfield":
-        return <Textfield {...field} handleOnChange={handleOnChange} />;
+        return (
+          <Textfield
+            {...field}
+            handleOnChange={handleOnChange}
+            setError={setError}
+          />
+        );
 
       case "Number":
-        return <Number {...field} handleOnChange={handleOnChange} />;
+        return (
+          <Number
+            {...field}
+            handleOnChange={handleOnChange}
+            setError={setError}
+          />
+        );
 
       default:
         return null;

@@ -42,27 +42,26 @@ const styles = {
   },
 };
 
-const Compensation = (props) => {
-  const {
-    SIZE,
-    FIELD_TYPE,
-    FIELD_LABEL,
-    FIELD_ID,
-    FIELD_NAME,
-    EXPANDABLE,
-    REQUIRED,
-    DISABLED,
-    PARENT_FIELD_NAME,
-    PARENT_FIELD_ID,
-    OPTIONS,
-    ERROR,
-    SUB_FIELDS,
-    VALUE,
-    keyRef,
-    handleOnChange,
-    dispatchFormData,
-  } = props;
-
+const Compensation = ({
+  SIZE,
+  FIELD_TYPE,
+  FIELD_LABEL,
+  FIELD_ID,
+  FIELD_NAME,
+  EXPANDABLE,
+  REQUIRED,
+  DISABLED,
+  PARENT_FIELD_NAME,
+  PARENT_FIELD_ID,
+  OPTIONS,
+  ERROR,
+  SUB_FIELDS,
+  VALUE,
+  keyRef,
+  handleOnChange,
+  setError,
+  dispatchFormData,
+}) => {
   const getFieldJSX = (field) => {
     switch (field.FIELD_TYPE) {
       case "Textfield":

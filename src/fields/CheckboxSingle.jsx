@@ -1,10 +1,10 @@
 /* eslint-disable react-refresh/only-export-components */
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import { TextField } from "@mui/material";
+/* eslint-disable no-unused-vars */
+import { Checkbox, InputLabel } from "@mui/material";
 import React, { useState } from "react";
 
-const Textfield = ({
+const CheckboxSingle = ({
   SIZE,
   FIELD_TYPE,
   FIELD_LABEL,
@@ -15,7 +15,9 @@ const Textfield = ({
   DISABLED,
   PARENT_FIELD_NAME,
   PARENT_FIELD_ID,
+  OPTIONS,
   ERROR,
+  SUB_FIELDS,
   VALUE,
   keyRef,
   handleOnChange,
@@ -25,9 +27,15 @@ const Textfield = ({
   const [helperText, setHelperText] = useState("");
 
   const handleChange = (event) => {
-    const value = event.target.value;
+    const value = event.target.checked;
     handleOnChange(value, FIELD_NAME, PARENT_FIELD_NAME, keyRef);
-
+    dispatchFormData({
+      type: "TOGGLE_DISABLE_END_DATE",
+      payload: {
+        childKeyName: keyRef,
+        checked: value,
+      },
+    });
     if (REQUIRED && value === "") {
       setError(true, FIELD_NAME, PARENT_FIELD_NAME, keyRef);
       setHelperText(`${FIELD_NAME} is required.`);
@@ -38,19 +46,19 @@ const Textfield = ({
   };
 
   return (
-    <TextField
-      id={FIELD_ID}
-      label={FIELD_LABEL}
-      value={VALUE}
-      onChange={handleChange}
-      error={ERROR}
-      helperText={helperText}
-      variant="outlined"
-      required={REQUIRED}
-      disabled={DISABLED}
-      fullWidth
-    />
+    <>
+      <InputLabel>{FIELD_LABEL}</InputLabel>
+      <Checkbox
+        id={FIELD_ID}
+        label={FIELD_LABEL}
+        checked={VALUE}
+        onChange={handleChange}
+        variant="outlined"
+        required={REQUIRED}
+        disabled={DISABLED}
+      />
+    </>
   );
 };
 
-export default React.memo(Textfield);
+export default React.memo(CheckboxSingle);

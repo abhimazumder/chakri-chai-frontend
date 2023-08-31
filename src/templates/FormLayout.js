@@ -133,7 +133,7 @@ const FromLayout = {
                 FIELD_NAME: "State/Province",
                 EXPANDABLE: false,
                 REQUIRED: true,
-                DISABLED: true,
+                DISABLED: false,
                 PARENT_FIELD_NAME: "Address",
                 PARENT_FIELD_ID: "form-field-7",
                 OPTIONS: [],
@@ -233,7 +233,7 @@ const FromLayout = {
 
             "Current Job": {
                 SIZE: 12,
-                FIELD_TYPE: "Checkbox",
+                FIELD_TYPE: "CheckboxSingle",
                 FIELD_LABEL: "Is this your current job?",
                 FIELD_ID: "form-field-8-c",
                 FIELD_NAME: "Current Job",
@@ -299,7 +299,7 @@ const FromLayout = {
                 FIELD_ID: "form-field-9-a",
                 FIELD_NAME: "Degree",
                 EXPANDABLE: false,
-                REQUIRED: false,
+                REQUIRED: true,
                 DISABLED: false,
                 PARENT_FIELD_NAME: "Education",
                 PARENT_FIELD_ID: "form-field-9",
@@ -471,33 +471,11 @@ const FromLayout = {
         VALUE: '',
     },
 
-    "Question 5": {
-        SIZE: 12,
-        FIELD_TYPE: "Dropdown",
-        FIELD_LABEL: "Are you subject to any prior or existing agreements which would limit, restrict, or prevent you from performing the duties of the position for which you have applied, such as a non-solicitation or a non-competition agreement?",
-        FIELD_ID: "form-field-14",
-        FIELD_NAME: "Question 5",
-        EXPANDABLE: false,
-        REQUIRED: true,
-        DISABLED: false,
-        PARENT_FIELD_NAME: null,
-        PARENT_FIELD_ID: null,
-        OPTIONS: [
-            { VALUE: "Select a option", ID: "Select a option", DISABLED: true },
-            { VALUE: "Yes", ID: "Yes", DISABLED: false },
-            { VALUE: "No", ID: "No", DISABLED: false },
-            { VALUE: "Not sure", ID: "Not sure", DISABLED: false }
-        ]
-        ,
-        ERROR: false,
-        VALUE: '',
-    },
-
     "Resume/CV": {
         SIZE: 12,
         FIELD_TYPE: "Attachment",
         FIELD_LABEL: "Drop your Resume/CV here",
-        FIELD_ID: "form-field-15",
+        FIELD_ID: "form-field-14",
         FIELD_NAME: "Resume/CV",
         EXPANDABLE: false,
         REQUIRED: true,

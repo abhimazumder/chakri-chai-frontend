@@ -34,13 +34,13 @@ const EmailField = ({
     handleOnChange(value, FIELD_NAME, PARENT_FIELD_NAME, keyRef);
 
     if (REQUIRED && value === "") {
-      setError(true, FIELD_NAME);
+      setError(true, FIELD_NAME, PARENT_FIELD_NAME, keyRef);
       setHelperText(`${FIELD_NAME} is required.`);
     } else if (!validateEmail(value)) {
-      setError(true, FIELD_NAME);
+      setError(true, FIELD_NAME, PARENT_FIELD_NAME, keyRef);
       setHelperText("Invalid email format.");
     } else {
-      setError(false, FIELD_NAME);
+      setError(false, FIELD_NAME, PARENT_FIELD_NAME, keyRef);
       setHelperText("");
     }
   };
