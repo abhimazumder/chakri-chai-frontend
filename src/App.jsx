@@ -11,6 +11,9 @@ import AdminConsoleIndex from "./pages/AdminConsole/AdminConsoleIndex";
 import JobPostingsIndex from "./pages/JobPostings/JobPostingsIndex";
 import HomeIndex from "./pages/Home/HomeIndex";
 import ProtectedRoute from "./components/ProtectedRoute";
+import JobApplicationsIndex from "./pages/JobApplications/JobApplicationsIndex";
+import ApplicationInfoIndex from "./pages/ApplicationInfo/ApplicationInfoIndex";
+
 import { useSelector } from "react-redux";
 
 function App() {
@@ -33,6 +36,9 @@ function App() {
             >
               <Route path="/console" element={<AdminConsoleIndex />} />
               <Route path="/jobpostings" element={<JobPostingsIndex />} />
+              <Route path="/jobapplications" element={<JobApplicationsIndex />} />
+              <Route path="/applicationinfo" element={<ApplicationInfoIndex/>} />
+
               <Route path="/createjob" element={<CreateJobIndex />} />
             </Route>
           </Routes>

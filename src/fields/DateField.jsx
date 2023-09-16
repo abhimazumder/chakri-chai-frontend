@@ -30,12 +30,12 @@ const DateField = ({
   const [helperText, setHelperText] = useState("");
 
   useEffect(() => {
-    if(ERROR){
+    if (ERROR) {
       setHelperText(`${FIELD_NAME} is required.`);
     } else {
       setHelperText("");
     }
-  }, [ERROR])
+  }, [ERROR]);
 
   const handleChange = (value) => {
     handleOnChange(value.toISOString(), FIELD_NAME, PARENT_FIELD_NAME, keyRef);
@@ -58,8 +58,8 @@ const DateField = ({
       slotProps={{
         textField: {
           error: ERROR,
-          helperText: helperText
-        }
+          helperText: helperText,
+        },
       }}
       format="dd-MM-yyyy"
       disablePast={DISABLE_PAST}

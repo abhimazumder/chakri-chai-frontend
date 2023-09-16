@@ -47,25 +47,19 @@ const styles = {
 
 const convertISOTimeStamp = (isoTimeStamp) => {
   const date = new Date(isoTimeStamp);
-  return `${date.getUTCDate() || "--"}/${
-    date.getUTCMonth() + 1 || "--"
-  }/${date.getUTCFullYear() || "----"}`;
+  return `${date.getUTCDate() || "--"}/${date.getUTCMonth() + 1 || "--"}/${
+    date.getUTCFullYear() || "----"
+  }`;
 };
 
-const JobBrief = (props) => {
+const JobBrief = ({ metaData }) => {
   const navigate = useNavigate();
-  const [metaData, setMetaData] = useState(null);
-
-  useEffect(() => {
-    // console.log("Job Bief", props.metaData);
-    setMetaData(props.metaData);
-  }, [props.metaData]);
 
   const generateFeatures = (jobFeatures, featureName, index) => {
     const feature = jobFeatures[featureName];
     switch (featureName) {
       case "REQUIRED_EXPERIENCE":
-        if(Object.keys(feature).length === 0) return;
+        if (Object.keys(feature).length === 0) return;
         return (
           <Tooltip title={"Required Experience"} arrow key={index}>
             <Grid item xs="auto">
@@ -89,7 +83,7 @@ const JobBrief = (props) => {
         );
 
       case "COMPENSATION":
-        if(Object.keys(feature).length === 0) return;
+        if (Object.keys(feature).length === 0) return;
         return (
           <Tooltip title={"Compensation"} arrow key={index}>
             <Grid item xs="auto">
@@ -127,7 +121,7 @@ const JobBrief = (props) => {
         );
 
       case "EMPLOYMENT_TYPE":
-        if(feature === "") return;
+        if (feature === "") return;
         return (
           <Tooltip title={"Employment Type"} arrow key={index}>
             <Grid item xs="auto">
@@ -137,7 +131,7 @@ const JobBrief = (props) => {
         );
 
       case "WORK_MODE":
-        if(feature === "") return;
+        if (feature === "") return;
         return (
           <Tooltip title={"Work Mode"} arrow key={index}>
             <Grid item xs="auto">
@@ -151,7 +145,7 @@ const JobBrief = (props) => {
         );
 
       case "OPENNINGS":
-        if(feature === "") return;
+        if (feature === "") return;
         return (
           <Tooltip title={"Opennings"} arrow key={index}>
             <Grid item xs="auto">
@@ -223,13 +217,15 @@ const JobBrief = (props) => {
             <Grid container spacing={2}>
               <Grid item xs={6} key={"POSTING_DATE"}>
                 <Typography>
-                  Posted on: {metaData && convertISOTimeStamp(metaData?.POSTING_DATE)}
+                  Posted on:{" "}
+                  {metaData && convertISOTimeStamp(metaData?.POSTING_DATE)}
                 </Typography>
               </Grid>
               <Grid item xs={6} textAlign="right" key={"APPLICATION_DEADLINE"}>
                 <Typography>
                   <span style={styles.asterisk}>* </span>Application deadline:{" "}
-                  {metaData && convertISOTimeStamp(metaData?.APPLICATION_DEADLINE)}
+                  {metaData &&
+                    convertISOTimeStamp(metaData?.APPLICATION_DEADLINE)}
                 </Typography>
               </Grid>
             </Grid>

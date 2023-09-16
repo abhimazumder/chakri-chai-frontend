@@ -66,7 +66,7 @@ const MiniJobApplications = ({ rows }) => {
           <Link
             component="button"
             onClick={() => {
-              navigate(`/joblist?userid=${userId}`);
+              navigate(`/jobapplications`);
             }}
             underline="hover"
             style={{ color: "#ED1C24" }}

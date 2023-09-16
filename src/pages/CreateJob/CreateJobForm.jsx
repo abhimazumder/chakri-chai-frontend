@@ -161,6 +161,50 @@ const formDataReducer = (state, action) => {
       }
     }
 
+    case "SET_ERROR": {
+      const { error, fieldName, parentFieldName, keyRef } = action.payload;
+      if (keyRef) {
+        return {
+          ...state,
+          [parentFieldName]: {
+            ...state[parentFieldName],
+            CHILDREN: {
+              ...state[parentFieldName]?.CHILDREN,
+              [keyRef]: {
+                ...state[parentFieldName]?.CHILDREN?.[keyRef],
+                [fieldName]: {
+                  ...state[parentFieldName]?.CHILDREN?.[keyRef]?.[fieldName],
+                  ERROR: error,
+                },
+              },
+            },
+          },
+        };
+      } else if (parentFieldName) {
+        return {
+          ...state,
+          [parentFieldName]: {
+            ...state[parentFieldName],
+            SUB_FIELDS: {
+              ...state[parentFieldName]?.SUB_FIELDS,
+              [fieldName]: {
+                ...state[parentFieldName]?.SUB_FIELDS?.[fieldName],
+                ERROR: error,
+              },
+            },
+          },
+        };
+      } else {
+        return {
+          ...state,
+          [fieldName]: {
+            ...state[fieldName],
+            ERROR: error,
+          },
+        };
+      }
+    }
+
     case "CREATE_LOCATION_OBJECT": {
       const newValue = [...state["Job Locations"].VALUE];
       newValue.push(action.payload);
@@ -314,6 +358,21 @@ const CreateJobForm = (props) => {
     dispatchFormData({ type: "SET_FORM_DATA", payload: props.jobLayout });
   }, [props.jobLayout]);
 
+  const setError = useCallback(
+    (error, fieldName, parentFieldName = null, keyRef = null) => {
+      dispatchFormData({
+        type: "SET_ERROR",
+        payload: {
+          error,
+          fieldName,
+          parentFieldName,
+          keyRef,
+        },
+      });
+    },
+    []
+  );
+
   const handleOnChange = useCallback(
     (value, fieldName, parentFieldName = null, keyRef = null) => {
       dispatchFormData({
@@ -332,19 +391,20 @@ const CreateJobForm = (props) => {
   const getFieldJSX = (field) => {
     switch (field.FIELD_TYPE) {
       case "Textfield":
-        return <Textfield {...field} handleOnChange={handleOnChange} />;
+        return <Textfield {...field} handleOnChange={handleOnChange} setError={setError} />;
 
       case "Dropdown":
-        return <Dropdown {...field} handleOnChange={handleOnChange} />;
+        return <Dropdown {...field} handleOnChange={handleOnChange} setError={setError} />;
 
       case "Number":
-        return <Number {...field} handleOnChange={handleOnChange} />;
+        return <Number {...field} handleOnChange={handleOnChange} setError={setError} />;
 
       case "Job Locations":
         return (
           <JobLocations
             {...field}
             handleOnChange={handleOnChange}
+            setError={setError}
             dispatchFormData={dispatchFormData}
           />
         );
@@ -354,6 +414,7 @@ const CreateJobForm = (props) => {
           <DateField
             {...field}
             handleOnChange={handleOnChange}
+            setError={setError}
             dispatchFormData={dispatchFormData}
           />
         );
@@ -363,6 +424,7 @@ const CreateJobForm = (props) => {
           <RequiredExperience
             {...field}
             handleOnChange={handleOnChange}
+            setError={setError}
             dispatchFormData={dispatchFormData}
           />
         );
@@ -372,6 +434,7 @@ const CreateJobForm = (props) => {
           <Compensation
             {...field}
             handleOnChange={handleOnChange}
+            setError={setError}
             dispatchFormData={dispatchFormData}
           />
         );
@@ -381,6 +444,7 @@ const CreateJobForm = (props) => {
           <Description
             {...field}
             handleOnChange={handleOnChange}
+            setError={setError}
             dispatchFormData={dispatchFormData}
           />
         );

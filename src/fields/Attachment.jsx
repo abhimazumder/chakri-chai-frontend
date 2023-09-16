@@ -75,8 +75,13 @@ const Attachment = ({
 
     const reader = new FileReader();
     reader.onload = () => {
-      const base64Data = reader.result;
-      handleOnChange(base64Data, FIELD_NAME, PARENT_FIELD_NAME, keyRef);
+      const base64data = reader.result.split(",")[1];
+      handleOnChange(
+        { BASE64_DATA: base64data, FILE_NAME: file.name },
+        FIELD_NAME,
+        PARENT_FIELD_NAME,
+        keyRef
+      );
       dispatchFormData({
         type: "SET_ERROR",
         payload: {
@@ -97,6 +102,8 @@ const Attachment = ({
       payload: {
         error: true,
         fieldName: FIELD_NAME,
+        parentFieldName: PARENT_FIELD_NAME,
+        keyRef: keyRef,
       },
     });
   };

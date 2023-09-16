@@ -323,12 +323,12 @@ const FromLayout = {
                 VALUE: '',
             },
 
-            "College/Universisty": {
+            "College/University": {
                 SIZE: 12,
                 FIELD_TYPE: "Textfield",
                 FIELD_LABEL: "College/University",
                 FIELD_ID: "form-field-9-c",
-                FIELD_NAME: "College/Universisty",
+                FIELD_NAME: "College/University",
                 EXPANDABLE: false,
                 REQUIRED: true,
                 DISABLED: false,
@@ -471,19 +471,19 @@ const FromLayout = {
         VALUE: '',
     },
 
-    "Resume/CV": {
+    "Resume": {
         SIZE: 12,
         FIELD_TYPE: "Attachment",
         FIELD_LABEL: "Drop your Resume/CV here",
         FIELD_ID: "form-field-14",
-        FIELD_NAME: "Resume/CV",
+        FIELD_NAME: "Resume",
         EXPANDABLE: false,
         REQUIRED: true,
         DISABLED: false,
         PARENT_FIELD_NAME: null,
         PARENT_FIELD_ID: null,
         ERROR: false,
-        VALUE: '',
+        VALUE: "",
     }
 }
 

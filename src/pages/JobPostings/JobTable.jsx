@@ -179,7 +179,7 @@ const JobTable = () => {
             </Tooltip>
           </Box>
           <Box marginRight={0}>
-            <Tooltip title={"Click to copy"} arrow>
+            <Tooltip title={"Copy job link"} arrow>
               <ContentCopyRoundedIcon
                 onClick={() => {
                   const rootDomain =

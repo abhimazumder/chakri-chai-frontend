@@ -26,7 +26,7 @@ const CreateJobIndex = () => {
         ...JobLayout,
         ["Job ID"]: {
           ...JobLayout["Job ID"],
-          VALUE: shortid.generate().slice(0, 12),
+          VALUE: shortid.generate(),
         },
         ["Posting Date"]: {
           ...JobLayout["Posting Date"],

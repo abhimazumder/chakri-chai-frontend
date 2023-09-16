@@ -9,7 +9,16 @@ import React, {
 } from "react";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers";
-import { Button, Container, Grid, Paper } from "@mui/material";
+import {
+  Backdrop,
+  Box,
+  Button,
+  Container,
+  Fade,
+  Grid,
+  Modal,
+  Paper,
+} from "@mui/material";
 import FormLayout from "../../templates/FormLayout";
 import Textfield from "../../fields/Textfield";
 import Dropdown from "../../fields/Dropdown";
@@ -23,8 +32,9 @@ import { fetchCountryList, fetchStatesByCountry } from "../../services/apis";
 import Attachment from "../../fields/Attachment";
 import Number from "../../fields/Number";
 
-import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useLocation } from "react-router-dom";
+import useAxiosInstance from "../../hooks/useAxiosInstance";
 
 const styles = {
   roundedPaper: {
@@ -42,6 +52,19 @@ const styles = {
     boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.50)",
     margin: 3,
     fontFamily: "Montserrat, sans-serif",
+  },
+  modalStyle: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    bgcolor: "background.paper",
+    boxShadow: 24,
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 1.5,
+    paddingRight: 1.5,
+    borderRadius: 5,
   },
 };
 
@@ -243,6 +266,7 @@ const formDataReducer = (state, action) => {
 
 const JobForm = () => {
   const [formData, dispatchFormData] = useReducer(formDataReducer, null);
+  const [jobId, setJobId] = useState(null);
 
   const countryList = useMemo(() => fetchCountryList(), []);
 
@@ -250,13 +274,23 @@ const JobForm = () => {
   const handleLoaderOpen = () => setLoader(true);
   const handleLoaderClose = () => setLoader(false);
 
+  const [open, setOpen] = useState(false);
+  const handleModalOpen = () => setOpen(true);
+  const handleModalClose = () => setOpen(false);
+
+  const location = useLocation();
+  const instance = useAxiosInstance();
+
   useEffect(() => {
     dispatchFormData({ type: "SET_FORM_DATA", payload: FormLayout });
     dispatchFormData({
       type: "SET_COUNTRY_OPTIONS",
       payload: { countryList },
     });
-  }, [countryList]);
+    const searchParams = new URLSearchParams(location.search);
+    const JOB_ID = searchParams.get("jobid");
+    setJobId(JOB_ID);
+  }, [countryList, location.search]);
 
   useEffect(() => {
     dispatchFormData({ type: "UPDATE_STATE_OPTIONS" });
@@ -405,18 +439,17 @@ const JobForm = () => {
           Object.entries(field.CHILDREN).forEach(([childKey, childField]) => {
             const subFieldsData = {};
             Object.values(childField).forEach((childSubField) => {
-              if (
-                childSubField.ERROR){
+              if (childSubField.ERROR) {
                 const error = new Error("Some fields have invalid value!");
-                error.focus = `${childSubField.FIELD_NAME}*${field.FIELD_NAME}*${childKey}`
+                error.focus = `${childSubField.FIELD_NAME}*${field.FIELD_NAME}*${childKey}`;
                 throw error;
               }
               if (
                 childSubField.REQUIRED &&
                 (childSubField.VALUE === "" || childSubField.VALUE === null)
-              ){
+              ) {
                 const error = new Error("All required fields must be filled!");
-                error.focus = `${childSubField.FIELD_NAME}*${field.FIELD_NAME}*${childKey}`
+                error.focus = `${childSubField.FIELD_NAME}*${field.FIELD_NAME}*${childKey}`;
                 throw error;
               }
               subFieldsData[childSubField.FIELD_NAME] = childSubField.VALUE;
@@ -429,17 +462,17 @@ const JobForm = () => {
         } else if (field.SUB_FIELDS) {
           const subFieldsData = {};
           Object.values(field.SUB_FIELDS).forEach((subField) => {
-            if(subField.ERROR){
+            if (subField.ERROR) {
               const error = new Error("Some fields have invalid value!");
-              error.focus = `${subField.FIELD_NAME}*${field.FIELD_NAME}`
+              error.focus = `${subField.FIELD_NAME}*${field.FIELD_NAME}`;
               throw error;
             }
             if (
               subField.REQUIRED &&
               (subField.VALUE === "" || subField.VALUE === null)
-            ){
+            ) {
               const error = new Error("All required fields must be filled!");
-              error.focus = `${subField.FIELD_NAME}*${field.FIELD_NAME}`
+              error.focus = `${subField.FIELD_NAME}*${field.FIELD_NAME}`;
               throw error;
             }
 
@@ -448,15 +481,14 @@ const JobForm = () => {
 
           data[field.FIELD_NAME] = subFieldsData;
         } else {
-          if(field.ERROR){
+          if (field.ERROR) {
             const error = new Error("Some fields have invalid value!");
-            error.focus = `${field.FIELD_NAME}`
+            error.focus = `${field.FIELD_NAME}`;
             throw error;
           }
-          if (field.REQUIRED && (field.VALUE === "" || field.VALUE === null))
-          {
+          if (field.REQUIRED && (field.VALUE === "" || field.VALUE === null)) {
             const error = new Error("All required fields must be filled!");
-            error.focus = `${field.FIELD_NAME}`
+            error.focus = `${field.FIELD_NAME}`;
             throw error;
           }
           data[field.FIELD_NAME] = field.VALUE;
@@ -466,17 +498,26 @@ const JobForm = () => {
           ...data,
         };
       });
-      console.log(DATA);
-      // API CALL HERE
+      console.log(DATA)
+      const res = await instance.post("/application/submit", {
+        DATA,
+        JOB_ID: jobId,
+      });
+      handleLoaderClose();
+      handleModalOpen();
     } catch (error) {
-      console.error(error.message);
+      console.log(error);
+      // console.error(error.message);
       const [fieldName, parentFieldName, keyRef] = error.focus.split("*");
-      dispatchFormData({type: "SET_ERROR", payload: {
-        error: true,
-        fieldName,
-        parentFieldName,
-        keyRef,
-      }})
+      dispatchFormData({
+        type: "SET_ERROR",
+        payload: {
+          error: true,
+          fieldName,
+          parentFieldName,
+          keyRef,
+        },
+      });
     } finally {
       handleLoaderClose();
     }
@@ -513,6 +554,28 @@ const JobForm = () => {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
+      <Modal
+        open={open}
+        onClose={handleModalClose}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+        <Fade in={open}>
+          <Box
+            sx={{
+              ...styles.modalStyle,
+              height: window.innerWidth <= 900 ? "10vh" : "15vh",
+              width: window.innerWidth <= 900 ? "80vw" : "30vw",
+            }}
+          >
+          </Box>
+        </Fade>
+      </Modal>
     </Container>
   );
 };

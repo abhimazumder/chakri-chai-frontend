@@ -57,6 +57,25 @@ const styles = {
   },
 };
 
+const isISODateString = (str) => {
+  const isoDatePattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,3})?Z?$/;
+
+  if (!isoDatePattern.test(str)) {
+    return false;
+  }
+
+  const date = new Date(str);
+
+  return !isNaN(date);
+};
+
+const convertISOTimeStamp = (isoTimeStamp) => {
+  const date = new Date(isoTimeStamp);
+  return `${date.getUTCDate() || "--"}/${date.getUTCMonth() + 1 || "--"}/${
+    date.getUTCFullYear() || "----"
+  }`;
+};
+
 const MiniTable = ({ headerNames, rows }) => {
   const [hoveredRowIndex, setHoveredRowIndex] = useState(null);
 
@@ -70,7 +89,7 @@ const MiniTable = ({ headerNames, rows }) => {
 
   const handleRowClick = (rowId) => {
     console.log("Clicked on", rowId);
-  }
+  };
 
   return (
     <Table>
@@ -130,6 +149,10 @@ const MiniTable = ({ headerNames, rows }) => {
                   ) : (
                     <Typography style={styles.booleanNo}>No</Typography>
                   )
+                ) : isISODateString(data) ? (
+                  <Typography style={styles.cellData}>
+                    {convertISOTimeStamp(data)}
+                  </Typography>
                 ) : (
                   <Typography style={styles.cellData}>{data}</Typography>
                 )}
